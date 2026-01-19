@@ -13,12 +13,17 @@ This guide walks you through deploying WTFiction.com to Vercel with automatic de
 1. Go to [vercel.com](https://vercel.com) and sign in (or create an account)
 2. Click **"Add New Project"**
 3. Import the GitHub repository: `RarefiedAir24/wtfiction`
-4. Vercel will auto-detect Next.js settings:
-   - **Framework Preset**: Next.js
-   - **Build Command**: `npm run build` (auto-detected)
-   - **Output Directory**: `out` (for static export)
-   - **Install Command**: `npm install` (auto-detected)
+4. **IMPORTANT**: Configure these settings manually:
+   - **Framework Preset**: Select **"Other"** (NOT Next.js - this is a static export)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `out`
+   - **Install Command**: `npm install`
 5. Click **"Deploy"**
+
+**Why "Other" instead of Next.js?**
+- This site uses `output: 'export'` which creates a static site
+- Vercel's Next.js preset tries to use server features (which we don't need)
+- Using "Other" tells Vercel to serve the static files from the `out` directory
 
 Vercel will build and deploy your site automatically. You'll get a preview URL like `wtfiction-xyz.vercel.app`.
 
@@ -92,10 +97,19 @@ Once connected, every push to the `main` branch will:
 - Check DNS propagation: `dig wtfiction.com` or use [dnschecker.org](https://dnschecker.org)
 - Ensure SSL certificate is provisioned (check Vercel dashboard)
 
-### Static Export Issues
-- The site uses static export (`output: 'export'` in `next.config.ts`)
-- This means no server-side features (API routes, etc.)
+### Static Export Issues / routes-manifest.json Error
+If you see "routes-manifest.json couldn't be found":
+1. Go to **Project Settings → General**
+2. Change **Framework Preset** from "Next.js" to **"Other"**
+3. Ensure **Output Directory** is set to `out`
+4. Ensure **Build Command** is `npm run build`
+5. Redeploy the project
+
+The site uses static export (`output: 'export'` in `next.config.ts`), which means:
+- No server-side features (API routes, etc.)
+- Static files served from `out` directory
 - Perfect for this use case - fast, CDN-optimized
+- Must use "Other" framework preset, not "Next.js"
 
 ## Environment Variables
 
