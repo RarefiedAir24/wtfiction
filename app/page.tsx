@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { featuredScenarios } from '@/data/scenarios';
 import EmailSignup from '@/components/EmailSignup';
+import TrackedExternalLink from '@/components/TrackedExternalLink';
 
 export default function Home() {
   return (
@@ -15,14 +16,15 @@ export default function Home() {
             WTFiction explores the consequences of science, technology, and power — before they happen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
+            <TrackedExternalLink
               href="https://www.youtube.com/@WTFictionTV"
-              target="_blank"
-              rel="noopener noreferrer"
+              eventType="cta"
+              ctaName="Watch on YouTube"
+              location="hero"
               className="inline-flex items-center justify-center px-8 py-3 bg-foreground text-background font-medium hover:opacity-90 transition-all text-sm rounded-sm shadow-lg hover:shadow-xl"
             >
               Watch on YouTube
-            </a>
+            </TrackedExternalLink>
             <Link
               href="/subscribe"
               className="inline-flex items-center justify-center px-8 py-3 border border-[#272727] text-foreground font-medium hover:bg-[#272727] transition-all text-sm rounded-sm"
@@ -76,11 +78,12 @@ export default function Home() {
         </div>
         <div className="grid gap-5 md:grid-cols-2">
           {featuredScenarios.map((scenario) => (
-            <a
+            <TrackedExternalLink
               key={scenario.id}
               href={scenario.youtubeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              eventType="scenario"
+              scenarioId={scenario.id}
+              scenarioTitle={scenario.title}
               className="card-modern border border-[#272727] rounded-sm overflow-hidden group block"
             >
               {scenario.thumbnailUrl ? (
@@ -128,7 +131,7 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-            </a>
+            </TrackedExternalLink>
           ))}
         </div>
       </section>

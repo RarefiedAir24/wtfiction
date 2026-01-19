@@ -116,3 +116,20 @@ a:hover {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Mobile UX improvements */
+@media (max-width: 640px) {
+  /* Ensure buttons are tappable (min 44x44px) */
+  button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve touch targets */
+  nav a, footer a {
+    padding: 8px 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
