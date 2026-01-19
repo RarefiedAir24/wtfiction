@@ -40,10 +40,10 @@ export const scenarios: Scenario[] = [
     featured: true,
   },
   {
-    id: 'undersea-cables',
-    title: 'What If Undersea Cables Were Cut?',
-    premise: 'The physical infrastructure connecting continents is severed, isolating nations from global communication.',
-    runtime: '16:55',
+    id: 'survival-guaranteed',
+    title: 'Survival Guaranteed',
+    premise: 'What happens when survival is guaranteed?',
+    runtime: '16:55', // Update with actual runtime
     youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
     publishDate: '2025-01-15', // Most recent - real video (update with actual publish date)
     featured: true,
