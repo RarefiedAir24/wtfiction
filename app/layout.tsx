@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { Crimson_Pro, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
-const crimsonPro = Crimson_Pro({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${crimsonPro.variable} ${inter.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
         <Navigation />
         {children}

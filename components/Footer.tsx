@@ -2,17 +2,17 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-800 mt-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <footer className="border-t border-[#272727] mt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <p className="text-sm text-muted">
+            <p className="text-xs text-muted">
               © {new Date().getFullYear()} WTFiction. All rights reserved.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-xs">
             <a
-              href="https://www.youtube.com/@wtfiction"
+              href="https://www.youtube.com/@WTFictionTV"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted hover:text-foreground transition-colors"

@@ -6,26 +6,26 @@ export default function ScenariosPage() {
 
   return (
     <main className="min-h-screen">
-      <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
-        <h1 className="text-4xl md:text-5xl font-serif font-semibold mb-12 text-foreground">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
+        <h1 className="text-2xl md:text-3xl font-medium mb-8 text-foreground">
           Scenarios
         </h1>
-        <div className="space-y-8">
+        <div className="space-y-6">
           {sortedScenarios.map((scenario) => (
             <article
               key={scenario.id}
-              className="border-b border-zinc-800 pb-8 last:border-b-0"
+              className="border-b border-[#272727] pb-6 last:border-b-0"
             >
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-serif font-semibold mb-3 text-foreground">
+                  <h2 className="text-base md:text-lg font-medium mb-2 text-foreground leading-snug">
                     {scenario.title}
                   </h2>
-                  <p className="text-muted leading-relaxed mb-4">
+                  <p className="text-sm text-muted leading-normal mb-2">
                     {scenario.premise}
                   </p>
                   {scenario.runtime && (
-                    <p className="text-sm text-muted mb-4">
+                    <p className="text-xs text-muted mb-2">
                       Runtime: {scenario.runtime}
                     </p>
                   )}
@@ -34,7 +34,7 @@ export default function ScenariosPage() {
                   href={scenario.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground hover:opacity-80 transition-opacity font-medium whitespace-nowrap"
+                  className="text-sm text-foreground hover:opacity-80 transition-opacity font-medium whitespace-nowrap"
                 >
                   Watch on YouTube →
                 </a>
