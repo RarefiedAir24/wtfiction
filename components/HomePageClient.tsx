@@ -106,18 +106,27 @@ export default function HomePageClient() {
                   </div>
 
                   {/* Right: YouTube Embed */}
-                  <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727]">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={buildYouTubeEmbedUrl(getYouTubeVideoId(heroEpisode.youtubeUrl) || '', false)}
-                      title={heroEpisode.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      className="w-full h-full"
-                      loading="lazy"
-                    />
-                  </div>
+                  {(() => {
+                    const videoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
+                    return videoId ? (
+                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727]">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={buildYouTubeEmbedUrl(videoId, false)}
+                          title={heroEpisode.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          className="w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] flex items-center justify-center">
+                        <p className="text-muted text-sm">Video unavailable</p>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </>
