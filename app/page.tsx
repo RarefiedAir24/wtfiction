@@ -6,13 +6,13 @@ import TrackedExternalLink from '@/components/TrackedExternalLink';
 export default function Home() {
   return (
     <main className="min-h-screen">
-      {/* Hero Section with Space/Globe Background */}
-      <section className="hero-background relative">
-        <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6 py-16 md:py-24">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight mb-6 text-foreground">
+      {/* Hero Section - Prestige Documentary Style */}
+      <section className="hero-background">
+        <div className="hero-content max-w-4xl mx-auto px-4 sm:px-6">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-8 text-foreground">
             What If the World Changed Overnight?
           </h1>
-          <p className="text-lg md:text-xl text-muted mb-10 max-w-2xl leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted mb-12 max-w-2xl leading-relaxed font-light">
             WTFiction explores the consequences of science, technology, and power — before they happen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -21,62 +21,62 @@ export default function Home() {
               eventType="cta"
               ctaName="Watch on YouTube"
               location="hero"
-              className="inline-flex items-center justify-center px-8 py-3 bg-foreground text-background font-medium hover:opacity-90 transition-all text-sm rounded-sm shadow-lg hover:shadow-xl"
+              className="inline-flex items-center justify-center px-10 py-4 bg-foreground text-background font-medium hover:opacity-90 transition-opacity text-base"
             >
               Watch on YouTube
             </TrackedExternalLink>
             <Link
               href="/subscribe"
-              className="inline-flex items-center justify-center px-8 py-3 border border-[#272727] text-foreground font-medium hover:bg-[#272727] transition-all text-sm rounded-sm"
+              className="inline-flex items-center justify-center px-10 py-4 border border-[#3f3f3f] text-foreground font-medium hover:border-foreground transition-colors text-base"
             >
-              Subscribe for Future Scenarios
+              Subscribe
             </Link>
           </div>
         </div>
       </section>
 
       {/* What Is WTFiction */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
-        <h2 className="text-2xl md:text-3xl font-medium mb-6 text-foreground">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
+        <h2 className="text-3xl md:text-4xl font-light mb-8 text-foreground">
           What Is WTFiction
         </h2>
-        <div className="max-w-3xl space-y-4">
-          <p className="text-base md:text-lg text-muted leading-relaxed">
+        <div className="max-w-3xl space-y-6">
+          <p className="text-lg md:text-xl text-muted leading-relaxed font-light">
             WTFiction is a speculative storytelling project exploring what happens if the systems we rely on break, evolve, or disappear.
           </p>
-          <p className="text-base md:text-lg text-muted leading-relaxed">
+          <p className="text-lg md:text-xl text-muted leading-relaxed font-light">
             Each episode examines a single scenario — grounded in real science, economics, and geopolitics — and follows the consequences forward.
           </p>
         </div>
       </section>
 
       {/* Email Signup Section */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
         <div className="max-w-2xl">
-          <h2 className="text-xl md:text-2xl font-medium mb-3 text-foreground">
+          <h2 className="text-2xl md:text-3xl font-light mb-4 text-foreground">
             Get Scenario Updates
           </h2>
-          <p className="text-sm md:text-base text-muted mb-6 leading-normal">
+          <p className="text-base md:text-lg text-muted mb-8 leading-relaxed font-light">
             Get notified when new scenarios are released. No spam, no daily emails — only new episodes.
           </p>
           <EmailSignup />
         </div>
       </section>
 
-      {/* Featured Scenarios */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
-        <div className="flex items-center justify-between mb-10">
-          <h2 className="text-2xl md:text-3xl font-medium text-foreground">
-            Featured Scenarios
+      {/* Featured Scenarios - Documentary Series Style */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
+        <div className="mb-16">
+          <h2 className="text-3xl md:text-4xl font-light mb-4 text-foreground">
+            Episodes
           </h2>
           <Link
             href="/scenarios"
-            className="text-sm text-muted hover:text-foreground transition-colors"
+            className="text-sm text-muted hover:text-foreground transition-colors inline-block mt-2"
           >
-            View All →
+            View All Episodes →
           </Link>
         </div>
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {featuredScenarios.map((scenario) => (
             <TrackedExternalLink
               key={scenario.id}
@@ -84,52 +84,41 @@ export default function Home() {
               eventType="scenario"
               scenarioId={scenario.id}
               scenarioTitle={scenario.title}
-              className="card-modern border border-[#272727] rounded-sm overflow-hidden group block"
+              className="episode-card card-modern group block"
             >
               {scenario.thumbnailUrl ? (
-                <div className="relative w-full aspect-video bg-[#272727] overflow-hidden">
+                <div className="relative w-full aspect-video bg-[#272727] overflow-hidden mb-4">
                   <img
                     src={scenario.thumbnailUrl}
                     alt={scenario.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
                   />
                   {scenario.runtime && (
-                    <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-xs text-foreground rounded">
+                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/90 text-xs text-foreground font-medium">
                       {scenario.runtime}
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="relative w-full aspect-video bg-gradient-to-br from-[#272727] to-[#1a1a1a] flex items-center justify-center">
-                  <div className="text-4xl text-muted/30">▶</div>
+                <div className="relative w-full aspect-video bg-[#1a1a1a] mb-4 flex items-center justify-center">
+                  <div className="text-3xl text-muted/20">▶</div>
                   {scenario.runtime && (
-                    <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-xs text-foreground rounded">
+                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/90 text-xs text-foreground font-medium">
                       {scenario.runtime}
                     </div>
                   )}
                 </div>
               )}
-              <div className="p-6">
-                <h3 className="text-lg md:text-xl font-medium mb-2 text-foreground leading-snug group-hover:opacity-80 transition-opacity">
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-foreground leading-tight">
                   {scenario.title}
                 </h3>
-                <p className="text-sm text-muted mb-3 leading-normal line-clamp-2">
+                <p className="text-sm text-muted leading-relaxed mb-3 line-clamp-2">
                   {scenario.premise}
                 </p>
-                {scenario.keyInsight && (
-                  <p className="text-xs text-muted/80 mb-3 leading-normal italic">
-                    {scenario.keyInsight}
-                  </p>
+                {scenario.publishDate && (
+                  <p className="text-xs text-muted/70">{scenario.publishDate}</p>
                 )}
-                <div className="flex items-center justify-between">
-                  {scenario.publishDate && (
-                    <span className="text-xs text-muted">{scenario.publishDate}</span>
-                  )}
-                  <span className="text-sm text-foreground font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">
-                    Watch Episode
-                    <span className="ml-2">→</span>
-                  </span>
-                </div>
               </div>
             </TrackedExternalLink>
           ))}
@@ -137,15 +126,15 @@ export default function Home() {
       </section>
 
       {/* Why This Matters */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
-        <h2 className="text-2xl md:text-3xl font-medium mb-6 text-foreground">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
+        <h2 className="text-3xl md:text-4xl font-light mb-8 text-foreground">
           Why This Matters
         </h2>
-        <div className="max-w-3xl space-y-3">
-          <p className="text-base md:text-lg text-muted leading-relaxed">
+        <div className="max-w-3xl space-y-4">
+          <p className="text-lg md:text-xl text-muted leading-relaxed font-light">
             These scenarios aren't predictions.
           </p>
-          <p className="text-base md:text-lg text-foreground leading-relaxed font-medium">
+          <p className="text-lg md:text-xl text-foreground leading-relaxed font-normal">
             They're stress tests for civilization.
           </p>
         </div>
