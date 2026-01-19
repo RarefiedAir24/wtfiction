@@ -2,6 +2,8 @@
  * Extract YouTube video ID from various YouTube URL formats
  */
 export function getYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
     /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
@@ -12,6 +14,11 @@ export function getYouTubeVideoId(url: string): string | null {
     if (match && match[1]) {
       return match[1];
     }
+  }
+
+  // If it's already just a video ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+    return url;
   }
 
   return null;
