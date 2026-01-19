@@ -8,14 +8,24 @@ export default function Home() {
     <main className="min-h-screen">
       {/* Hero Section - Prestige Documentary Style */}
       <section className="hero-background">
-        <div className="hero-content max-w-4xl mx-auto px-4 sm:px-6">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-8 text-foreground">
-            What If the World Changed Overnight?
+        <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="mb-4">
+            <span className="text-sm md:text-base text-[#3ea6ff] font-medium tracking-wider uppercase mb-4 block">
+              Speculative Scenarios
+            </span>
+          </div>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-[1.05] mb-6 text-foreground">
+            <span className="hero-title block">
+              What If the World
+            </span>
+            <span className="hero-title block mt-2">
+              Changed Overnight?
+            </span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted mb-12 max-w-2xl leading-relaxed font-light">
+          <p className="hero-subtitle text-lg md:text-xl lg:text-2xl text-muted mb-12 max-w-2xl leading-relaxed font-light mt-8">
             WTFiction explores the consequences of science, technology, and power — before they happen.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 mt-12">
             <TrackedExternalLink
               href="https://www.youtube.com/@WTFictionTV"
               eventType="cta"
