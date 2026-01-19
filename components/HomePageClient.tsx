@@ -120,13 +120,13 @@ export default function HomePageClient() {
                     }
                     
                     // Try multiple thumbnail quality levels if one fails
-                    const getThumbnailUrl = () => {
+                    const getThumbnailUrl = (quality: 'maxres' | 'high' = 'maxres') => {
                       if (heroEpisode.thumbnailUrl) return heroEpisode.thumbnailUrl;
-                      // Try maxres first, then fall back to high quality
-                      return getYouTubeThumbnail(heroEpisode.youtubeUrl, 'maxres');
+                      return getYouTubeThumbnail(heroEpisode.youtubeUrl, quality);
                     };
                     
-                    const thumbnailUrl = getThumbnailUrl();
+                    // Start with maxres, fallback to high if it fails
+                    const thumbnailUrl = getThumbnailUrl('maxres');
                     
                     return (
                       <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer">
@@ -141,10 +141,13 @@ export default function HomePageClient() {
                                 loading="eager"
                                 onError={(e) => {
                                   // Try fallback to high quality thumbnail
-                                  const fallbackUrl = getYouTubeThumbnail(heroEpisode.youtubeUrl, 'high');
-                                  if (fallbackUrl !== thumbnailUrl) {
+                                  const currentSrc = (e.target as HTMLImageElement).src;
+                                  if (currentSrc.includes('maxresdefault')) {
+                                    // Try high quality fallback
+                                    const fallbackUrl = getThumbnailUrl('high');
                                     (e.target as HTMLImageElement).src = fallbackUrl;
                                   } else {
+                                    // Both failed, show error state
                                     setHeroThumbnailError(true);
                                   }
                                 }}
