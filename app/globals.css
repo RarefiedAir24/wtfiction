@@ -95,6 +95,13 @@ a:hover {
   pointer-events: none;
 }
 
+/* Episode-driven hero with embedded player */
+.hero-episode {
+  position: relative;
+  overflow: hidden;
+  min-height: 90vh;
+}
+
 @keyframes heroPulse {
   0%, 100% {
     opacity: 0.6;

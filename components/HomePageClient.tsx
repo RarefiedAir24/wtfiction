@@ -8,7 +8,7 @@ import TrackedExternalLink from '@/components/TrackedExternalLink';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import YouTubeModal from '@/components/YouTubeModal';
 import PlayButton from '@/components/PlayButton';
-import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
+import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
@@ -45,59 +45,79 @@ export default function HomePageClient() {
   return (
     <>
       <main className="min-h-screen">
-        {/* Hero Section - Episode-Driven */}
-        <section className="hero-background relative min-h-[85vh] flex items-center">
+        {/* Hero Section - Episode-Driven with Embedded Player */}
+        <section className="hero-episode relative min-h-[90vh] flex items-center overflow-hidden">
           {heroEpisode ? (
             <>
               {/* Hero Episode Background */}
               <div className="absolute inset-0 z-0">
                 <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-20"
+                  className="absolute inset-0 bg-cover bg-center"
                   style={{
                     backgroundImage: heroEpisode.thumbnailUrl 
                       ? `url(${heroEpisode.thumbnailUrl})` 
                       : `url(${getYouTubeThumbnail(heroEpisode.youtubeUrl)})`
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/70" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
               </div>
               
-              <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6 relative z-10 w-full">
-                <div className="mb-4">
-                  <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-4 block opacity-90">
-                    Latest Episode
-                  </span>
-                </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-6 text-foreground tracking-tight">
-                  <span className="hero-title block">
-                    {heroEpisode.title}
-                  </span>
-                </h1>
-                <p className="hero-subtitle text-lg md:text-xl lg:text-2xl text-muted/90 mb-8 max-w-3xl leading-relaxed font-light">
-                  {heroEpisode.premise}
-                </p>
-                {heroEpisode.runtime && (
-                  <p className="text-sm text-muted/70 mb-8">
-                    Runtime: {heroEpisode.runtime}
-                  </p>
-                )}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={handleHeroPlay}
-                    className="btn-primary inline-flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                    Play Episode
-                  </button>
-                  <TrackedExternalLink
-                    href={heroEpisode.youtubeUrl}
-                    eventType="youtube"
-                    className="btn-secondary"
-                  >
-                    Watch on YouTube
-                  </TrackedExternalLink>
+              <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full py-16">
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                  {/* Left: Title & Info */}
+                  <div>
+                    <div className="mb-4">
+                      <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-4 block opacity-90">
+                        Latest Episode
+                      </span>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-6 text-foreground tracking-tight">
+                      <span className="hero-title block">
+                        {heroEpisode.title}
+                      </span>
+                    </h1>
+                    <p className="hero-subtitle text-lg md:text-xl text-muted/90 mb-6 max-w-2xl leading-relaxed font-light">
+                      {heroEpisode.premise}
+                    </p>
+                    {heroEpisode.runtime && (
+                      <p className="text-sm text-muted/70 mb-8">
+                        Runtime: {heroEpisode.runtime}
+                      </p>
+                    )}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <button
+                        onClick={handleHeroPlay}
+                        className="btn-primary inline-flex items-center justify-center gap-2"
+                      >
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                        Play Episode
+                      </button>
+                      <TrackedExternalLink
+                        href={heroEpisode.youtubeUrl}
+                        eventType="youtube"
+                        className="btn-secondary"
+                      >
+                        Watch on YouTube
+                      </TrackedExternalLink>
+                    </div>
+                  </div>
+
+                  {/* Right: YouTube Embed */}
+                  <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727]">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={buildYouTubeEmbedUrl(getYouTubeVideoId(heroEpisode.youtubeUrl) || '', false)}
+                      title={heroEpisode.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="w-full h-full"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
               </div>
             </>

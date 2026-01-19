@@ -51,10 +51,16 @@ export const featuredScenarios = scenarios.filter(s => s.featured);
 
 // Get hero episode (explicitly marked hero, or most recent featured)
 export function getHeroEpisode(): Scenario | null {
+  // First check for explicitly marked hero
   const heroEpisode = scenarios.find(s => s.hero && s.featured);
   if (heroEpisode) return heroEpisode;
   
-  // Fallback to most recent featured (first in array, assuming newest first)
+  // Fallback to most recent featured (reverse array to get newest first)
   const featured = scenarios.filter(s => s.featured);
-  return featured.length > 0 ? featured[0] : null;
+  if (featured.length === 0) return null;
+  
+  // Return the last one in array (most recent) or first if publishDate sorting needed
+  // For now, assuming array is in chronological order (oldest to newest)
+  // So we want the last item
+  return featured[featured.length - 1];
 }
