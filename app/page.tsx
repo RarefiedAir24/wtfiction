@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { featuredScenarios } from '@/data/scenarios';
 import EmailSignup from '@/components/EmailSignup';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
+import EpisodeThumbnail from '@/components/EpisodeThumbnail';
+import { getYouTubeThumbnail } from '@/lib/youtube';
 
 export default function Home() {
   return (
@@ -9,21 +11,21 @@ export default function Home() {
       {/* Hero Section - Prestige Documentary Style */}
       <section className="hero-background">
         <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="mb-4">
-            <span className="text-sm md:text-base text-[#3ea6ff] font-medium tracking-wider uppercase mb-4 block">
+          <div className="mb-6">
+            <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-6 block opacity-90">
               Speculative Scenarios
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-[1.05] mb-6 text-foreground">
+          <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-[0.95] mb-8 text-foreground tracking-tight">
             <span className="hero-title block">
               What If the World
             </span>
-            <span className="hero-title block mt-2">
+            <span className="hero-title block mt-1 md:mt-2">
               Changed Overnight?
             </span>
           </h1>
-          <p className="hero-subtitle text-lg md:text-xl lg:text-2xl text-muted mb-12 max-w-2xl leading-relaxed font-light mt-8">
-            WTFiction explores the consequences of science, technology, and power — before they happen.
+          <p className="hero-subtitle text-xl md:text-2xl lg:text-3xl text-muted/90 mb-16 max-w-3xl leading-relaxed font-light mt-10">
+            Explore the consequences of science, technology, and power — before they happen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-12">
             <TrackedExternalLink
@@ -96,29 +98,11 @@ export default function Home() {
               scenarioTitle={scenario.title}
               className="episode-card card-modern group block"
             >
-              {scenario.thumbnailUrl ? (
-                <div className="episode-thumbnail relative w-full aspect-video mb-5">
-                  <img
-                    src={scenario.thumbnailUrl}
-                    alt={scenario.title}
-                    className="w-full h-full object-cover"
-                  />
-                  {scenario.runtime && (
-                    <div className="episode-runtime absolute bottom-3 right-3 px-2.5 py-1 text-xs text-foreground font-medium rounded">
-                      {scenario.runtime}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="episode-thumbnail relative w-full aspect-video mb-5 flex items-center justify-center bg-[#1a1a1a]">
-                  <div className="text-4xl text-muted/15">▶</div>
-                  {scenario.runtime && (
-                    <div className="episode-runtime absolute bottom-3 right-3 px-2.5 py-1 text-xs text-foreground font-medium rounded">
-                      {scenario.runtime}
-                    </div>
-                  )}
-                </div>
-              )}
+              <EpisodeThumbnail
+                thumbnailUrl={scenario.thumbnailUrl || getYouTubeThumbnail(scenario.youtubeUrl)}
+                title={scenario.title}
+                runtime={scenario.runtime}
+              />
               <div className="px-1">
                 <h3 className="text-lg font-medium mb-3 text-foreground leading-tight tracking-tight">
                   {scenario.title}
