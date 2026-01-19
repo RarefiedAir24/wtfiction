@@ -110,7 +110,6 @@ export default function HomePageClient() {
                   {/* Right: YouTube Thumbnail/Player */}
                   {(() => {
                     const videoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
-                    const thumbnailUrl = heroEpisode.thumbnailUrl || (videoId ? getYouTubeThumbnail(heroEpisode.youtubeUrl) : null);
                     
                     if (!videoId) {
                       return (
@@ -119,6 +118,15 @@ export default function HomePageClient() {
                         </div>
                       );
                     }
+                    
+                    // Try multiple thumbnail quality levels if one fails
+                    const getThumbnailUrl = () => {
+                      if (heroEpisode.thumbnailUrl) return heroEpisode.thumbnailUrl;
+                      // Try maxres first, then fall back to high quality
+                      return getYouTubeThumbnail(heroEpisode.youtubeUrl, 'maxres');
+                    };
+                    
+                    const thumbnailUrl = getThumbnailUrl();
                     
                     return (
                       <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer">
@@ -131,7 +139,15 @@ export default function HomePageClient() {
                                 alt={heroEpisode.title}
                                 className="w-full h-full object-cover"
                                 loading="eager"
-                                onError={() => setHeroThumbnailError(true)}
+                                onError={(e) => {
+                                  // Try fallback to high quality thumbnail
+                                  const fallbackUrl = getYouTubeThumbnail(heroEpisode.youtubeUrl, 'high');
+                                  if (fallbackUrl !== thumbnailUrl) {
+                                    (e.target as HTMLImageElement).src = fallbackUrl;
+                                  } else {
+                                    setHeroThumbnailError(true);
+                                  }
+                                }}
                               />
                             ) : (
                               // Fallback: gradient background when thumbnail fails
@@ -146,7 +162,7 @@ export default function HomePageClient() {
                                       <path d="M8 5v14l11-7z" />
                                     </svg>
                                   </div>
-                                  <p className="text-xs text-muted/60">{heroEpisode.title}</p>
+                                  <p className="text-xs text-muted/60 px-4">{heroEpisode.title}</p>
                                 </div>
                               </div>
                             )}

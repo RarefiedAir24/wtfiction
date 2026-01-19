@@ -61,20 +61,38 @@ export function getHeroEpisode(): Scenario | null {
   const sorted = [...featured].sort((a, b) => {
     // If both have publishDate, sort by date (newest first)
     if (a.publishDate && b.publishDate) {
-      return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
+      const dateA = new Date(a.publishDate);
+      const dateB = new Date(b.publishDate);
+      // Check if dates are valid
+      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+        // If dates are invalid, maintain original order
+        return 0;
+      }
+      return dateB.getTime() - dateA.getTime();
     }
     // If only one has publishDate, prioritize it
-    if (a.publishDate && !b.publishDate) return -1;
-    if (!a.publishDate && b.publishDate) return 1;
+    if (a.publishDate && !b.publishDate) {
+      const dateA = new Date(a.publishDate);
+      return isNaN(dateA.getTime()) ? 0 : -1;
+    }
+    if (!a.publishDate && b.publishDate) {
+      const dateB = new Date(b.publishDate);
+      return isNaN(dateB.getTime()) ? 0 : 1;
+    }
     // If neither has publishDate, assume array order is chronological (oldest to newest)
     // So we want the last item in the original array
-    // This is handled by returning 0 and then taking the last item
     return 0;
   });
   
-  // If no publishDates, return last item in original array (assumed to be most recent)
-  const hasAnyDates = sorted.some(s => s.publishDate);
-  if (!hasAnyDates) {
+  // If no valid publishDates, return last item in original array (assumed to be most recent)
+  const hasValidDates = sorted.some(s => {
+    if (!s.publishDate) return false;
+    const date = new Date(s.publishDate);
+    return !isNaN(date.getTime());
+  });
+  
+  if (!hasValidDates) {
+    // Return last item in original array (assumed to be most recent)
     return featured[featured.length - 1];
   }
   
