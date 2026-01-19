@@ -47,33 +47,99 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Email Signup Section */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
+        <div className="max-w-2xl">
+          <h2 className="text-xl md:text-2xl font-medium mb-3 text-foreground">
+            Get Scenario Updates
+          </h2>
+          <p className="text-sm md:text-base text-muted mb-6 leading-normal">
+            Get notified when new scenarios are released. No spam, no daily emails — only new episodes.
+          </p>
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder="your@email.com"
+              className="flex-1 px-4 py-2.5 bg-[#272727] border border-[#272727] text-foreground placeholder:text-muted focus:outline-none focus:border-[#3f3f3f] transition-colors text-sm rounded-sm"
+            />
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-foreground text-background font-medium hover:opacity-90 transition-opacity text-sm rounded-sm whitespace-nowrap"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+
       {/* Featured Scenarios */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-[#272727]">
-        <h2 className="text-2xl md:text-3xl font-medium mb-10 text-foreground">
-          Featured Scenarios
-        </h2>
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-2xl md:text-3xl font-medium text-foreground">
+            Featured Scenarios
+          </h2>
+          <Link
+            href="/scenarios"
+            className="text-sm text-muted hover:text-foreground transition-colors"
+          >
+            View All →
+          </Link>
+        </div>
         <div className="grid gap-5 md:grid-cols-2">
           {featuredScenarios.map((scenario) => (
-            <div
+            <a
               key={scenario.id}
-              className="card-modern border border-[#272727] p-6 rounded-sm"
+              href={scenario.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-modern border border-[#272727] rounded-sm overflow-hidden group block"
             >
-              <h3 className="text-lg md:text-xl font-medium mb-3 text-foreground leading-snug">
-                {scenario.title}
-              </h3>
-              <p className="text-sm text-muted mb-4 leading-normal line-clamp-3">
-                {scenario.premise}
-              </p>
-              <a
-                href={scenario.youtubeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-sm text-foreground hover:opacity-80 transition-opacity font-medium group"
-              >
-                Watch Episode
-                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-              </a>
-            </div>
+              {scenario.thumbnailUrl ? (
+                <div className="relative w-full aspect-video bg-[#272727] overflow-hidden">
+                  <img
+                    src={scenario.thumbnailUrl}
+                    alt={scenario.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {scenario.runtime && (
+                    <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-xs text-foreground rounded">
+                      {scenario.runtime}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="relative w-full aspect-video bg-gradient-to-br from-[#272727] to-[#1a1a1a] flex items-center justify-center">
+                  <div className="text-4xl text-muted/30">▶</div>
+                  {scenario.runtime && (
+                    <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-xs text-foreground rounded">
+                      {scenario.runtime}
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="p-6">
+                <h3 className="text-lg md:text-xl font-medium mb-2 text-foreground leading-snug group-hover:opacity-80 transition-opacity">
+                  {scenario.title}
+                </h3>
+                <p className="text-sm text-muted mb-3 leading-normal line-clamp-2">
+                  {scenario.premise}
+                </p>
+                {scenario.keyInsight && (
+                  <p className="text-xs text-muted/80 mb-3 leading-normal italic">
+                    {scenario.keyInsight}
+                  </p>
+                )}
+                <div className="flex items-center justify-between">
+                  {scenario.publishDate && (
+                    <span className="text-xs text-muted">{scenario.publishDate}</span>
+                  )}
+                  <span className="text-sm text-foreground font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">
+                    Watch Episode
+                    <span className="ml-2">→</span>
+                  </span>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
       </section>

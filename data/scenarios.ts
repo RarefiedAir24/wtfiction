@@ -4,6 +4,9 @@ export interface Scenario {
   premise: string;
   runtime?: string;
   youtubeUrl: string;
+  thumbnailUrl?: string;
+  publishDate?: string;
+  keyInsight?: string;
   featured?: boolean;
 }
 
