@@ -3,15 +3,18 @@
  * Script to fetch video metadata from YouTube and update scenarios.ts
  * 
  * Usage:
- *   YOUTUBE_API_KEY=your_key npm run fetch-videos
- *   or
- *   npx tsx scripts/fetch-video-data.ts
+ *   npm run fetch-videos
+ *   (reads YOUTUBE_API_KEY from .env.local automatically)
  */
 
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { config } from 'dotenv';
 import { fetchYouTubeVideoMetadata } from '../lib/youtube-api';
 import { getYouTubeVideoId } from '../lib/youtube';
+
+// Load .env.local file
+config({ path: join(process.cwd(), '.env.local') });
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
