@@ -44,8 +44,8 @@ export const scenarios: Scenario[] = [
     title: 'What If Undersea Cables Were Cut?',
     premise: 'The physical infrastructure connecting continents is severed, isolating nations from global communication.',
     runtime: '16:55',
-    youtubeUrl: 'https://www.youtube.com/watch?v=example4',
-    publishDate: '2024-04-05', // Most recent
+    youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
+    publishDate: '2025-01-15', // Most recent - real video (update with actual publish date)
     featured: true,
   },
 ];
