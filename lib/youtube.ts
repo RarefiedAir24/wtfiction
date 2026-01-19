@@ -47,3 +47,22 @@ export function getYouTubeThumbnail(videoIdOrUrl: string, quality: 'default' | '
 
   return `https://img.youtube.com/vi/${videoId}/${qualityMap[quality]}.jpg`;
 }
+
+/**
+ * Build YouTube embed URL with recommended parameters
+ */
+export function buildYouTubeEmbedUrl(videoId: string, autoplay: boolean = false): string {
+  const params = new URLSearchParams({
+    rel: '0',
+    modestbranding: '1',
+    playsinline: '1',
+    enablejsapi: '1',
+    origin: typeof window !== 'undefined' ? window.location.origin : 'https://wtfiction.com',
+  });
+
+  if (autoplay) {
+    params.set('autoplay', '1');
+  }
+
+  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+}

@@ -6,7 +6,11 @@ export type AnalyticsEvent =
   | { type: 'email_signup'; email: string }
   | { type: 'scenario_click'; scenarioId: string; title: string }
   | { type: 'nav_click'; page: string }
-  | { type: 'cta_click'; cta: string; location: string };
+  | { type: 'cta_click'; cta: string; location: string }
+  | { type: 'video_modal_open'; video_id: string; page: string; placement: string }
+  | { type: 'video_modal_close'; video_id: string; watch_intent_time_ms?: number }
+  | { type: 'watch_on_youtube_click'; video_id: string }
+  | { type: 'scenario_card_click'; video_id: string };
 
 export function trackEvent(event: AnalyticsEvent) {
   // In production, replace with your analytics service
@@ -56,4 +60,20 @@ export function trackNavClick(page: string) {
 
 export function trackCTAClick(cta: string, location: string) {
   trackEvent({ type: 'cta_click', cta, location });
+}
+
+export function trackVideoModalOpen(videoId: string, page: string, placement: string) {
+  trackEvent({ type: 'video_modal_open', video_id: videoId, page, placement });
+}
+
+export function trackVideoModalClose(videoId: string, watchIntentTimeMs?: number) {
+  trackEvent({ type: 'video_modal_close', video_id: videoId, watch_intent_time_ms: watchIntentTimeMs });
+}
+
+export function trackWatchOnYouTubeClick(videoId: string) {
+  trackEvent({ type: 'watch_on_youtube_click', video_id: videoId });
+}
+
+export function trackScenarioCardClick(videoId: string) {
+  trackEvent({ type: 'scenario_card_click', video_id: videoId });
 }

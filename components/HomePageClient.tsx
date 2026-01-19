@@ -8,15 +8,23 @@ import TrackedExternalLink from '@/components/TrackedExternalLink';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import YouTubeModal from '@/components/YouTubeModal';
 import PlayButton from '@/components/PlayButton';
-import { getYouTubeThumbnail } from '@/lib/youtube';
-import { trackScenarioClick } from '@/lib/analytics';
+import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
+import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
-  const [modalVideo, setModalVideo] = useState<{ url: string; title: string } | null>(null);
+  const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string } | null>(null);
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
     trackScenarioClick(scenario.id, scenario.title);
-    setModalVideo({ url: scenario.youtubeUrl, title: scenario.title });
+    const videoId = getYouTubeVideoId(scenario.youtubeUrl);
+    if (videoId) {
+      trackVideoModalOpen(videoId, 'home', 'episode_card');
+    }
+    setModalVideo({ 
+      url: scenario.youtubeUrl, 
+      title: scenario.title,
+      logline: scenario.premise
+    });
   };
 
   return (
@@ -170,8 +178,11 @@ export default function HomePageClient() {
         <YouTubeModal
           videoUrl={modalVideo.url}
           title={modalVideo.title}
+          logline={modalVideo.logline}
           isOpen={!!modalVideo}
           onClose={() => setModalVideo(null)}
+          page="home"
+          placement="episode_card"
         />
       )}
     </>

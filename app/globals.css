@@ -301,6 +301,37 @@ section {
   border-width: 1px;
 }
 
+/* YouTube Modal Styling */
+.youtube-modal {
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.youtube-modal-content {
+  animation: modalSlideIn 0.24s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Mobile UX improvements */
 @media (max-width: 640px) {
   /* Ensure buttons are tappable (min 44x44px) */
@@ -319,5 +350,15 @@ section {
   
   .hero-background {
     min-height: 60vh;
+  }
+
+  /* Modal full screen on mobile */
+  .youtube-modal-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 }

@@ -6,16 +6,24 @@ import YouTubeModal from '@/components/YouTubeModal';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import PlayButton from '@/components/PlayButton';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
-import { getYouTubeThumbnail } from '@/lib/youtube';
-import { trackScenarioClick } from '@/lib/analytics';
+import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
+import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function ScenariosPageClient() {
-  const [modalVideo, setModalVideo] = useState<{ url: string; title: string } | null>(null);
+  const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string } | null>(null);
   const sortedScenarios = [...scenarios].reverse();
 
   const handlePlayClick = (scenario: typeof scenarios[0]) => {
     trackScenarioClick(scenario.id, scenario.title);
-    setModalVideo({ url: scenario.youtubeUrl, title: scenario.title });
+    const videoId = getYouTubeVideoId(scenario.youtubeUrl);
+    if (videoId) {
+      trackVideoModalOpen(videoId, 'scenarios', 'scenario_card');
+    }
+    setModalVideo({ 
+      url: scenario.youtubeUrl, 
+      title: scenario.title,
+      logline: scenario.premise
+    });
   };
 
   return (
@@ -90,8 +98,11 @@ export default function ScenariosPageClient() {
         <YouTubeModal
           videoUrl={modalVideo.url}
           title={modalVideo.title}
+          logline={modalVideo.logline}
           isOpen={!!modalVideo}
           onClose={() => setModalVideo(null)}
+          page="scenarios"
+          placement="scenario_card"
         />
       )}
     </>

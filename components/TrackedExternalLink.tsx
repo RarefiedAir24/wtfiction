@@ -11,6 +11,7 @@ interface TrackedExternalLinkProps {
   location?: string;
   scenarioId?: string;
   scenarioTitle?: string;
+  onClick?: () => void;
 }
 
 export default function TrackedExternalLink({ 
@@ -21,7 +22,8 @@ export default function TrackedExternalLink({
   ctaName,
   location,
   scenarioId,
-  scenarioTitle
+  scenarioTitle,
+  onClick
 }: TrackedExternalLinkProps) {
   const handleClick = () => {
     if (eventType === 'youtube') {
@@ -31,6 +33,7 @@ export default function TrackedExternalLink({
     } else if (eventType === 'scenario' && scenarioId && scenarioTitle) {
       trackScenarioClick(scenarioId, scenarioTitle);
     }
+    onClick?.();
   };
 
   return (
