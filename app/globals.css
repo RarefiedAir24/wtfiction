@@ -19,7 +19,7 @@
   --color-hover: var(--hover);
   --color-accent: var(--accent);
   --font-sans: var(--font-sans);
-  --font-serif: var(--font-serif);
+  --font-display: var(--font-display);
 }
 
 body {
@@ -36,9 +36,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--foreground);
 }
 
@@ -122,8 +122,9 @@ a:hover {
 .hero-title {
   position: relative;
   display: inline-block;
-  font-family: var(--font-serif), Georgia, serif;
-  font-weight: 400;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   background: linear-gradient(135deg, #f1f1f1 0%, #e0e0e0 50%, #f1f1f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
