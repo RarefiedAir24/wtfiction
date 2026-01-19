@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 export default function Navigation() {
   return (
-    <nav className="border-b border-[#272727] bg-[#0f0f0f] sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
+    <nav className="border-b border-[#272727] bg-[#0f0f0f]/95 backdrop-blur-md sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-base sm:text-lg font-medium text-foreground hover:opacity-80 transition-opacity">
+          <Link href="/" className="text-lg sm:text-xl font-medium text-foreground hover:opacity-80 transition-opacity">
             WTFiction
           </Link>
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8 text-sm">
@@ -21,7 +21,7 @@ export default function Navigation() {
             <Link href="/references" className="text-muted hover:text-foreground transition-colors hidden md:inline">
               References
             </Link>
-            <Link href="/subscribe" className="text-foreground hover:opacity-80 transition-opacity">
+            <Link href="/subscribe" className="text-foreground hover:opacity-80 transition-opacity font-medium">
               Subscribe
             </Link>
           </div>
