@@ -21,13 +21,13 @@ export default function Home() {
               eventType="cta"
               ctaName="Watch on YouTube"
               location="hero"
-              className="inline-flex items-center justify-center px-10 py-4 bg-foreground text-background font-medium hover:opacity-90 transition-opacity text-base"
+              className="btn-primary"
             >
               Watch on YouTube
             </TrackedExternalLink>
             <Link
               href="/subscribe"
-              className="inline-flex items-center justify-center px-10 py-4 border border-[#3f3f3f] text-foreground font-medium hover:border-foreground transition-colors text-base"
+              className="btn-secondary"
             >
               Subscribe
             </Link>
@@ -87,37 +87,37 @@ export default function Home() {
               className="episode-card card-modern group block"
             >
               {scenario.thumbnailUrl ? (
-                <div className="relative w-full aspect-video bg-[#272727] overflow-hidden mb-4">
+                <div className="episode-thumbnail relative w-full aspect-video mb-5">
                   <img
                     src={scenario.thumbnailUrl}
                     alt={scenario.title}
                     className="w-full h-full object-cover"
                   />
                   {scenario.runtime && (
-                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/90 text-xs text-foreground font-medium">
+                    <div className="episode-runtime absolute bottom-3 right-3 px-2.5 py-1 text-xs text-foreground font-medium rounded">
                       {scenario.runtime}
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="relative w-full aspect-video bg-[#1a1a1a] mb-4 flex items-center justify-center">
-                  <div className="text-3xl text-muted/20">▶</div>
+                <div className="episode-thumbnail relative w-full aspect-video mb-5 flex items-center justify-center bg-[#1a1a1a]">
+                  <div className="text-4xl text-muted/15">▶</div>
                   {scenario.runtime && (
-                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/90 text-xs text-foreground font-medium">
+                    <div className="episode-runtime absolute bottom-3 right-3 px-2.5 py-1 text-xs text-foreground font-medium rounded">
                       {scenario.runtime}
                     </div>
                   )}
                 </div>
               )}
-              <div>
-                <h3 className="text-lg font-medium mb-2 text-foreground leading-tight">
+              <div className="px-1">
+                <h3 className="text-lg font-medium mb-3 text-foreground leading-tight tracking-tight">
                   {scenario.title}
                 </h3>
-                <p className="text-sm text-muted leading-relaxed mb-3 line-clamp-2">
+                <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-2">
                   {scenario.premise}
                 </p>
                 {scenario.publishDate && (
-                  <p className="text-xs text-muted/70">{scenario.publishDate}</p>
+                  <p className="text-xs text-muted/60 font-medium">{scenario.publishDate}</p>
                 )}
               </div>
             </TrackedExternalLink>

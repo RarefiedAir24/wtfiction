@@ -7,6 +7,8 @@
   --border: #272727;
   --hover: #272727;
   --accent: #3ea6ff;
+  --surface: #1a1a1a;
+  --surface-elevated: #242424;
 }
 
 @theme inline {
@@ -25,6 +27,11 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -52,9 +59,10 @@ a:hover {
 .hero-background {
   position: relative;
   overflow: hidden;
-  min-height: 70vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
+  background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
 }
 
 .hero-background::before {
@@ -65,9 +73,10 @@ a:hover {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at center top, rgba(62, 166, 255, 0.03) 0%, transparent 60%),
-    linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+    radial-gradient(ellipse 120% 100% at 50% 0%, rgba(62, 166, 255, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(62, 166, 255, 0.03) 0%, transparent 50%);
   z-index: 0;
+  opacity: 0.8;
 }
 
 .hero-background::after {
@@ -76,7 +85,7 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 200px;
+  height: 300px;
   background: linear-gradient(to top, var(--background) 0%, transparent 100%);
   z-index: 1;
   pointer-events: none;
@@ -86,21 +95,39 @@ a:hover {
   position: relative;
   z-index: 2;
   width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 /* Documentary-style episode cards */
 .card-modern {
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: transparent;
 }
 
 .card-modern:hover {
-  opacity: 0.85;
+  transform: translateY(-4px);
 }
 
 .episode-card {
   position: relative;
   overflow: hidden;
+  border-radius: 2px;
+}
+
+.episode-card .episode-thumbnail {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--surface);
+}
+
+.episode-card .episode-thumbnail img {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.episode-card:hover .episode-thumbnail img {
+  transform: scale(1.05);
 }
 
 .episode-card::after {
@@ -110,14 +137,21 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   pointer-events: none;
+  border-radius: 2px;
 }
 
 .episode-card:hover::after {
   opacity: 1;
+}
+
+.episode-runtime {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Subtle gradient text */
@@ -128,10 +162,85 @@ a:hover {
   background-clip: text;
 }
 
+/* Button styles */
+.btn-primary {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 0.875rem 2rem;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(241, 241, 241, 0.15);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--foreground);
+  padding: 0.875rem 2rem;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  border-color: var(--foreground);
+  background: rgba(241, 241, 241, 0.05);
+}
+
+/* Form inputs */
+input[type="email"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+}
+
+input[type="email"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface-elevated);
+  box-shadow: 0 0 0 3px rgba(62, 166, 255, 0.1);
+}
+
+input[type="email"]::placeholder {
+  color: var(--muted);
+}
+
+/* Section spacing */
+section {
+  scroll-margin-top: 80px;
+}
+
+/* Refined borders */
+.border-refined {
+  border-color: var(--border);
+  border-width: 1px;
+}
+
 /* Mobile UX improvements */
 @media (max-width: 640px) {
   /* Ensure buttons are tappable (min 44x44px) */
-  button, a[role="button"] {
+  button, a[role="button"], .btn-primary, .btn-secondary {
     min-height: 44px;
     min-width: 44px;
   }
@@ -142,5 +251,9 @@ a:hover {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+  }
+  
+  .hero-background {
+    min-height: 60vh;
   }
 }
