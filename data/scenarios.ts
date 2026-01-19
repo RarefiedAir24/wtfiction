@@ -18,8 +18,8 @@ export const scenarios: Scenario[] = [
     premise: 'A coordinated attack on global internet infrastructure tests the resilience of modern civilization.',
     runtime: '18:42',
     youtubeUrl: 'https://www.youtube.com/watch?v=example1',
+    publishDate: '2024-01-15',
     featured: true,
-    hero: true, // Featured in hero section
   },
   {
     id: 'money-optional',
@@ -27,6 +27,7 @@ export const scenarios: Scenario[] = [
     premise: 'A new economic system emerges where traditional currency loses its meaning.',
     runtime: '22:15',
     youtubeUrl: 'https://www.youtube.com/watch?v=example2',
+    publishDate: '2024-02-20',
     featured: true,
   },
   {
@@ -35,6 +36,7 @@ export const scenarios: Scenario[] = [
     premise: 'Artificial intelligence systems take over governance, making decisions based on pure logic and data.',
     runtime: '19:30',
     youtubeUrl: 'https://www.youtube.com/watch?v=example3',
+    publishDate: '2024-03-10',
     featured: true,
   },
   {
@@ -43,24 +45,39 @@ export const scenarios: Scenario[] = [
     premise: 'The physical infrastructure connecting continents is severed, isolating nations from global communication.',
     runtime: '16:55',
     youtubeUrl: 'https://www.youtube.com/watch?v=example4',
+    publishDate: '2024-04-05', // Most recent
     featured: true,
   },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
 
-// Get hero episode (explicitly marked hero, or most recent featured)
+// Get hero episode (most recent by publishDate, or last in array if no dates)
 export function getHeroEpisode(): Scenario | null {
-  // First check for explicitly marked hero
-  const heroEpisode = scenarios.find(s => s.hero && s.featured);
-  if (heroEpisode) return heroEpisode;
-  
-  // Fallback to most recent featured (reverse array to get newest first)
   const featured = scenarios.filter(s => s.featured);
   if (featured.length === 0) return null;
   
-  // Return the last one in array (most recent) or first if publishDate sorting needed
-  // For now, assuming array is in chronological order (oldest to newest)
-  // So we want the last item
-  return featured[featured.length - 1];
+  // Sort by publishDate (most recent first)
+  const sorted = [...featured].sort((a, b) => {
+    // If both have publishDate, sort by date (newest first)
+    if (a.publishDate && b.publishDate) {
+      return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
+    }
+    // If only one has publishDate, prioritize it
+    if (a.publishDate && !b.publishDate) return -1;
+    if (!a.publishDate && b.publishDate) return 1;
+    // If neither has publishDate, assume array order is chronological (oldest to newest)
+    // So we want the last item in the original array
+    // This is handled by returning 0 and then taking the last item
+    return 0;
+  });
+  
+  // If no publishDates, return last item in original array (assumed to be most recent)
+  const hasAnyDates = sorted.some(s => s.publishDate);
+  if (!hasAnyDates) {
+    return featured[featured.length - 1];
+  }
+  
+  // Return most recent (first in sorted array)
+  return sorted[0];
 }

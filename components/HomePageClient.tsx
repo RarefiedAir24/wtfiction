@@ -13,6 +13,7 @@ import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
   const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string } | null>(null);
+  const [heroVideoLoaded, setHeroVideoLoaded] = useState(false);
   const heroEpisode = getHeroEpisode();
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
@@ -105,25 +106,57 @@ export default function HomePageClient() {
                     </div>
                   </div>
 
-                  {/* Right: YouTube Embed */}
+                  {/* Right: YouTube Thumbnail/Player */}
                   {(() => {
                     const videoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
-                    return videoId ? (
-                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727]">
-                        <iframe
-                          width="100%"
-                          height="100%"
-                          src={buildYouTubeEmbedUrl(videoId, false)}
-                          title={heroEpisode.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          className="w-full h-full"
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : (
-                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] flex items-center justify-center">
-                        <p className="text-muted text-sm">Video unavailable</p>
+                    const thumbnailUrl = heroEpisode.thumbnailUrl || getYouTubeThumbnail(heroEpisode.youtubeUrl);
+                    
+                    if (!videoId) {
+                      return (
+                        <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] flex items-center justify-center">
+                          <p className="text-muted text-sm">Video unavailable</p>
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer">
+                        {!heroVideoLoaded ? (
+                          // Thumbnail with play button overlay
+                          <>
+                            <img
+                              src={thumbnailUrl}
+                              alt={heroEpisode.title}
+                              className="w-full h-full object-cover"
+                              loading="eager"
+                            />
+                            <div 
+                              className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
+                              onClick={() => setHeroVideoLoaded(true)}
+                            >
+                              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#3ea6ff]/90 hover:bg-[#3ea6ff] flex items-center justify-center transition-colors shadow-2xl">
+                                <svg 
+                                  className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" 
+                                  fill="currentColor" 
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          // YouTube iframe (loaded on click)
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={buildYouTubeEmbedUrl(videoId, true)}
+                            title={heroEpisode.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            className="w-full h-full"
+                          />
+                        )}
                       </div>
                     );
                   })()}
