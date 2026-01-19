@@ -1,12 +1,13 @@
 import Link from 'next/link';
+import Logo from './Logo';
 
 export default function Navigation() {
   return (
     <nav className="border-b border-[#272727] bg-[#0f0f0f]/95 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-lg sm:text-xl font-medium text-foreground hover:opacity-80 transition-opacity">
-            WTFiction
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <Logo />
           </Link>
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8 text-sm">
             <Link href="/" className="text-muted hover:text-foreground transition-colors hidden sm:inline">
