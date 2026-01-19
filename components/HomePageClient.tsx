@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { featuredScenarios } from '@/data/scenarios';
+import { featuredScenarios, getHeroEpisode } from '@/data/scenarios';
 import EmailSignup from '@/components/EmailSignup';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
@@ -13,6 +13,7 @@ import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
   const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string } | null>(null);
+  const heroEpisode = getHeroEpisode();
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
     trackScenarioClick(scenario.id, scenario.title);
@@ -27,46 +28,117 @@ export default function HomePageClient() {
     });
   };
 
+  const handleHeroPlay = () => {
+    if (!heroEpisode) return;
+    trackScenarioClick(heroEpisode.id, heroEpisode.title);
+    const videoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
+    if (videoId) {
+      trackVideoModalOpen(videoId, 'home', 'hero');
+    }
+    setModalVideo({ 
+      url: heroEpisode.youtubeUrl, 
+      title: heroEpisode.title,
+      logline: heroEpisode.premise
+    });
+  };
+
   return (
     <>
       <main className="min-h-screen">
-        {/* Hero Section - Prestige Documentary Style */}
-        <section className="hero-background">
-          <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="mb-6">
-              <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-6 block opacity-90">
-                Speculative Scenarios
-              </span>
+        {/* Hero Section - Episode-Driven */}
+        <section className="hero-background relative min-h-[85vh] flex items-center">
+          {heroEpisode ? (
+            <>
+              {/* Hero Episode Background */}
+              <div className="absolute inset-0 z-0">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-20"
+                  style={{
+                    backgroundImage: heroEpisode.thumbnailUrl 
+                      ? `url(${heroEpisode.thumbnailUrl})` 
+                      : `url(${getYouTubeThumbnail(heroEpisode.youtubeUrl)})`
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+              </div>
+              
+              <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+                <div className="mb-4">
+                  <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-4 block opacity-90">
+                    Latest Episode
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-6 text-foreground tracking-tight">
+                  <span className="hero-title block">
+                    {heroEpisode.title}
+                  </span>
+                </h1>
+                <p className="hero-subtitle text-lg md:text-xl lg:text-2xl text-muted/90 mb-8 max-w-3xl leading-relaxed font-light">
+                  {heroEpisode.premise}
+                </p>
+                {heroEpisode.runtime && (
+                  <p className="text-sm text-muted/70 mb-8">
+                    Runtime: {heroEpisode.runtime}
+                  </p>
+                )}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleHeroPlay}
+                    className="btn-primary inline-flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    Play Episode
+                  </button>
+                  <TrackedExternalLink
+                    href={heroEpisode.youtubeUrl}
+                    eventType="youtube"
+                    className="btn-secondary"
+                  >
+                    Watch on YouTube
+                  </TrackedExternalLink>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* Fallback: Static Brand Message */
+            <div className="hero-content max-w-5xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+              <div className="mb-6">
+                <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-6 block opacity-90">
+                  Speculative Scenarios
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-8 text-foreground tracking-tight">
+                <span className="hero-title block">
+                  What If the World
+                </span>
+                <span className="hero-title block mt-2 md:mt-3">
+                  Changed Overnight?
+                </span>
+              </h1>
+              <p className="hero-subtitle text-xl md:text-2xl lg:text-3xl text-muted/90 mb-16 max-w-3xl leading-relaxed font-light mt-10">
+                WTFiction explores the consequences of science, technology, and power — before they happen.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mt-12">
+                <TrackedExternalLink
+                  href="https://www.youtube.com/@WTFictionTV"
+                  eventType="cta"
+                  ctaName="Watch on YouTube"
+                  location="hero"
+                  className="btn-primary"
+                >
+                  Watch on YouTube
+                </TrackedExternalLink>
+                <Link
+                  href="/subscribe"
+                  className="btn-secondary"
+                >
+                  Subscribe
+                </Link>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-8 text-foreground tracking-tight">
-              <span className="hero-title block">
-                What If the World
-              </span>
-              <span className="hero-title block mt-2 md:mt-3">
-                Changed Overnight?
-              </span>
-            </h1>
-            <p className="hero-subtitle text-xl md:text-2xl lg:text-3xl text-muted/90 mb-16 max-w-3xl leading-relaxed font-light mt-10">
-              Explore the consequences of science, technology, and power — before they happen.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-12">
-              <TrackedExternalLink
-                href="https://www.youtube.com/@WTFictionTV"
-                eventType="cta"
-                ctaName="Watch on YouTube"
-                location="hero"
-                className="btn-primary"
-              >
-                Watch on YouTube
-              </TrackedExternalLink>
-              <Link
-                href="/subscribe"
-                className="btn-secondary"
-              >
-                Subscribe
-              </Link>
-            </div>
-          </div>
+          )}
         </section>
 
         {/* What Is WTFiction */}

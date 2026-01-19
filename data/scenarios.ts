@@ -8,6 +8,7 @@ export interface Scenario {
   publishDate?: string;
   keyInsight?: string;
   featured?: boolean;
+  hero?: boolean; // Featured in hero section
 }
 
 export const scenarios: Scenario[] = [
@@ -18,6 +19,7 @@ export const scenarios: Scenario[] = [
     runtime: '18:42',
     youtubeUrl: 'https://www.youtube.com/watch?v=example1',
     featured: true,
+    hero: true, // Featured in hero section
   },
   {
     id: 'money-optional',
@@ -46,3 +48,13 @@ export const scenarios: Scenario[] = [
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
+
+// Get hero episode (explicitly marked hero, or most recent featured)
+export function getHeroEpisode(): Scenario | null {
+  const heroEpisode = scenarios.find(s => s.hero && s.featured);
+  if (heroEpisode) return heroEpisode;
+  
+  // Fallback to most recent featured (first in array, assuming newest first)
+  const featured = scenarios.filter(s => s.featured);
+  return featured.length > 0 ? featured[0] : null;
+}
