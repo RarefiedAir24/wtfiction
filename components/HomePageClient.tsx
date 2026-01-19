@@ -30,11 +30,11 @@ export default function HomePageClient() {
                 Speculative Scenarios
               </span>
             </div>
-            <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-[0.95] mb-8 text-foreground tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-8 text-foreground tracking-tight">
               <span className="hero-title block">
                 What If the World
               </span>
-              <span className="hero-title block mt-1 md:mt-2">
+              <span className="hero-title block mt-2 md:mt-3">
                 Changed Overnight?
               </span>
             </h1>

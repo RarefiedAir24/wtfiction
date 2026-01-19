@@ -19,6 +19,7 @@
   --color-hover: var(--hover);
   --color-accent: var(--accent);
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 body {
@@ -114,6 +115,8 @@ a:hover {
 .hero-title {
   position: relative;
   display: inline-block;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
   background: linear-gradient(135deg, #f1f1f1 0%, #e0e0e0 50%, #f1f1f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
