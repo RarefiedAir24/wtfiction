@@ -42,10 +42,10 @@ export const scenarios: Scenario[] = [
   {
     id: 'survival-guaranteed',
     title: 'Survival Guaranteed',
-    premise: 'What happens when survival is guaranteed?',
-    runtime: '16:55', // Update with actual runtime
+    premise: 'What happens when death becomes optional? A world where survival is guaranteed challenges everything we know about life, purpose, and human nature.',
+    runtime: '16:55', // Update with actual runtime from video
     youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
-    publishDate: '2025-01-15', // Most recent - real video (update with actual publish date)
+    publishDate: '2025-01-15', // Update with actual publish date from YouTube
     featured: true,
   },
 ];
