@@ -13,25 +13,35 @@ export interface Scenario {
 }
 
 export const scenarios: Scenario[] = [
-  {
-    id: 'internet-blackout',
-    title: 'What If the Internet Went Dark for a Week?',
-    premise: 'A coordinated attack on global internet infrastructure tests the resilience of modern civilization.',
-    runtime: '18:42',
-    youtubeUrl: 'https://www.youtube.com/watch?v=example1',
-    publishDate: '2024-01-15',
+    {
+    id: 'EwIQB4sBx4I',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater',
+    premise: 'What if the very systems we rely on are the ones we barely think about?',
+    runtime: '07:28',
+    youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
+    thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
+    publishDate: '2026-01-08',
     featured: true,
   },
-  {
-    id: 'money-optional',
-    title: 'What If Money Became Optional?',
-    premise: 'A new economic system emerges where traditional currency loses its meaning.',
-    runtime: '22:15',
-    youtubeUrl: 'https://www.youtube.com/watch?v=example2',
-    publishDate: '2024-02-20',
+      {
+    id: '8ytNzzit528',
+    title: 'Heat Age vs Ice Age: Which Future Are We In?',
+    premise: 'The last Ice Age nearly wiped out humanity.
+
+But what if the next global age isn’t ice?
+
+What if it’s heat?
+
+In this episode of WTFiction, we explore a grounded, science-based what-if scenario:
+
+What',
+    runtime: '04:12',
+    youtubeUrl: 'https://youtu.be/8ytNzzit528',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    publishDate: '2025-12-18',
     featured: true,
   },
-  {
+    {
     id: 'ai-leaders',
     title: 'What If AI Was Elected to Run a Country? #viralvideo',
     premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency',
@@ -49,6 +59,16 @@ export const scenarios: Scenario[] = [
     youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
     thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
     publishDate: '2026-01-18',
+    featured: true,
+  },
+  {
+    id: 'what-if-venezuela-attacked-u-s-oil-platforms-video',
+    title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
+    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
+    runtime: '07:21',
+    youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
+    thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
+    publishDate: '2025-12-17',
     featured: true,
   },
 ];
