@@ -34,7 +34,7 @@ export const scenarios: Scenario[] = [
   {
     id: 'ai-leaders',
     title: 'What If AI Was Elected to Run a Country? #viralvideo',
-    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency't a choice — but the end result of efficiency',
+    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency',
     runtime: '07:43',
     youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
     thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
@@ -43,7 +43,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'survival-guaranteed',
-    title: 'What If Survival Wasn’t the Reason We Work?'t the Reason We Work?',
+    title: 'What If Survival Wasn’t the Reason We Work?',
     premise: 'For most of human history, survival has been the reason we work',
     runtime: '05:17',
     youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
