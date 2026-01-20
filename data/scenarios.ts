@@ -12,13 +12,14 @@ export interface Scenario {
 }
 
 export const scenarios: Scenario[] = [
-  {
-    id: 'internet-blackout',
-    title: 'What If the Internet Went Dark for a Week?',
-    premise: 'A coordinated attack on global internet infrastructure tests the resilience of modern civilization.',
-    runtime: '18:42',
-    youtubeUrl: 'https://www.youtube.com/watch?v=example1',
-    publishDate: '2024-01-15',
+    {
+    id: 'EwIQB4sBx4I',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater',
+    premise: 'What if the very systems we rely on are the ones we barely think about?',
+    runtime: '07:28',
+    youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
+    thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
+    publishDate: '2026-01-08',
     featured: true,
   },
       {
