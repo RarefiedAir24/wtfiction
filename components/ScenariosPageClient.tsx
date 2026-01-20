@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { scenarios } from '@/data/scenarios';
 import YouTubeModal from '@/components/YouTubeModal';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
@@ -51,9 +52,11 @@ export default function ScenariosPageClient() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-xl md:text-2xl font-medium mb-4 text-foreground leading-snug">
-                      {scenario.title}
-                    </h2>
+                    <Link href={`/scenarios/${scenario.id}`}>
+                      <h2 className="text-xl md:text-2xl font-medium mb-4 text-foreground leading-snug hover:text-[#3ea6ff] transition-colors">
+                        {scenario.title}
+                      </h2>
+                    </Link>
                     <p className="text-sm md:text-base text-muted leading-relaxed mb-4">
                       {scenario.premise}
                     </p>

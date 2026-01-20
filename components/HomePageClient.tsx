@@ -12,12 +12,17 @@ import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl } from '@/
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
-  const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string } | null>(null);
+  const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string; id?: string } | null>(null);
   const [heroVideoLoaded, setHeroVideoLoaded] = useState(false);
   const [heroThumbnailError, setHeroThumbnailError] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [highlightedScenarioId, setHighlightedScenarioId] = useState<string | null>(null);
   const heroEpisode = getHeroEpisode();
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
+    // Save scroll position before opening modal
+    setScrollPosition(window.scrollY);
+    
     trackScenarioClick(scenario.id, scenario.title);
     const videoId = getYouTubeVideoId(scenario.youtubeUrl);
     if (videoId) {
@@ -26,12 +31,17 @@ export default function HomePageClient() {
     setModalVideo({ 
       url: scenario.youtubeUrl, 
       title: scenario.title,
-      logline: scenario.premise
+      logline: scenario.premise,
+      id: scenario.id
     });
   };
 
   const handleHeroPlay = () => {
     if (!heroEpisode) return;
+    
+    // Save scroll position before opening modal
+    setScrollPosition(window.scrollY);
+    
     trackScenarioClick(heroEpisode.id, heroEpisode.title);
     const videoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
     if (videoId) {
@@ -40,8 +50,42 @@ export default function HomePageClient() {
     setModalVideo({ 
       url: heroEpisode.youtubeUrl, 
       title: heroEpisode.title,
-      logline: heroEpisode.premise
+      logline: heroEpisode.premise,
+      id: heroEpisode.id
     });
+  };
+
+  const handleModalClose = () => {
+    const currentVideoId = modalVideo?.id;
+    setModalVideo(null);
+    
+    // Restore scroll position
+    setTimeout(() => {
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: 'instant' as ScrollBehavior
+      });
+    }, 100);
+    
+    // Find and highlight next scenario
+    if (currentVideoId) {
+      const currentIndex = featuredScenarios.findIndex(s => s.id === currentVideoId);
+      if (currentIndex >= 0 && currentIndex < featuredScenarios.slice(0, 6).length - 1) {
+        const nextScenario = featuredScenarios[currentIndex + 1];
+        setHighlightedScenarioId(nextScenario.id);
+        
+        // Scroll to next scenario smoothly after a brief delay
+        setTimeout(() => {
+          const element = document.getElementById(`scenario-${nextScenario.id}`);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 200);
+        
+        // Remove highlight after 5 seconds
+        setTimeout(() => setHighlightedScenarioId(null), 5000);
+      }
+    }
   };
 
   return (
@@ -82,11 +126,16 @@ export default function HomePageClient() {
                     <p className="hero-subtitle text-lg md:text-xl text-muted/90 mb-6 max-w-2xl leading-relaxed font-light">
                       {heroEpisode.premise}
                     </p>
-                    {heroEpisode.runtime && (
-                      <p className="text-sm text-muted/70 mb-8">
-                        Runtime: {heroEpisode.runtime}
-                      </p>
-                    )}
+                    <div className="flex items-center gap-4 text-sm text-muted/70 mb-8">
+                      {heroEpisode.runtime && (
+                        <span>Runtime: {heroEpisode.runtime}</span>
+                      )}
+                      {heroEpisode.category && (
+                        <span className="px-2 py-1 bg-[#3ea6ff]/10 text-[#3ea6ff] rounded text-xs font-medium">
+                          {heroEpisode.category}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex flex-col sm:flex-row gap-4">
                       <button
                         onClick={handleHeroPlay}
@@ -284,10 +333,15 @@ export default function HomePageClient() {
             </Link>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuredScenarios.map((scenario) => (
+            {featuredScenarios.slice(0, 6).map((scenario) => (
               <div
+                id={`scenario-${scenario.id}`}
                 key={scenario.id}
-                className="episode-card card-modern group block"
+                className={`episode-card card-modern group block transition-all duration-500 ${
+                  highlightedScenarioId === scenario.id 
+                    ? 'ring-2 ring-[#3ea6ff] ring-offset-2 ring-offset-[#0f0f0f] scale-[1.02]' 
+                    : ''
+                }`}
               >
                 <div className="relative">
                   <EpisodeThumbnail
@@ -353,7 +407,7 @@ export default function HomePageClient() {
           title={modalVideo.title}
           logline={modalVideo.logline}
           isOpen={!!modalVideo}
-          onClose={() => setModalVideo(null)}
+          onClose={handleModalClose}
           page="home"
           placement="episode_card"
         />
