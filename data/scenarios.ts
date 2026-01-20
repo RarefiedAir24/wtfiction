@@ -13,9 +13,9 @@ export interface Scenario {
 }
 
 export const scenarios: Scenario[] = [
-    {
+  {
     id: 'EwIQB4sBx4I',
-    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
     premise: '🤔 What if the very systems we rely on are the ones we barely think about',
     runtime: '07:28',
     youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
@@ -23,7 +23,7 @@ export const scenarios: Scenario[] = [
     publishDate: '2026-01-08',
     featured: true,
   },
-      {
+  {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
     premise: 'The last Ice Age nearly wiped out humanity.
@@ -34,7 +34,7 @@ What if it’s heat?
 
 In this episode of WTFiction, we explore a grounded, science-based what-if scenario:
 
-What',
+What't ice? What if it\'s heat?',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
