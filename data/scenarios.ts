@@ -21,13 +21,14 @@ export const scenarios: Scenario[] = [
     publishDate: '2024-01-15',
     featured: true,
   },
-  {
+    {
     id: 'money-optional',
-    title: 'What If Money Became Optional?',
-    premise: 'A new economic system emerges where traditional currency loses its meaning.',
-    runtime: '22:15',
-    youtubeUrl: 'https://www.youtube.com/watch?v=example2',
-    publishDate: '2024-02-20',
+    title: 'What If Survival Wasn’t the Reason We Work?',
+    premise: 'For most of human history, survival has been the reason we work',
+    runtime: '05:17',
+    youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
+    thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
+    publishDate: '2026-01-18',
     featured: true,
   },
   {
