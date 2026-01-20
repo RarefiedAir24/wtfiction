@@ -8,7 +8,8 @@ export interface Scenario {
   publishDate?: string;
   keyInsight?: string;
   featured?: boolean;
-  hero?: boolean; // Featured in hero section
+  hero?: boolean; // Pinned episode - always shown in hero (overrides latest)
+  category?: string; // e.g., 'Long-Form', 'Short', 'Mini'
 }
 
 export const scenarios: Scenario[] = [
@@ -32,32 +33,40 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'ai-leaders',
-    title: 'What If AI Replaced World Leaders?',
-    premise: 'Artificial intelligence systems take over governance, making decisions based on pure logic and data.',
-    runtime: '19:30',
+    title: 'What If AI Was Elected to Run a Country? #viralvideo',
+    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency't a choice — but the end result of efficiency',
+    runtime: '07:43',
     youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
-    publishDate: '2024-03-10',
+    thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
+    publishDate: '2025-12-30',
     featured: true,
   },
   {
     id: 'survival-guaranteed',
-    title: 'What If Survival Wasn't the Reason We Work?',
+    title: 'What If Survival Wasn’t the Reason We Work?'t the Reason We Work?',
     premise: 'For most of human history, survival has been the reason we work',
-    runtime: '05:17', // Update with actual runtime from video
+    runtime: '05:17',
     youtubeUrl: 'https://www.youtube.com/watch?v=qBl6FCVTA8E',
     thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
-    publishDate: '2026-01-18', // Update with actual publish date from YouTube
+    publishDate: '2026-01-18',
     featured: true,
   },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
 
-// Get hero episode (most recent by publishDate, or last in array if no dates)
+// Get hero episode (pinned episode OR most recent by publishDate)
 export function getHeroEpisode(): Scenario | null {
   const featured = scenarios.filter(s => s.featured);
   if (featured.length === 0) return null;
   
+  // First, check for pinned episode (hero: true)
+  const pinnedEpisode = featured.find(s => s.hero === true);
+  if (pinnedEpisode) {
+    return pinnedEpisode;
+  }
+  
+  // If no pinned episode, return most recent by publishDate
   // Sort by publishDate (most recent first)
   const sorted = [...featured].sort((a, b) => {
     // If both have publishDate, sort by date (newest first)
@@ -99,4 +108,9 @@ export function getHeroEpisode(): Scenario | null {
   
   // Return most recent (first in sorted array)
   return sorted[0];
+}
+
+// Get scenario by ID
+export function getScenarioById(id: string): Scenario | undefined {
+  return scenarios.find(s => s.id === id);
 }
