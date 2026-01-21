@@ -297,6 +297,17 @@ export function parseEpisodes(fileContent: string): Episode[] {
         }
       }
       
+      // Final aggressive cleanup: if premise ends with "scenario:" followed by incomplete text, stop at colon
+      if (premise.includes('scenario:')) {
+        const scenarioIndex = premise.lastIndexOf('scenario:');
+        const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length).trim();
+        // If what comes after is just whitespace/newlines and then an incomplete word, remove it
+        if (afterScenario && (afterScenario.match(/^\s*\n*\s*(What|But|The|And|Or|If)$/) || 
+            (afterScenario.length < 10 && incompleteEndings.some(w => afterScenario.includes(w))))) {
+          premise = premise.substring(0, scenarioIndex + 'scenario:'.length - 1) + '.';
+        }
+      }
+      
       episode.premise = premise.trim();
     }
     
