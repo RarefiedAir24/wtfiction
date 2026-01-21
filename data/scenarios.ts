@@ -23,6 +23,16 @@ export const scenarios: Scenario[] = [
     publishDate: '2025-12-17',
     featured: true,
   },
+  {
+    id: '8ytNzzit528',
+    title: 'Heat Age vs Ice Age: Which Future Are We In?',
+    premise: 'The last Ice Age nearly wiped out humanity.',
+    runtime: '04:12',
+    youtubeUrl: 'https://youtu.be/8ytNzzit528',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    publishDate: '2025-12-18',
+    featured: true,
+  },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
