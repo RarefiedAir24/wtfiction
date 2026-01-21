@@ -33,6 +33,16 @@ export const scenarios: Scenario[] = [
     publishDate: '2025-12-18',
     featured: true,
   },
+  {
+    id: 'sPklz6qf1h0',
+    title: 'What If AI Was Elected to Run a Country? #viralvideo',
+    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency',
+    runtime: '07:43',
+    youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
+    thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
+    publishDate: '2025-12-30',
+    featured: true,
+  },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
