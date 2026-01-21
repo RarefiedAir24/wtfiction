@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\\n\\nBut what if the next global age isn’t ice?\\n\\nWhat if it’s heat?\\n\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\\n\\nWhat',
+    premise: 'The last Ice Age nearly wiped out humanity.\\\\n\\\\nBut what if the next global age isn’t ice?\\\\n\\\\nWhat if it’s heat?\\\\n\\\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\\\\n\\\\nWhat',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
@@ -43,17 +43,6 @@ export const scenarios: Scenario[] = [
     youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
     thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
     publishDate: '2025-12-30',
-    featured: true,
-  },
-
-  {
-    id: 'EwIQB4sBx4I',
-    title: 'The Internet\'s Biggest Vulnerability Is Underwater',
-    premise: '🤔 What if the very systems we rely on are the ones we barely think about',
-    runtime: '07:28',
-    youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
-    thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
-    publishDate: '2026-01-08',
     featured: true,
   }
 ];
