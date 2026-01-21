@@ -302,9 +302,30 @@ export function parseEpisodes(fileContent: string): Episode[] {
         const scenarioIndex = premise.lastIndexOf('scenario:');
         const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length).trim();
         // If what comes after is just whitespace/newlines and then an incomplete word, remove it
-        if (afterScenario && (afterScenario.match(/^\s*\n*\s*(What|But|The|And|Or|If)$/) || 
-            (afterScenario.length < 10 && incompleteEndings.some(w => afterScenario.includes(w))))) {
+        const afterClean = afterScenario.replace(/\s+/g, ' ').trim();
+        if (afterClean && (afterClean.match(/^(What|But|The|And|Or|If)$/) || 
+            (afterClean.length < 10 && incompleteEndings.some(w => afterClean.includes(w))))) {
           premise = premise.substring(0, scenarioIndex + 'scenario:'.length - 1) + '.';
+        } else if (afterClean && !afterClean.match(/^[.!?]/) && afterClean.length < 20) {
+          // Short fragment after scenario: is likely corruption
+          premise = premise.substring(0, scenarioIndex + 'scenario:'.length - 1) + '.';
+        }
+      }
+      
+      // One more pass: if it still ends with an incomplete word, remove it
+      const finalTrim = premise.trim();
+      const lastWord = finalTrim.split(/\s+/).pop() || '';
+      if (incompleteEndings.includes(lastWord) && finalTrim.length > 50) {
+        // Find last sentence ending
+        const lastPeriod = finalTrim.lastIndexOf('.');
+        const lastExclamation = finalTrim.lastIndexOf('!');
+        const lastQuestion = finalTrim.lastIndexOf('?');
+        const lastEnding = Math.max(lastPeriod, lastExclamation, lastQuestion);
+        if (lastEnding > finalTrim.length * 0.7) {
+          premise = finalTrim.substring(0, lastEnding + 1);
+        } else {
+          // No sentence ending found, just remove the last word
+          premise = finalTrim.substring(0, finalTrim.lastIndexOf(lastWord)).trim();
         }
       }
       
