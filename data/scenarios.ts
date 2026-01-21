@@ -79,13 +79,11 @@ export const featuredScenarios = scenarios.filter(s => s.featured);
 export function getHeroEpisode(): Scenario | null {
   const featured = scenarios.filter(s => s.featured);
   if (featured.length === 0) return null;
-  
   // First, check for pinned episode (hero: true)
   const pinnedEpisode = featured.find(s => s.hero === true);
   if (pinnedEpisode) {
     return pinnedEpisode;
   }
-  
   // If no pinned episode, return most recent by publishDate
   // Sort by publishDate (most recent first)
   const sorted = [...featured].sort((a, b) => {
@@ -113,19 +111,16 @@ export function getHeroEpisode(): Scenario | null {
     // So we want the last item in the original array
     return 0;
   });
-  
   // If no valid publishDates, return last item in original array (assumed to be most recent)
   const hasValidDates = sorted.some(s => {
     if (!s.publishDate) return false;
     const date = new Date(s.publishDate);
     return !isNaN(date.getTime());
   });
-  
   if (!hasValidDates) {
     // Return last item in original array (assumed to be most recent)
     return featured[featured.length - 1];
   }
-  
   // Return most recent (first in sorted array)
   return sorted[0];
 }
