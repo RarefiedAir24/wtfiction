@@ -255,11 +255,22 @@ export function parseEpisodes(fileContent: string): Episode[] {
       if (episodeMatch) {
         const beforeEpisode = premise.substring(0, episodeMatch.index);
         const afterEpisode = premise.substring(episodeMatch.index! + episodeMatch[0].length);
-        // If there's text after "scenario:", it's likely corrupted
-        if (afterEpisode.trim().length > 0 && !afterEpisode.match(/^[.!?]/)) {
-          premise = beforeEpisode + 'In this episode of WTFiction, we explore a grounded, science-based what-if scenario.';
+        // If there's text after "scenario:" that looks corrupted (starts with "What", "But", etc.)
+        if (afterEpisode.trim().length > 0 && (afterEpisode.match(/^\s*(What|But|The|And)/) || !afterEpisode.match(/^[.!?]/))) {
+          // Stop at "scenario:" and add period
+          const cleanEpisode = episodeMatch[0].replace(/:\s*$/, '').replace(/[.!?]\s*$/, '');
+          premise = beforeEpisode + cleanEpisode + '.';
         } else {
           premise = beforeEpisode + episodeMatch[0];
+        }
+      }
+      
+      // Pattern 6: Remove any text after "scenario:" that starts with incomplete words
+      if (premise.includes('scenario:')) {
+        const scenarioIndex = premise.indexOf('scenario:');
+        const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length).trim();
+        if (afterScenario && incompleteEndings.some(word => afterScenario.startsWith(word))) {
+          premise = premise.substring(0, scenarioIndex + 'scenario:'.length - 1) + '.';
         }
       }
       
