@@ -251,7 +251,7 @@ export function parseEpisodes(fileContent: string): Episode[] {
       
       // Pattern 5: Remove corrupted text after "scenario:"
       // The GitHub file has corruption like: "scenario:\n\nWhat't ice? What if it\\'s heat?..."
-      // We should stop at "scenario:" and remove everything after
+      // ALWAYS stop at "scenario:" - if there's anything after it, it's likely corrupted
       if (premise.includes('scenario:')) {
         const scenarioIndex = premise.indexOf('scenario:');
         const beforeScenario = premise.substring(0, scenarioIndex);
@@ -260,17 +260,19 @@ export function parseEpisodes(fileContent: string): Episode[] {
         // Normalize whitespace (including newlines) for checking
         const afterClean = afterScenario.replace(/[\s\n\r]+/g, ' ').trim();
         
-        // Check if what comes after looks like corruption
-        // The corrupted text typically starts with "What't ice?" or "What if it"
-        const isCorrupted = 
-          afterClean.match(/^(What['"]t|What if it)/i) || // Starts with corrupted fragments
-          afterClean.includes("What't ice") || // Contains known corruption pattern
-          afterClean.includes("What if it\\'s") || // Contains escaped corruption
-          (afterClean.length > 0 && afterClean.length < 200 && !afterClean.match(/^[.!?]/)); // Short fragment that doesn't start with punctuation
-        
-        if (isCorrupted) {
-          // Stop at "scenario:" and add period
-          premise = beforeScenario + 'scenario.';
+        // If there's ANY text after "scenario:", check if it's corrupted
+        // The corrupted text typically starts with "What't ice?" or "What if it" or just "What"
+        if (afterClean.length > 0) {
+          const looksCorrupted = 
+            afterClean.match(/^(What['"]t|What if it|What\s*$)/i) || // Starts with corrupted fragments or just "What"
+            afterClean.includes("What't ice") || // Contains known corruption pattern
+            afterClean.includes("What if it\\'s") || // Contains escaped corruption
+            afterClean.length < 200; // Short fragment is likely corruption (complete sentences are usually longer)
+          
+          if (looksCorrupted) {
+            // Stop at "scenario:" and add period
+            premise = beforeScenario + 'scenario.';
+          }
         }
       }
       
