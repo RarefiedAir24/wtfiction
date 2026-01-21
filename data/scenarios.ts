@@ -15,7 +15,7 @@ export interface Scenario {
 export const scenarios: Scenario[] = [
   {
     id: 'EwIQB4sBx4I',
-    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
     premise: '🤔 What if the very systems we rely on are the ones we barely think about',
     runtime: '07:28',
     youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
@@ -54,7 +54,7 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
   {
     id: 'i8vIIkaU4wI',
     title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
-    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
+    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security's offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
     runtime: '07:21',
     youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
     thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
@@ -63,7 +63,7 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
   },
   {
     id: 'qBl6FCVTA8E',
-    title: 'What If Survival Wasn’t the Reason We Work?',
+    title: 'What If Survival Wasn’t the Reason We Work?'t the Reason We Work?',
     premise: 'For most of human history, survival has been the reason we work',
     runtime: '05:17',
     youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
