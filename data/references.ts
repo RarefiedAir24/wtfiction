@@ -54,11 +54,13 @@ export const references: Reference[] = [
     episodeTitle: 'What If Survival Wasn\'t the Reason We Work?',
     publishDate: '2026-01-18',
     citations: [
-      { text: 'Smith et al., Post-Scarcity Labor Models, Journal of Economic Futures', type: 'Academic' },
+{ text: 'Smith et al., Post-Scarcity Labor Models, Journal of Economic Futures', type: 'Academic' },
       { text: 'OECD, Automation and Employment Outlook', type: 'Government' },
       { text: 'McKinsey Global Institute, The Future of Work', type: 'Research' },
       { text: 'World Bank employment statistics and labor market data', type: 'Data' },
-      { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (Academic, 2025).', type: 'Academic' },
+      { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (Academic, 2025).', type: 'Academic' },,
+      { title: 'The Stanford Basic Income Lab', citation: 'a Variety of Criteria, The Stanford Basic Income Lab (Academic).', description: 'We provide an academic home for research into the politics, philosophy, economics and implementation of basic income and related cash policies.', type: 'Academic', url: 'https://basicincome.stanford.edu' }
+
     ],
   },
   {
