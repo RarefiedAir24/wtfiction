@@ -11,6 +11,7 @@ import { join } from 'path';
 import { fetchYouTubeVideoMetadata } from '../lib/youtube-api';
 import { getYouTubeVideoId } from '../lib/youtube';
 import { readFileSync, writeFileSync } from 'fs';
+import fetchReferencesFromGitHub from './fetch-references';
 
 // Load .env.local if it exists (for local development)
 config({ path: join(process.cwd(), '.env.local') });
@@ -18,6 +19,9 @@ config({ path: join(process.cwd(), '.env.local') });
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
 async function preBuild() {
+  // Always fetch latest references from GitHub first
+  await fetchReferencesFromGitHub();
+  
   if (!API_KEY) {
     console.log('⚠️  YOUTUBE_API_KEY not found - skipping video metadata fetch');
     console.log('   Videos will use existing metadata or placeholders');
