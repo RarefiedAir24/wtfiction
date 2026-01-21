@@ -12,15 +12,7 @@ export interface Reference {
   episodeId: string;
   episodeTitle: string;
   publishDate?: string;
-  citations: Citation[  {
-    episodeId: 'qBl6FCVTA8E',
-    episodeTitle: 'What If Survival Wasn’t the Reason We Work?',
-    publishDate: '2026-01-18',
-    citations: [
-      { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (2025).', type: 'Academic' },
-    ],
-  },
-];
+  citations: Citation[];
 }
 
 export const references: Reference[] = [
@@ -66,6 +58,7 @@ export const references: Reference[] = [
       { text: 'OECD, Automation and Employment Outlook', type: 'Government' },
       { text: 'McKinsey Global Institute, The Future of Work', type: 'Research' },
       { text: 'World Bank employment statistics and labor market data', type: 'Data' },
+      { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (Academic, 2025).', type: 'Academic' },
     ],
   },
   {
