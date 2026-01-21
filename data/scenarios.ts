@@ -16,7 +16,6 @@ export const scenarios: Scenario[] = [
   {
     id: 'EwIQB4sBx4I',
     title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
-
     premise: '🤔 What if the very systems we rely on are the ones we barely think about',
     runtime: '07:28',
     youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
