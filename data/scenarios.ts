@@ -26,6 +26,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: '8ytNzzit528',
+    title: 'Heat Age vs Ice Age: Which Future Are We In?',
     premise: 'The last Ice Age nearly wiped out humanity.
 
 But what if the next global age isn’t ice?
