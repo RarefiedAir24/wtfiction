@@ -13,6 +13,7 @@ import { getYouTubeVideoId } from '../lib/youtube';
 import { readFileSync, writeFileSync } from 'fs';
 import fetchReferencesFromGitHub from './fetch-references';
 import fetchScenariosFromGitHub from './fetch-scenarios';
+import { parseEpisodes, generateScenariosFile, Episode } from './scenarios-manager';
 
 // Load .env.local if it exists (for local development)
 config({ path: join(process.cwd(), '.env.local') });
@@ -36,94 +37,39 @@ async function preBuild() {
   console.log('📹 Auto-fetching video metadata...\n');
 
   const scenariosPath = join(process.cwd(), 'data', 'scenarios.ts');
-  let fileContent = readFileSync(scenariosPath, 'utf-8');
+  const fileContent = readFileSync(scenariosPath, 'utf-8');
 
-  // Extract all YouTube URLs
-  const videoUrlRegex = /youtubeUrl:\s*['"](https?:\/\/[^'"]+)['"]/g;
-  const videoUrls: Array<{ url: string; videoId: string }> = [];
-  let match;
+  // Parse as records (ensures clean data structure)
+  const episodes = parseEpisodes(fileContent);
 
-  while ((match = videoUrlRegex.exec(fileContent)) !== null) {
-    const url = match[1];
-    const videoId = getYouTubeVideoId(url);
+  // Find episodes that need metadata updates
+  const episodesToUpdate: Array<{ episode: Episode; videoId: string }> = [];
+  for (const episode of episodes) {
+    const videoId = getYouTubeVideoId(episode.youtubeUrl);
     if (videoId && !videoId.startsWith('example')) {
-      videoUrls.push({ url, videoId });
+      episodesToUpdate.push({ episode, videoId });
     }
   }
 
-  if (videoUrls.length === 0) {
+  if (episodesToUpdate.length === 0) {
     console.log('✅ No videos to fetch\n');
     return;
   }
 
-  // Fetch metadata for each video
-  for (const { url, videoId } of videoUrls) {
+  // Fetch metadata for each video and update episode records
+  for (const { episode, videoId } of episodesToUpdate) {
     try {
       const metadata = await fetchYouTubeVideoMetadata(videoId, API_KEY);
       
       if (metadata) {
-        // Update the file with fetched metadata
-        const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const scenarioBlockRegex = new RegExp(
-          `(\\{[^}]*youtubeUrl:\\s*['"]${escapedUrl}['"][^}]*\\})`,
-          's'
-        );
-        const scenarioMatch = fileContent.match(scenarioBlockRegex);
+        // Update episode record (not string manipulation!)
+        episode.title = metadata.title;
+        episode.premise = metadata.premise;
+        episode.runtime = metadata.runtime;
+        episode.publishDate = metadata.publishDate;
+        episode.thumbnailUrl = metadata.thumbnailUrl;
         
-        if (scenarioMatch) {
-          let scenarioBlock = scenarioMatch[1];
-          const originalBlock = scenarioBlock;
-
-          // Update fields
-          scenarioBlock = scenarioBlock.replace(
-            /title:\s*['"]([^'"]*)['"]/,
-            `title: '${metadata.title.replace(/'/g, "\\'")}'`
-          );
-          
-          scenarioBlock = scenarioBlock.replace(
-            /premise:\s*['"]([^'"]*)['"]/,
-            `premise: '${metadata.premise.replace(/'/g, "\\'")}'`
-          );
-
-          if (scenarioBlock.includes('runtime:')) {
-            scenarioBlock = scenarioBlock.replace(
-              /runtime:\s*['"]([^'"]*)['"]/,
-              `runtime: '${metadata.runtime}'`
-            );
-          } else {
-            scenarioBlock = scenarioBlock.replace(
-              /(premise:\s*['"][^'"]*['"],\s*\n\s*)(youtubeUrl:)/,
-              `$1runtime: '${metadata.runtime}',\n    $2`
-            );
-          }
-
-          if (scenarioBlock.includes('publishDate:')) {
-            scenarioBlock = scenarioBlock.replace(
-              /publishDate:\s*['"]([^'"]*)['"]/,
-              `publishDate: '${metadata.publishDate}'`
-            );
-          } else {
-            scenarioBlock = scenarioBlock.replace(
-              /(youtubeUrl:\s*['"][^'"]*['"],\s*\n\s*)(featured|thumbnailUrl)/,
-              `$1publishDate: '${metadata.publishDate}',\n    $2`
-            );
-          }
-
-          if (scenarioBlock.includes('thumbnailUrl:')) {
-            scenarioBlock = scenarioBlock.replace(
-              /thumbnailUrl:\s*['"]([^'"]*)['"]/,
-              `thumbnailUrl: '${metadata.thumbnailUrl}'`
-            );
-          } else {
-            scenarioBlock = scenarioBlock.replace(
-              /(youtubeUrl:\s*['"][^'"]*['"],\s*\n\s*)(publishDate|featured)/,
-              `$1thumbnailUrl: '${metadata.thumbnailUrl}',\n    $2`
-            );
-          }
-
-          fileContent = fileContent.replace(originalBlock, scenarioBlock);
-          console.log(`   ✓ ${metadata.title}`);
-        }
+        console.log(`   ✓ ${metadata.title}`);
       }
     } catch (error) {
       console.error(`   ❌ Error fetching ${videoId}:`, error);
@@ -133,8 +79,10 @@ async function preBuild() {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
-  writeFileSync(scenariosPath, fileContent, 'utf-8');
-  console.log(`\n✅ Updated ${videoUrls.length} video(s)\n`);
+  // Regenerate clean file from updated records
+  const cleanContent = generateScenariosFile(episodes);
+  writeFileSync(scenariosPath, cleanContent, 'utf-8');
+  console.log(`\n✅ Updated ${episodesToUpdate.length} video(s)\n`);
 }
 
 preBuild().catch(console.error);

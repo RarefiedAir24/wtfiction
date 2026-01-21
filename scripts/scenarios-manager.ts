@@ -184,19 +184,80 @@ export function parseEpisodes(fileContent: string): Episode[] {
         }
       }
       
-      // Clean up premise - remove duplicate text
+      // Clean up premise - remove duplicate text (more aggressive)
+      // Check for common corruption patterns
+      const originalPremise = premise;
+      
+      // Pattern 1: Exact duplicate of entire string
       const words = premise.split(/\s+/);
       if (words.length > 10) {
-        const firstThird = words.slice(0, Math.floor(words.length / 3)).join(' ');
-        const secondThird = words.slice(Math.floor(words.length / 3), Math.floor(words.length * 2 / 3)).join(' ');
-        const thirdThird = words.slice(Math.floor(words.length * 2 / 3)).join(' ');
-        if (firstThird === secondThird && secondThird === thirdThird) {
-          premise = firstThird;
-        } else if (firstThird === secondThird) {
-          premise = firstThird + ' ' + thirdThird;
+        const midPoint = Math.floor(words.length / 2);
+        const firstHalf = words.slice(0, midPoint).join(' ');
+        const secondHalf = words.slice(midPoint).join(' ');
+        
+        // Check if first half equals second half (exact duplicate)
+        if (firstHalf === secondHalf) {
+          premise = firstHalf;
+        } else {
+          // Check for partial duplicates at the end
+          // Look for repeated phrases at the end
+          for (let i = Math.floor(words.length * 0.3); i < words.length; i++) {
+            const endPhrase = words.slice(i).join(' ');
+            const startPhrase = words.slice(0, words.length - (words.length - i)).join(' ');
+            if (endPhrase.length > 20 && startPhrase.includes(endPhrase)) {
+              premise = words.slice(0, i).join(' ');
+              break;
+            }
+          }
         }
       }
-      episode.premise = premise.replace(/\n/g, ' ').trim();
+      
+      // Pattern 2: Remove trailing fragments that look like duplicates
+      // If premise ends with a short word/phrase that appears earlier, it might be corruption
+      const cleanPremise = premise.trim();
+      const lastWords = cleanPremise.split(/\s+/).slice(-5).join(' ');
+      if (lastWords.length < 50 && cleanPremise.indexOf(lastWords) !== cleanPremise.lastIndexOf(lastWords)) {
+        // Last few words appear earlier, likely corruption
+        premise = cleanPremise.substring(0, cleanPremise.lastIndexOf(lastWords)).trim();
+      }
+      
+      // Pattern 3: Remove incomplete sentences at the end (ending with "What", "But", etc.)
+      const incompleteEndings = ['What', 'But', 'The', 'And', 'Or', 'If'];
+      const lastWord = premise.trim().split(/\s+/).pop() || '';
+      if (incompleteEndings.includes(lastWord) && premise.length > 100) {
+        // Find the last complete sentence
+        const sentences = premise.split(/[.!?]\s+/);
+        if (sentences.length > 1) {
+          premise = sentences.slice(0, -1).join('. ') + '.';
+        } else {
+          // No sentence endings, find last complete phrase
+          const lastPeriod = premise.lastIndexOf('.');
+          if (lastPeriod > premise.length * 0.5) {
+            premise = premise.substring(0, lastPeriod + 1);
+          } else {
+            // Remove the incomplete last word
+            const words = premise.trim().split(/\s+/);
+            if (words.length > 1) {
+              premise = words.slice(0, -1).join(' ');
+            }
+          }
+        }
+      }
+      
+      // Pattern 4: Remove corrupted fragments like "What't ice?" or "What if it\\'s"
+      // These are clearly corrupted text that should be removed
+      premise = premise.replace(/What['"]t\s+ice\?[^.]*/g, '');
+      premise = premise.replace(/What\s+if\s+it\\?'s\s+heat\?[^.]*/g, '');
+      premise = premise.replace(/In this episode of WTFiction[^.]*scenario:[^.]*/g, 'In this episode of WTFiction, we explore a grounded, science-based what-if scenario.');
+      
+      // Normalize whitespace and newlines
+      episode.premise = premise.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+      
+      // Final check: if premise still ends with incomplete word, remove it
+      const finalWords = episode.premise.split(/\s+/);
+      if (finalWords.length > 1 && incompleteEndings.includes(finalWords[finalWords.length - 1])) {
+        episode.premise = finalWords.slice(0, -1).join(' ');
+      }
     }
     
     // Extract other fields
