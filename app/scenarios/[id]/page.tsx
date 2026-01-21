@@ -25,10 +25,13 @@ export default async function ScenarioDetailPage({ params }: PageProps) {
   
   const episodeReferences = references.find(r => r.episodeId === id);
   
+  // Convert Citation objects to strings for backward compatibility
+  const citationStrings = episodeReferences?.citations.map(c => c.text) || [];
+  
   return (
     <ScenarioDetailClient 
       scenario={scenario} 
-      references={episodeReferences?.citations || []}
+      references={citationStrings}
     />
   );
 }
