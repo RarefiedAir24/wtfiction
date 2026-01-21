@@ -14,13 +14,13 @@ export interface Scenario {
 
 export const scenarios: Scenario[] = [
   {
-    id: 'i8vIIkaU4wI',
-    title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
-    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
-    runtime: '07:21',
-    youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
-    thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
-    publishDate: '2025-12-17',
+    id: '8ytNzzit528',
+    title: 'Heat Age vs Ice Age: Which Future Are We In?',
+    premise: 'The last Ice Age nearly wiped out humanity.\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\nBut what if the next global age isn’t ice?\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\nWhat if it’s heat?\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\nWhat',
+    runtime: '04:12',
+    youtubeUrl: 'https://youtu.be/8ytNzzit528',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    publishDate: '2025-12-18',
     featured: true,
   }
 ];
