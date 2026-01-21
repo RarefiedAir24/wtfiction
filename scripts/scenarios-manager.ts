@@ -248,16 +248,45 @@ export function parseEpisodes(fileContent: string): Episode[] {
       // These are clearly corrupted text that should be removed
       premise = premise.replace(/What['"]t\s+ice\?[^.]*/g, '');
       premise = premise.replace(/What\s+if\s+it\\?'s\s+heat\?[^.]*/g, '');
-      premise = premise.replace(/In this episode of WTFiction[^.]*scenario:[^.]*/g, 'In this episode of WTFiction, we explore a grounded, science-based what-if scenario.');
+      
+      // Pattern 5: If premise ends with "In this episode..." followed by corrupted text,
+      // find the last complete sentence before the corruption
+      const episodeMatch = premise.match(/In this episode of WTFiction[^.]*scenario[^.]*/i);
+      if (episodeMatch) {
+        const beforeEpisode = premise.substring(0, episodeMatch.index);
+        const afterEpisode = premise.substring(episodeMatch.index! + episodeMatch[0].length);
+        // If there's text after "scenario:", it's likely corrupted
+        if (afterEpisode.trim().length > 0 && !afterEpisode.match(/^[.!?]/)) {
+          premise = beforeEpisode + 'In this episode of WTFiction, we explore a grounded, science-based what-if scenario.';
+        } else {
+          premise = beforeEpisode + episodeMatch[0];
+        }
+      }
       
       // Normalize whitespace and newlines
-      episode.premise = premise.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+      premise = premise.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
       
-      // Final check: if premise still ends with incomplete word, remove it
-      const finalWords = episode.premise.split(/\s+/);
+      // Final check: if premise ends with incomplete word, remove it
+      const finalWords = premise.split(/\s+/);
       if (finalWords.length > 1 && incompleteEndings.includes(finalWords[finalWords.length - 1])) {
-        episode.premise = finalWords.slice(0, -1).join(' ');
+        // Check if it's part of a complete phrase
+        const lastPhrase = finalWords.slice(-3).join(' ');
+        if (!lastPhrase.match(/[.!?]$/) && premise.length > 100) {
+          premise = finalWords.slice(0, -1).join(' ');
+        }
       }
+      
+      // Remove any trailing incomplete fragments
+      if (premise.endsWith('What') || premise.endsWith('But') || premise.endsWith('The')) {
+        const sentences = premise.split(/[.!?]\s+/);
+        if (sentences.length > 1) {
+          premise = sentences.slice(0, -1).join('. ') + '.';
+        } else {
+          premise = premise.replace(/\s+(What|But|The)$/, '');
+        }
+      }
+      
+      episode.premise = premise.trim();
     }
     
     // Extract other fields
