@@ -249,28 +249,36 @@ export function parseEpisodes(fileContent: string): Episode[] {
       premise = premise.replace(/What['"]t\s+ice\?[^.]*/g, '');
       premise = premise.replace(/What\s+if\s+it\\?'s\s+heat\?[^.]*/g, '');
       
-      // Pattern 5: If premise ends with "In this episode..." followed by corrupted text,
-      // find the last complete sentence before the corruption
-      const episodeMatch = premise.match(/In this episode of WTFiction[^.]*scenario[^.]*/i);
-      if (episodeMatch) {
-        const beforeEpisode = premise.substring(0, episodeMatch.index);
-        const afterEpisode = premise.substring(episodeMatch.index! + episodeMatch[0].length);
-        // If there's text after "scenario:" that looks corrupted (starts with "What", "But", etc.)
-        if (afterEpisode.trim().length > 0 && (afterEpisode.match(/^\s*(What|But|The|And)/) || !afterEpisode.match(/^[.!?]/))) {
+      // Pattern 5: Remove corrupted text after "scenario:"
+      // The GitHub file has corruption like: "scenario:\n\nWhat't ice? What if it\\'s heat?..."
+      // We should stop at "scenario:" and remove everything after
+      if (premise.includes('scenario:')) {
+        const scenarioIndex = premise.indexOf('scenario:');
+        const beforeScenario = premise.substring(0, scenarioIndex);
+        const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length);
+        
+        // Check if what comes after looks like corruption
+        const afterClean = afterScenario.replace(/\s+/g, ' ').trim();
+        const isCorrupted = 
+          afterClean.match(/^(What['"]t|What if it)/) || // Starts with corrupted fragments
+          afterClean.includes("What't ice") || // Contains known corruption pattern
+          (afterClean.length > 0 && afterClean.length < 150 && !afterClean.match(/^[.!?]/)); // Short fragment that doesn't start with punctuation
+        
+        if (isCorrupted) {
           // Stop at "scenario:" and add period
-          const cleanEpisode = episodeMatch[0].replace(/:\s*$/, '').replace(/[.!?]\s*$/, '');
-          premise = beforeEpisode + cleanEpisode + '.';
-        } else {
-          premise = beforeEpisode + episodeMatch[0];
+          premise = beforeScenario + 'scenario.';
         }
       }
       
-      // Pattern 6: Remove any text after "scenario:" that starts with incomplete words
-      if (premise.includes('scenario:')) {
-        const scenarioIndex = premise.indexOf('scenario:');
-        const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length).trim();
-        if (afterScenario && incompleteEndings.some(word => afterScenario.startsWith(word))) {
-          premise = premise.substring(0, scenarioIndex + 'scenario:'.length - 1) + '.';
+      // Pattern 6: Also check for "In this episode..." pattern and clean after it
+      const episodeMatch = premise.match(/In this episode of WTFiction[^.]*scenario[^.]*/i);
+      if (episodeMatch) {
+        const matchText = episodeMatch[0];
+        // If match ends with "scenario:" and there's text after, it's likely corrupted
+        if (matchText.endsWith('scenario:') || matchText.endsWith('scenario')) {
+          const beforeMatch = premise.substring(0, episodeMatch.index);
+          const cleanMatch = matchText.replace(/:\s*$/, '').replace(/[.!?]\s*$/, '');
+          premise = beforeMatch + cleanMatch + '.';
         }
       }
       
