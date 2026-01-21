@@ -1,10 +1,11 @@
 /**
  * Fetch latest scenarios.ts from GitHub during build
- * This ensures the main site always has the latest scenarios without manual deployment
+ * Parses as records and regenerates clean file to prevent corruption
  */
 
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { parseEpisodes, generateScenariosFile } from './scenarios-manager';
 
 async function fetchScenariosFromGitHub(): Promise<void> {
   const owner = 'RarefiedAir24';
@@ -36,13 +37,18 @@ async function fetchScenariosFromGitHub(): Promise<void> {
       return;
     }
 
-    // Write to local file
-    const scenariosPath = join(process.cwd(), 'data', 'scenarios.ts');
-    writeFileSync(scenariosPath, content, 'utf-8');
+    // Parse as records (this cleans corrupted data automatically)
+    const episodes = parseEpisodes(content);
+    console.log(`   Parsed ${episodes.length} episodes as records`);
     
-    // Count scenarios to verify
-    const scenarioCount = (content.match(/id:\s*['"]/g) || []).length;
-    console.log(`✅ Fetched scenarios.ts from GitHub (${scenarioCount} scenarios)`);
+    // Regenerate clean file
+    const cleanContent = generateScenariosFile(episodes);
+    
+    // Write clean file
+    const scenariosPath = join(process.cwd(), 'data', 'scenarios.ts');
+    writeFileSync(scenariosPath, cleanContent, 'utf-8');
+    
+    console.log(`✅ Fetched and cleaned scenarios.ts from GitHub (${episodes.length} scenarios)`);
   } catch (error: any) {
     console.warn(`⚠️  Error fetching scenarios from GitHub: ${error.message}`);
     console.warn('   Using local scenarios.ts file');

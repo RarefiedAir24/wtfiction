@@ -1,0 +1,348 @@
+/**
+ * Scenarios Manager - Treats episodes as structured records
+ * Parses, modifies, and regenerates the scenarios.ts file
+ * Same as admin portal to ensure consistency
+ */
+
+export interface Episode {
+  id: string;
+  title: string;
+  premise: string;
+  runtime?: string;
+  youtubeUrl: string;
+  thumbnailUrl?: string;
+  publishDate?: string;
+  keyInsight?: string;
+  featured?: boolean;
+  hero?: boolean;
+  category?: string;
+}
+
+/**
+ * Parse episodes from scenarios.ts file content
+ * Returns array of episode records
+ */
+export function parseEpisodes(fileContent: string): Episode[] {
+  const episodes: Episode[] = [];
+  
+  // Find the scenarios array
+  const arrayStartMatch = fileContent.match(/export\s+const\s+scenarios\s*:\s*Scenario\[\]\s*=\s*\[|export\s+const\s+scenarios\s*=\s*\[/);
+  if (!arrayStartMatch) {
+    throw new Error('Could not find scenarios array');
+  }
+  
+  const arrayStart = arrayStartMatch.index! + arrayStartMatch[0].length;
+  
+  // Find array end
+  let bracketDepth = 1;
+  let arrayEnd = -1;
+  for (let i = arrayStart; i < fileContent.length; i++) {
+    if (fileContent[i] === '[') bracketDepth++;
+    if (fileContent[i] === ']') {
+      bracketDepth--;
+      if (bracketDepth === 0) {
+        arrayEnd = i;
+        break;
+      }
+    }
+  }
+  
+  if (arrayEnd === -1) {
+    throw new Error('Could not find end of scenarios array');
+  }
+  
+  const arrayContent = fileContent.substring(arrayStart, arrayEnd);
+  
+  // Extract each episode object using a more robust approach
+  // Find all episode IDs first to get boundaries
+  const idMatches: Array<{ id: string; position: number }> = [];
+  const idRegex = /id\s*:\s*['"]([^'"]+)['"]/g;
+  let match;
+  while ((match = idRegex.exec(arrayContent)) !== null) {
+    idMatches.push({
+      id: match[1],
+      position: match.index,
+    });
+  }
+  
+  // Parse each episode
+  for (let i = 0; i < idMatches.length; i++) {
+    const idMatch = idMatches[i];
+    const nextMatch = idMatches[i + 1];
+    
+    // Find episode boundaries
+    let episodeStart = -1;
+    for (let j = idMatch.position; j >= 0; j--) {
+      if (arrayContent[j] === '{') {
+        episodeStart = j;
+        break;
+      }
+    }
+    
+    if (episodeStart === -1) continue;
+    
+    // Find episode end - use next episode or array end
+    let episodeEnd = -1;
+    const searchStart = episodeStart + 1;
+    const searchEnd = nextMatch ? nextMatch.position : arrayContent.length;
+    
+    let braceDepth = 1;
+    for (let j = searchStart; j < searchEnd; j++) {
+      if (arrayContent[j] === '{') braceDepth++;
+      if (arrayContent[j] === '}') {
+        braceDepth--;
+        if (braceDepth === 0) {
+          episodeEnd = j + 1;
+          break;
+        }
+      }
+    }
+    
+    if (episodeEnd === -1) continue;
+    
+    const episodeBlock = arrayContent.substring(episodeStart, episodeEnd);
+    
+    // Parse episode fields (handle corrupted strings by being flexible)
+    const episode: Partial<Episode> = {};
+    
+    // Extract ID
+    const idMatch2 = episodeBlock.match(/id\s*:\s*['"]([^'"]+)['"]/);
+    if (idMatch2) episode.id = idMatch2[1];
+    
+    // Extract title - handle escaped apostrophes properly
+    const titlePattern = /title\s*:\s*['"]/;
+    const titleMatch = episodeBlock.match(titlePattern);
+    if (titleMatch) {
+      const startPos = titleMatch.index! + titleMatch[0].length;
+      const quoteChar = episodeBlock[startPos - 1];
+      let title = '';
+      let j = startPos;
+      
+      // Parse until we find an unescaped closing quote
+      while (j < episodeBlock.length) {
+        if (episodeBlock[j] === '\\' && j + 1 < episodeBlock.length) {
+          if (episodeBlock[j + 1] === quoteChar) {
+            title += quoteChar;
+            j += 2;
+          } else if (episodeBlock[j + 1] === '\\') {
+            title += '\\';
+            j += 2;
+          } else {
+            title += episodeBlock[j] + episodeBlock[j + 1];
+            j += 2;
+          }
+        } else if (episodeBlock[j] === quoteChar) {
+          break;
+        } else {
+          title += episodeBlock[j];
+          j++;
+        }
+      }
+      
+      // Clean up title - remove duplicate text if present
+      const words = title.split(/\s+/);
+      if (words.length > 4) {
+        const firstHalf = words.slice(0, Math.floor(words.length / 2)).join(' ');
+        const secondHalf = words.slice(Math.floor(words.length / 2)).join(' ');
+        if (firstHalf === secondHalf) {
+          title = firstHalf;
+        }
+      }
+      episode.title = title;
+    }
+    
+    // Extract premise - handle corrupted strings
+    const premisePattern = /premise\s*:\s*['"]/;
+    const premiseMatch = episodeBlock.match(premisePattern);
+    if (premiseMatch) {
+      const startPos = premiseMatch.index! + premiseMatch[0].length;
+      const quoteChar = episodeBlock[startPos - 1];
+      let premise = '';
+      let j = startPos;
+      
+      // Parse until we find an unescaped closing quote
+      while (j < episodeBlock.length) {
+        if (episodeBlock[j] === '\\' && j + 1 < episodeBlock.length) {
+          if (episodeBlock[j + 1] === quoteChar) {
+            premise += quoteChar;
+            j += 2;
+          } else if (episodeBlock[j + 1] === '\\') {
+            premise += '\\';
+            j += 2;
+          } else if (episodeBlock[j + 1] === 'n') {
+            premise += '\n';
+            j += 2;
+          } else {
+            premise += episodeBlock[j] + episodeBlock[j + 1];
+            j += 2;
+          }
+        } else if (episodeBlock[j] === quoteChar) {
+          break;
+        } else {
+          premise += episodeBlock[j];
+          j++;
+        }
+      }
+      
+      // Clean up premise - remove duplicate text
+      const words = premise.split(/\s+/);
+      if (words.length > 10) {
+        const firstThird = words.slice(0, Math.floor(words.length / 3)).join(' ');
+        const secondThird = words.slice(Math.floor(words.length / 3), Math.floor(words.length * 2 / 3)).join(' ');
+        const thirdThird = words.slice(Math.floor(words.length * 2 / 3)).join(' ');
+        if (firstThird === secondThird && secondThird === thirdThird) {
+          premise = firstThird;
+        } else if (firstThird === secondThird) {
+          premise = firstThird + ' ' + thirdThird;
+        }
+      }
+      episode.premise = premise.replace(/\n/g, ' ').trim();
+    }
+    
+    // Extract other fields
+    const runtimeMatch = episodeBlock.match(/runtime\s*:\s*['"]([^'"]+)['"]/);
+    if (runtimeMatch) episode.runtime = runtimeMatch[1];
+    
+    const youtubeMatch = episodeBlock.match(/youtubeUrl\s*:\s*['"]([^'"]+)['"]/);
+    if (youtubeMatch) episode.youtubeUrl = youtubeMatch[1];
+    
+    const thumbnailMatch = episodeBlock.match(/thumbnailUrl\s*:\s*['"]([^'"]+)['"]/);
+    if (thumbnailMatch) episode.thumbnailUrl = thumbnailMatch[1];
+    
+    const publishDateMatch = episodeBlock.match(/publishDate\s*:\s*['"]([^'"]+)['"]/);
+    if (publishDateMatch) episode.publishDate = publishDateMatch[1];
+    
+    const keyInsightMatch = episodeBlock.match(/keyInsight\s*:\s*['"]([^'"]+)['"]/);
+    if (keyInsightMatch) episode.keyInsight = keyInsightMatch[1];
+    
+    const featuredMatch = episodeBlock.match(/featured\s*:\s*(true|false)/);
+    if (featuredMatch) episode.featured = featuredMatch[1] === 'true';
+    
+    const heroMatch = episodeBlock.match(/hero\s*:\s*(true|false)/);
+    if (heroMatch) episode.hero = heroMatch[1] === 'true';
+    
+    const categoryMatch = episodeBlock.match(/category\s*:\s*['"]([^'"]+)['"]/);
+    if (categoryMatch) episode.category = categoryMatch[1];
+    
+    if (episode.id && episode.title && episode.premise && episode.youtubeUrl) {
+      episodes.push(episode as Episode);
+    }
+  }
+  
+  return episodes;
+}
+
+/**
+ * Escape string for TypeScript/JavaScript code generation
+ */
+function escapeStringForCode(str: string): string {
+  if (!str) return '';
+  
+  return str
+    .replace(/\\/g, '\\\\')  // Escape backslashes first
+    .replace(/'/g, "\\'")    // Escape single quotes
+    .replace(/\n/g, '\\n')   // Escape newlines
+    .replace(/\r/g, '\\r')   // Escape carriage returns
+    .replace(/\t/g, '\\t');  // Escape tabs
+}
+
+/**
+ * Generate scenarios.ts file content from episode records
+ */
+export function generateScenariosFile(episodes: Episode[]): string {
+  const header = `export interface Scenario {
+  id: string;
+  title: string;
+  premise: string;
+  runtime?: string;
+  youtubeUrl: string;
+  thumbnailUrl?: string;
+  publishDate?: string;
+  keyInsight?: string;
+  featured?: boolean;
+  hero?: boolean;
+  category?: string;
+}
+
+export const scenarios: Scenario[] = [
+`;
+
+  const footer = `];
+
+export const featuredScenarios = scenarios.filter(s => s.featured);
+
+export function getHeroEpisode(): Scenario | null {
+  const featured = scenarios.filter(s => s.featured);
+  if (featured.length === 0) return null;
+  const pinnedEpisode = featured.find(s => s.hero === true);
+  if (pinnedEpisode) {
+    return pinnedEpisode;
+  }
+  const sorted = [...featured].sort((a, b) => {
+    if (a.publishDate && b.publishDate) {
+      const dateA = new Date(a.publishDate);
+      const dateB = new Date(b.publishDate);
+      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+        return 0;
+      }
+      return dateB.getTime() - dateA.getTime();
+    }
+    if (a.publishDate && !b.publishDate) {
+      const dateA = new Date(a.publishDate);
+      return isNaN(dateA.getTime()) ? 0 : -1;
+    }
+    if (!a.publishDate && b.publishDate) {
+      const dateB = new Date(b.publishDate);
+      return isNaN(dateB.getTime()) ? 0 : 1;
+    }
+    return 0;
+  });
+  const hasValidDates = sorted.some(s => {
+    if (!s.publishDate) return false;
+    const date = new Date(s.publishDate);
+    return !isNaN(date.getTime());
+  });
+  if (!hasValidDates) {
+    return featured[featured.length - 1];
+  }
+  return sorted[0];
+}
+
+export function getScenarioById(id: string): Scenario | undefined {
+  return scenarios.find(s => s.id === id);
+}
+`;
+
+  const episodeBlocks = episodes.map(episode => {
+    const lines: string[] = ['  {'];
+    lines.push(`    id: '${escapeStringForCode(episode.id)}',`);
+    lines.push(`    title: '${escapeStringForCode(episode.title)}',`);
+    lines.push(`    premise: '${escapeStringForCode(episode.premise)}',`);
+    if (episode.runtime) {
+      lines.push(`    runtime: '${escapeStringForCode(episode.runtime)}',`);
+    }
+    lines.push(`    youtubeUrl: '${escapeStringForCode(episode.youtubeUrl)}',`);
+    if (episode.thumbnailUrl) {
+      lines.push(`    thumbnailUrl: '${escapeStringForCode(episode.thumbnailUrl)}',`);
+    }
+    if (episode.publishDate) {
+      lines.push(`    publishDate: '${escapeStringForCode(episode.publishDate)}',`);
+    }
+    if (episode.keyInsight) {
+      lines.push(`    keyInsight: '${escapeStringForCode(episode.keyInsight)}',`);
+    }
+    if (episode.featured !== undefined) {
+      lines.push(`    featured: ${episode.featured},`);
+    }
+    if (episode.hero !== undefined) {
+      lines.push(`    hero: ${episode.hero},`);
+    }
+    if (episode.category) {
+      lines.push(`    category: '${escapeStringForCode(episode.category)}',`);
+    }
+    lines.push('  }');
+    return lines.join('\n');
+  });
+
+  return header + episodeBlocks.join(',\n\n') + '\n' + footer;
+}
