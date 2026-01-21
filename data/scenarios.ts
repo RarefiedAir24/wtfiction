@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\n\nBut what if the next global age isn’t ice?\n\nWhat if it’s heat?\n\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\n\nWhat',
+    premise: 'The last Ice Age nearly wiped out humanity.\\n\\nBut what if the next global age isn’t ice?\\n\\nWhat if it’s heat?\\n\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\\n\\nWhat',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
@@ -54,17 +54,6 @@ export const scenarios: Scenario[] = [
     youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
     thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
     publishDate: '2026-01-08',
-    featured: true,
-  },
-
-  {
-    id: 'qBl6FCVTA8E',
-    title: 'What If Survival Wasn’t the Reason We Work?',
-    premise: 'For most of human history, survival has been the reason we work',
-    runtime: '05:17',
-    youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
-    thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
-    publishDate: '2026-01-18',
     featured: true,
   }
 ];
