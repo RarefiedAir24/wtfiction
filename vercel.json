@@ -1,5 +1,23 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "out",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/references",
+      "destination": "/references.html"
+    },
+    {
+      "source": "/scenarios",
+      "destination": "/scenarios.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/subscribe",
+      "destination": "/subscribe.html"
+    }
+  ]
 }
