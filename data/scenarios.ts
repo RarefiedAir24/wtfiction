@@ -43,6 +43,16 @@ export const scenarios: Scenario[] = [
     publishDate: '2025-12-30',
     featured: true,
   },
+  {
+    id: 'EwIQB4sBx4I',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater',
+    premise: '🤔 What if the very systems we rely on are the ones we barely think about',
+    runtime: '07:28',
+    youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
+    thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
+    publishDate: '2026-01-08',
+    featured: true,
+  },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
