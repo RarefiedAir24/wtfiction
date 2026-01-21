@@ -15,7 +15,7 @@ export interface Scenario {
 export const scenarios: Scenario[] = [
   {
     id: 'EwIQB4sBx4I',
-    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
 
     premise: '🤔 What if the very systems we rely on are the ones we barely think about',
     runtime: '07:28',
@@ -34,7 +34,6 @@ What if it’s heat?
 
 In this episode of WTFiction, we explore a grounded, science-based what-if scenario:
 
-What't ice? What if it\'s heat? In this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
 What't ice? What if it\'s heat? In this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
