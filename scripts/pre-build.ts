@@ -12,6 +12,7 @@ import { fetchYouTubeVideoMetadata } from '../lib/youtube-api';
 import { getYouTubeVideoId } from '../lib/youtube';
 import { readFileSync, writeFileSync } from 'fs';
 import fetchReferencesFromGitHub from './fetch-references';
+import fetchScenariosFromGitHub from './fetch-scenarios';
 
 // Load .env.local if it exists (for local development)
 config({ path: join(process.cwd(), '.env.local') });
@@ -19,8 +20,12 @@ config({ path: join(process.cwd(), '.env.local') });
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
 async function preBuild() {
-  // Always fetch latest references from GitHub first
-  await fetchReferencesFromGitHub();
+  // Always fetch latest data from GitHub first (scenarios and references)
+  // This ensures the main site always has the latest content from admin portal
+  await Promise.all([
+    fetchScenariosFromGitHub(),
+    fetchReferencesFromGitHub(),
+  ]);
   
   if (!API_KEY) {
     console.log('⚠️  YOUTUBE_API_KEY not found - skipping video metadata fetch');
