@@ -8,14 +8,14 @@ export interface Scenario {
   publishDate?: string;
   keyInsight?: string;
   featured?: boolean;
-  hero?: boolean; // Pinned episode - always shown in hero (overrides latest)
-  category?: string; // e.g., 'Long-Form', 'Short', 'Mini'
+  hero?: boolean;
+  category?: string;
 }
 
 export const scenarios: Scenario[] = [
   {
     id: 'EwIQB4sBx4I',
-    title: 'The Internet\'s Biggest Vulnerability Is Underwater's Biggest Vulnerability Is Underwater',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater'\''s Biggest Vulnerability Is Underwater',
     premise: '🤔 What if the very systems we rely on are the ones we barely think about',
     runtime: '07:28',
     youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
@@ -34,7 +34,7 @@ What if it’s heat?
 
 In this episode of WTFiction, we explore a grounded, science-based what-if scenario:
 
-What't ice? What if it\'s heat? In this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
+What'\''t ice? What if it'\''s heat? In this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
@@ -44,7 +44,7 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
   {
     id: 'sPklz6qf1h0',
     title: 'What If AI Was Elected to Run a Country? #viralvideo',
-    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency't a choice — but the end result of efficiency',
+    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency'\''t a choice — but the end result of efficiency',
     runtime: '07:43',
     youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
     thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
@@ -54,7 +54,7 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
   {
     id: 'i8vIIkaU4wI',
     title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
-    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security's offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
+    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security'\''s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
     runtime: '07:21',
     youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
     thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
@@ -63,7 +63,7 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
   },
   {
     id: 'qBl6FCVTA8E',
-    title: 'What If Survival Wasn’t the Reason We Work?'t the Reason We Work?',
+    title: 'What If Survival Wasn’t the Reason We Work?'\''t the Reason We Work?',
     premise: 'For most of human history, survival has been the reason we work',
     runtime: '05:17',
     youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
@@ -75,32 +75,22 @@ What't ice? What if it\'s heat? In this episode of WTFiction, we explore a groun
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
 
-// Get hero episode (pinned episode OR most recent by publishDate)
 export function getHeroEpisode(): Scenario | null {
   const featured = scenarios.filter(s => s.featured);
   if (featured.length === 0) return null;
-  
-  // First, check for pinned episode (hero: true)
   const pinnedEpisode = featured.find(s => s.hero === true);
   if (pinnedEpisode) {
     return pinnedEpisode;
   }
-  
-  // If no pinned episode, return most recent by publishDate
-  // Sort by publishDate (most recent first)
   const sorted = [...featured].sort((a, b) => {
-    // If both have publishDate, sort by date (newest first)
     if (a.publishDate && b.publishDate) {
       const dateA = new Date(a.publishDate);
       const dateB = new Date(b.publishDate);
-      // Check if dates are valid
       if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-        // If dates are invalid, maintain original order
         return 0;
       }
       return dateB.getTime() - dateA.getTime();
     }
-    // If only one has publishDate, prioritize it
     if (a.publishDate && !b.publishDate) {
       const dateA = new Date(a.publishDate);
       return isNaN(dateA.getTime()) ? 0 : -1;
@@ -109,28 +99,19 @@ export function getHeroEpisode(): Scenario | null {
       const dateB = new Date(b.publishDate);
       return isNaN(dateB.getTime()) ? 0 : 1;
     }
-    // If neither has publishDate, assume array order is chronological (oldest to newest)
-    // So we want the last item in the original array
     return 0;
   });
-  
-  // If no valid publishDates, return last item in original array (assumed to be most recent)
   const hasValidDates = sorted.some(s => {
     if (!s.publishDate) return false;
     const date = new Date(s.publishDate);
     return !isNaN(date.getTime());
   });
-  
   if (!hasValidDates) {
-    // Return last item in original array (assumed to be most recent)
     return featured[featured.length - 1];
   }
-  
-  // Return most recent (first in sorted array)
   return sorted[0];
 }
 
-// Get scenario by ID
 export function getScenarioById(id: string): Scenario | undefined {
   return scenarios.find(s => s.id === id);
 }
