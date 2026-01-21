@@ -63,33 +63,56 @@ export default function ReferencesPage() {
                   <h3 className="text-sm font-medium text-muted/80 mb-4 uppercase tracking-wide">
                     Sources
                   </h3>
-                  <ul className="space-y-3 text-sm md:text-base text-muted leading-relaxed">
-                    {reference.citations.map((citation, citationIndex) => (
-                      <li key={citationIndex} className="flex items-start gap-3 pl-4 relative">
-                        <span className="absolute left-0 top-2.5 w-1.5 h-1.5 bg-muted/60 rounded-full flex-shrink-0"></span>
-                        <div className="flex-1">
-                          {/* Source Type Label */}
+                  <ul className="space-y-4 text-sm md:text-base text-muted leading-relaxed">
+                    {reference.citations.map((citation, citationIndex) => {
+                      // Backward compatibility: convert old format to new
+                      const title = citation.title || citation.text || 'Untitled Reference';
+                      const description = citation.description;
+                      const citationText = citation.citation || citation.text || '';
+                      
+                      return (
+                        <li key={citationIndex} className="flex items-start gap-4">
+                          {/* Source Type Label - Left Side */}
                           {citation.type && (
-                            <span className="inline-block text-xs text-muted/60 font-medium mb-1 mr-2">
+                            <span className="text-xs text-muted/60 font-medium uppercase tracking-wide flex-shrink-0 pt-0.5 min-w-[80px]">
                               [{citation.type}]
                             </span>
                           )}
-                          {/* Citation Text */}
-                          {citation.url ? (
-                            <a
-                              href={citation.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-foreground transition-colors underline underline-offset-2"
-                            >
-                              {citation.text}
-                            </a>
-                          ) : (
-                            <span>{citation.text}</span>
-                          )}
-                        </div>
-                      </li>
-                    ))}
+                          {/* Citation Content - Right Side */}
+                          <div className="flex-1 space-y-1.5">
+                            {/* Title */}
+                            <div className="text-foreground font-medium">
+                              {title}
+                            </div>
+                            {/* Description */}
+                            {description && (
+                              <div className="text-muted text-sm leading-relaxed">
+                                {description}
+                              </div>
+                            )}
+                            {/* Link */}
+                            {citation.url && (
+                              <div>
+                                <a
+                                  href={citation.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-[#3ea6ff] hover:text-[#2d8fdd] transition-colors underline underline-offset-2 text-sm break-all"
+                                >
+                                  {citation.url}
+                                </a>
+                              </div>
+                            )}
+                            {/* Citation Format */}
+                            {citationText && (
+                              <div className="text-xs text-muted/70 italic mt-2 pt-2 border-t border-[#272727]">
+                                <span className="font-medium">How to cite:</span> {citationText}
+                              </div>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </section>
