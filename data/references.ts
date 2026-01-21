@@ -12,7 +12,15 @@ export interface Reference {
   episodeId: string;
   episodeTitle: string;
   publishDate?: string;
-  citations: Citation[];
+  citations: Citation[  {
+    episodeId: 'qBl6FCVTA8E',
+    episodeTitle: 'What If Survival Wasn’t the Reason We Work?',
+    publishDate: '2026-01-18',
+    citations: [
+      { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (2025).', type: 'Academic' },
+    ],
+  },
+];
 }
 
 export const references: Reference[] = [
