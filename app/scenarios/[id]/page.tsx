@@ -25,8 +25,21 @@ export default async function ScenarioDetailPage({ params }: PageProps) {
   
   const episodeReferences = references.find(r => r.episodeId === id);
   
-  // Convert Citation objects to strings for backward compatibility
-  const citationStrings = episodeReferences?.citations.map(c => c.text) || [];
+  // Convert Citation objects to strings for display
+  // Support both new format (citation field) and legacy format (text field)
+  const citationStrings = episodeReferences?.citations.map(c => {
+    if (c.citation) {
+      // New format: use citation field
+      return c.citation;
+    } else if (c.text) {
+      // Legacy format: use text field
+      return c.text;
+    } else if (c.title) {
+      // Fallback: use title if available
+      return c.title;
+    }
+    return '';
+  }).filter(c => c.length > 0) || [];
   
   return (
     <ScenarioDetailClient 
