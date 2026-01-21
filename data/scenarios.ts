@@ -34,7 +34,7 @@ What if it’s heat?
 
 In this episode of WTFiction, we explore a grounded, science-based what-if scenario:
 
-What't ice? What if it\'s heat?',
+What's heat?',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
