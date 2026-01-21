@@ -50,7 +50,7 @@ export const references: Reference[] = [
     ],
   },
   {
-    episodeId: 'survival-guaranteed',
+    episodeId: 'qBl6FCVTA8E',
     episodeTitle: 'What If Survival Wasn\'t the Reason We Work?',
     publishDate: '2026-01-18',
     citations: [
