@@ -257,12 +257,16 @@ export function parseEpisodes(fileContent: string): Episode[] {
         const beforeScenario = premise.substring(0, scenarioIndex);
         const afterScenario = premise.substring(scenarioIndex + 'scenario:'.length);
         
+        // Normalize whitespace (including newlines) for checking
+        const afterClean = afterScenario.replace(/[\s\n\r]+/g, ' ').trim();
+        
         // Check if what comes after looks like corruption
-        const afterClean = afterScenario.replace(/\s+/g, ' ').trim();
+        // The corrupted text typically starts with "What't ice?" or "What if it"
         const isCorrupted = 
-          afterClean.match(/^(What['"]t|What if it)/) || // Starts with corrupted fragments
+          afterClean.match(/^(What['"]t|What if it)/i) || // Starts with corrupted fragments
           afterClean.includes("What't ice") || // Contains known corruption pattern
-          (afterClean.length > 0 && afterClean.length < 150 && !afterClean.match(/^[.!?]/)); // Short fragment that doesn't start with punctuation
+          afterClean.includes("What if it\\'s") || // Contains escaped corruption
+          (afterClean.length > 0 && afterClean.length < 200 && !afterClean.match(/^[.!?]/)); // Short fragment that doesn't start with punctuation
         
         if (isCorrupted) {
           // Stop at "scenario:" and add period
