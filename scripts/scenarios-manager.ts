@@ -343,7 +343,28 @@ export function parseEpisodes(fileContent: string): Episode[] {
         }
       }
       
-      episode.premise = premise.trim();
+      // ABSOLUTE FINAL FIX: If premise still ends with "What", "But", "The" after all cleanup,
+      // just remove it - this handles old corrupted data
+      let finalPremise = premise.trim();
+      const finalWords = finalPremise.split(/\s+/);
+      if (finalWords.length > 0) {
+        const lastWord = finalWords[finalWords.length - 1];
+        if (incompleteEndings.includes(lastWord)) {
+          // Remove the incomplete last word
+          finalPremise = finalWords.slice(0, -1).join(' ');
+        }
+      }
+      
+      // If it still ends with "scenario:" and has text after, stop at scenario
+      if (finalPremise.includes('scenario:')) {
+        const idx = finalPremise.indexOf('scenario:');
+        const after = finalPremise.substring(idx + 'scenario:'.length).trim();
+        if (after && (after.length < 50 || incompleteEndings.some(w => after.includes(w)))) {
+          finalPremise = finalPremise.substring(0, idx + 'scenario'.length) + '.';
+        }
+      }
+      
+      episode.premise = finalPremise.trim();
     }
     
     // Extract other fields
