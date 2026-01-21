@@ -43,6 +43,16 @@ export const scenarios: Scenario[] = [
     publishDate: '2025-12-30',
     featured: true,
   },
+  {
+    id: 'i8vIIkaU4wI',
+    title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
+    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
+    runtime: '07:21',
+    youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
+    thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
+    publishDate: '2025-12-17',
+    featured: true,
+  },
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
