@@ -26,6 +26,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "WTFiction — Speculative Scenarios Before They Happen",
   description: "WTFiction explores the consequences of science, technology, and power — before they happen. Each episode examines a single scenario grounded in real science, economics, and geopolitics.",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
 };
 
 export default function RootLayout({
