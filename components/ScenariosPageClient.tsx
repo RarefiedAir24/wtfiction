@@ -101,50 +101,57 @@ export default function ScenariosPageClient() {
               Listed newest to oldest
             </p>
           </div>
-          <div className="space-y-10">
+          <div className="space-y-0">
             {sortedScenarios.map((scenario, index) => {
               const isLatest = isLatestScenario(scenario);
               const thumbnailUrl = getThumbnailUrl(scenario);
+              const isEven = index % 2 === 0;
               
               return (
                 <article
                   key={scenario.id}
                   id={`scenario-${scenario.id}`}
-                  className={`border-b border-[#272727] pb-10 last:border-b-0 transition-all duration-300 ${
+                  className={`border-b border-[#272727] py-10 transition-all duration-300 ${
                     highlightedScenarioId === scenario.id 
                       ? 'ring-4 ring-[#3ea6ff] ring-opacity-30 ring-offset-4 ring-offset-[#0f0f0f] -m-4 p-4 rounded-lg' 
                       : ''
                   } ${
-                    isLatest ? 'border-l-2 border-l-[#3ea6ff] pl-6 -ml-6' : ''
+                    isEven ? 'bg-[#0a0a0a]/30' : 'bg-transparent'
+                  } ${
+                    isLatest ? 'border-l-4 border-l-[#3ea6ff] pl-8 -ml-8 bg-[#0a0a0a]/50' : ''
                   }`}
                 >
                   <div className="flex flex-col md:flex-row gap-6">
-                    {/* Thumbnail - Phase 1: Visual Consistency + Phase 2: Editorial Hierarchy */}
-                    <div className={`flex-shrink-0 w-full md:w-80 relative group ${
-                      isLatest ? 'md:w-96' : ''
+                    {/* Thumbnail - Enhanced for latest episode */}
+                    <div className={`flex-shrink-0 w-full md:w-80 relative group transition-all duration-300 ${
+                      isLatest ? 'md:w-96 scale-105 md:scale-100' : ''
                     }`}>
-                      <EpisodeThumbnail
-                        thumbnailUrl={thumbnailUrl || getYouTubeThumbnail(scenario.youtubeUrl, 'high')}
-                        title={scenario.title}
-                        runtime={scenario.runtime}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                        <PlayButton onClick={() => handlePlayClick(scenario)} size="md" />
-                      </div>
-                      {isLatest && (
-                        <div className="absolute top-3 left-3 px-2.5 py-1 bg-[#3ea6ff]/90 text-white text-xs font-medium rounded backdrop-blur-sm">
-                          Latest Scenario
+                      <div className={`relative ${isLatest ? 'ring-2 ring-[#3ea6ff]/50 rounded-lg overflow-hidden' : ''}`}>
+                        <EpisodeThumbnail
+                          thumbnailUrl={thumbnailUrl || getYouTubeThumbnail(scenario.youtubeUrl, 'high')}
+                          title={scenario.title}
+                          runtime={scenario.runtime}
+                        />
+                        {/* Gradient overlay for better text contrast */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                          <PlayButton onClick={() => handlePlayClick(scenario)} size={isLatest ? "lg" : "md"} />
                         </div>
-                      )}
+                        {isLatest && (
+                          <div className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white text-xs font-bold rounded-md backdrop-blur-sm shadow-lg uppercase tracking-wide">
+                            Latest
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     {/* Content */}
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-4 mb-2">
                         <Link href={`/scenarios/${scenario.id}`}>
-                          <h2 className={`font-medium mb-4 text-foreground leading-snug hover:text-[#3ea6ff] transition-colors ${
-                            isLatest ? 'text-xl md:text-2xl lg:text-3xl' : 'text-xl md:text-2xl'
-                          }`}>
+                          <h2 className={`font-bold mb-4 text-foreground leading-snug hover:text-[#3ea6ff] transition-colors ${
+                            isLatest ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-xl md:text-2xl'
+                          }`} style={{ fontFamily: isLatest ? 'var(--font-title), system-ui, sans-serif' : 'inherit' }}>
                             {scenario.title}
                           </h2>
                         </Link>
@@ -157,7 +164,7 @@ export default function ScenariosPageClient() {
                           {scenario.keyInsight}
                         </p>
                       )}
-                      <div className="flex items-center gap-4 text-xs text-muted mb-6">
+                      <div className="flex items-center gap-4 text-xs text-muted/80 mb-6">
                         {scenario.runtime && (
                           <span>Runtime: {scenario.runtime}</span>
                         )}

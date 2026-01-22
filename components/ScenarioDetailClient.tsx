@@ -45,8 +45,12 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
                   : `url(${getYouTubeThumbnail(scenario.youtubeUrl)})`
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/70" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+            {/* Enhanced gradient overlay system for better text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/90 to-black/80" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            {/* Vignette effect for better focus */}
+            <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/40" />
           </div>
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 w-full py-16">
@@ -62,11 +66,11 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
               </Link>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-6 text-foreground tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tracking-tight" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
               {scenario.title}
             </h1>
             
-            <p className="text-lg md:text-xl text-muted/90 mb-6 max-w-3xl leading-relaxed font-light">
+            <p className="text-lg md:text-xl text-white/95 mb-6 max-w-3xl leading-relaxed font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
               {scenario.premise}
             </p>
             

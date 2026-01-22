@@ -126,12 +126,7 @@ a:hover {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #f1f1f1 0%, #e0e0e0 50%, #f1f1f1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: titleShimmer 4s ease-in-out infinite;
+  /* Removed gradient text effect - using white with drop shadow for better contrast on hero images */
 }
 
 @keyframes titleShimmer {
