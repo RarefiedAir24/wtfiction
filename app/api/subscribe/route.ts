@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export const runtime = 'nodejs'; // Ensure this runs on Node.js runtime
 
@@ -23,40 +23,80 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if SMTP is configured
+    // Check for Resend API key (preferred method for shared mailboxes)
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const recipientEmail = process.env.SUBSCRIBE_EMAIL || 'subscribe@wtfiction.com';
+    const fromEmail = process.env.FROM_EMAIL || 'noreply@wtfiction.com';
+
+    if (resendApiKey) {
+      // Use Resend (works with shared mailboxes)
+      const resend = new Resend(resendApiKey);
+
+      const { data, error } = await resend.emails.send({
+        from: `WTFiction <${fromEmail}>`,
+        to: recipientEmail,
+        subject: 'New Email Subscription - WTFiction',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #3ea6ff;">New Email Subscription</h2>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+            <hr style="border: none; border-top: 1px solid #272727; margin: 20px 0;">
+            <p style="color: #aaaaaa; font-size: 12px;">
+              This is an automated notification from the WTFiction website.
+            </p>
+          </div>
+        `,
+        text: `New email subscription:\n\nEmail: ${email}\n\nTimestamp: ${new Date().toISOString()}`,
+      });
+
+      if (error) {
+        console.error('Resend API error:', error);
+        return NextResponse.json(
+          { error: 'Failed to send email. Please try again later.' },
+          { status: 500 }
+        );
+      }
+
+      console.log('Email sent successfully via Resend:', data?.id);
+      return NextResponse.json({ 
+        success: true,
+        message: 'Subscription received successfully' 
+      });
+    }
+
+    // Fallback to SMTP (requires regular user account)
     const smtpHost = process.env.SMTP_HOST;
     const smtpUser = process.env.SMTP_USER;
     const smtpPassword = process.env.SMTP_PASSWORD;
-    const recipientEmail = process.env.SUBSCRIBE_EMAIL || 'subscribe@wtfiction.com';
 
     if (!smtpHost || !smtpUser || !smtpPassword) {
-      console.error('SMTP not configured. Missing environment variables.');
+      console.error('Email service not configured. Missing RESEND_API_KEY or SMTP credentials.');
       return NextResponse.json(
         { error: 'Email service is not configured. Please contact support.' },
         { status: 503 }
       );
     }
 
-    // Create transporter for Microsoft 365 SMTP
-    const transporter = nodemailer.createTransport({
-      host: smtpHost, // e.g., smtp.office365.com
+    // SMTP fallback (only works with regular user accounts, not shared mailboxes)
+    const nodemailer = await import('nodemailer');
+    const transporter = nodemailer.default.createTransport({
+      host: smtpHost,
       port: 587,
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
         user: smtpUser,
         pass: smtpPassword,
       },
       tls: {
         ciphers: 'SSLv3',
-        rejectUnauthorized: false, // For development, set to true in production with proper certs
+        rejectUnauthorized: false,
       },
-      // Microsoft 365 may require these additional options
       requireTLS: true,
-      connectionTimeout: 10000, // 10 seconds
+      connectionTimeout: 10000,
       greetingTimeout: 10000,
     });
 
-    // Verify transporter configuration
     try {
       await transporter.verify();
     } catch (error) {
@@ -67,10 +107,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Email content
     const mailOptions = {
-      from: `"WTFiction" <${smtpUser}>`, // Sender address (must be authenticated user account)
-      to: recipientEmail, // subscribe@wtfiction.com (can be shared mailbox)
+      from: `"WTFiction" <${smtpUser}>`,
+      to: recipientEmail,
       subject: 'New Email Subscription - WTFiction',
       text: `New email subscription:\n\nEmail: ${email}\n\nTimestamp: ${new Date().toISOString()}`,
       html: `
@@ -86,10 +125,8 @@ export async function POST(request: NextRequest) {
       `,
     };
 
-    // Send email
     const info = await transporter.sendMail(mailOptions);
-
-    console.log('Email sent successfully:', info.messageId);
+    console.log('Email sent successfully via SMTP:', info.messageId);
 
     return NextResponse.json({ 
       success: true,

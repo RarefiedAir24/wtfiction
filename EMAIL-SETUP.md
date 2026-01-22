@@ -74,6 +74,10 @@ Once DNS is configured and email is set up, we'll need to:
 
 ## Environment Variables (Vercel)
 
+**Recommended Solution: Use Resend (Works with Shared Mailboxes)**
+
+Since you're using a shared mailbox, we'll use **Resend** - a modern email API service that works perfectly with shared mailboxes and doesn't require SMTP authentication.
+
 ### Method 1: Via Vercel Dashboard (Recommended)
 
 1. **Go to Vercel Dashboard**
@@ -86,30 +90,24 @@ Once DNS is configured and email is set up, we'll need to:
    - Go to **Settings** (in the top navigation)
    - Click **Environment Variables** (in the left sidebar)
 
-3. **Add Each Variable**
+3. **Add Variables**
    Click **"Add New"** for each variable below:
 
-   **Variable 1:**
-   - **Key**: `SMTP_HOST`
-   - **Value**: `smtp.office365.com`
+   **Variable 1 (Required):**
+   - **Key**: `RESEND_API_KEY`
+   - **Value**: `[Your Resend API Key]` (see below for how to get)
    - **Environment**: Select all three (Production, Preview, Development)
    - Click **"Save"**
 
-   **Variable 2:**
-   - **Key**: `SMTP_USER`
-   - **Value**: `subscribe@wtfiction.com`
-   - **Environment**: Select all three
-   - Click **"Save"**
-
-   **Variable 3:**
-   - **Key**: `SMTP_PASSWORD`
-   - **Value**: `[Your Microsoft 365 App Password]` (see below for how to create)
-   - **Environment**: Select all three
-   - Click **"Save"**
-
-   **Variable 4 (Optional):**
+   **Variable 2 (Required):**
    - **Key**: `SUBSCRIBE_EMAIL`
    - **Value**: `subscribe@wtfiction.com`
+   - **Environment**: Select all three
+   - Click **"Save"**
+
+   **Variable 3 (Optional):**
+   - **Key**: `FROM_EMAIL`
+   - **Value**: `noreply@wtfiction.com` (or any verified domain email)
    - **Environment**: Select all three
    - Click **"Save"**
 
@@ -118,6 +116,34 @@ Once DNS is configured and email is set up, we'll need to:
    - Find the latest deployment
    - Click **"..."** (three dots) → **"Redeploy"**
    - Or push a new commit to trigger a rebuild
+
+### Getting Resend API Key
+
+1. **Sign up for Resend** (if you haven't already)
+   - Go to [resend.com](https://resend.com)
+   - Sign up for a free account (100 emails/day free)
+
+2. **Verify your domain**
+   - Go to **Domains** in Resend dashboard
+   - Add `wtfiction.com`
+   - Add the DNS records Resend provides (DKIM, SPF, etc.)
+
+3. **Get your API Key**
+   - Go to **API Keys** in Resend dashboard
+   - Click **"Create API Key"**
+   - Name it: "WTFiction Production"
+   - Copy the key (starts with `re_`)
+   - Use this as `RESEND_API_KEY` in Vercel
+
+### Alternative: SMTP (Only if you have a regular user account)
+
+If you later get a regular user account, you can use SMTP instead:
+
+   **SMTP Variables (Optional - only if not using Resend):**
+   - `SMTP_HOST` = `smtp.office365.com`
+   - `SMTP_USER` = `[regular-user-account@wtfiction.com]`
+   - `SMTP_PASSWORD` = `[App Password]`
+   - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
 
 ### Method 2: Via Vercel CLI
 
@@ -150,51 +176,38 @@ vercel env add SMTP_HOST development
 # (Repeat for all variables)
 ```
 
-### Creating Microsoft 365 App Password
+### Why Resend Instead of SMTP?
 
-**Important:** 
-- `SMTP_PASSWORD` must be an **App Password** (not your regular password)
-- App passwords can only be created for **regular user accounts** (not shared mailboxes)
-- If `subscribe@wtfiction.com` is a shared mailbox, you'll need to either:
-  - Create a regular user account for sending emails, OR
-  - Use a different user account (like your admin account) for SMTP authentication
+**Problem with Shared Mailboxes:**
+- Microsoft 365 shared mailboxes cannot authenticate via SMTP
+- App passwords only work with regular user accounts (not shared mailboxes)
+- SMTP requires a licensed user account
 
-**Option 1: Via Microsoft 365 Admin Center (For User Accounts)**
-1. Go to [Microsoft 365 Admin Center](https://admin.microsoft.com)
-2. Sign in with your Microsoft 365 admin account
-3. Go to **Users** → **Active users**
-4. Find and click on a **regular user account** (not a shared mailbox)
-   - This could be your admin account (e.g., `frank.s@montebay.io` or similar)
-   - OR create a new user account specifically for sending emails
-5. Click on the **Mail** tab
-6. Scroll down to look for **App passwords** section
-   - If you don't see it, try Option 2 below
-7. Click **"Create app password"** or **"Manage app passwords"**
-8. Name it: "WTFiction Email Service" or "Vercel SMTP"
-9. Copy the generated password (16 characters, spaces don't matter)
-10. Use this password as the `SMTP_PASSWORD` value
-11. Update `SMTP_USER` to match the user account you used (not the shared mailbox)
+**Solution: Resend**
+- ✅ Works with shared mailboxes (sends TO them, doesn't authenticate AS them)
+- ✅ No need for app passwords or user accounts
+- ✅ Simple API-based approach
+- ✅ Free tier: 100 emails/day
+- ✅ Better deliverability and tracking
+- ✅ Easy domain verification
 
-**Option 2: Via User's Security Settings (Alternative)**
-1. Sign in to [My Sign-Ins](https://mysignins.microsoft.com) with the **user account** (not shared mailbox)
-2. Go to **Security info** page
-3. Look for **"App passwords"** link in the left sidebar or main content
-4. If you see **"App passwords"**, click it
-5. Click **"Create"** or **"Generate app password"**
-6. Name it: "WTFiction Email Service"
-7. Copy the generated password
-8. Use this password as the `SMTP_PASSWORD` value
+### SMTP Alternative (If you get a regular user account later)
 
-**Option 3: Direct Link (If Available)**
-- Try going directly to: [App Passwords](https://account.microsoft.com/security/app-passwords)
-- Make sure you're signed in with a **user account** (not viewing a shared mailbox)
-- Or search for "app passwords" in the Microsoft 365 portal
+If you later create a regular user account, you can switch to SMTP:
 
-**Important Notes:** 
-- You won't be able to see this password again, so save it securely
-- If you don't see "App passwords" option, you may need to enable it in your organization's security settings
-- App passwords are only available when MFA is enabled (which you have with Microsoft Authenticator)
-- **The `SMTP_USER` should be the user account email** (the one you created the app password for), but emails will still be sent TO `subscribe@wtfiction.com` (the shared mailbox)
+1. **Create App Password** (for regular user account only):
+   - Go to [Microsoft 365 Admin Center](https://admin.microsoft.com)
+   - Users → Active users → Select regular user account
+   - Mail tab → App passwords → Create app password
+   - Copy the password
+
+2. **Add SMTP variables to Vercel:**
+   - `SMTP_HOST` = `smtp.office365.com`
+   - `SMTP_USER` = `[regular-user-account@wtfiction.com]`
+   - `SMTP_PASSWORD` = `[App Password]`
+   - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
+
+3. **Remove `RESEND_API_KEY`** from Vercel (code will automatically use SMTP if Resend key is missing)
 
 ## Next Steps
 
