@@ -30,8 +30,10 @@ function NavLink({ href, children, className = '', isActive = false }: NavLinkPr
       )}
       {/* Hover underline animation */}
       <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] rounded-full transition-all duration-300 ease-out group-hover:w-full"></span>
-      {/* Subtle background glow on hover */}
-      <span className="absolute -inset-x-2 -inset-y-1 rounded-md bg-[#3ea6ff]/5 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
+      {/* Subtle background glow on hover - only show on hover, not active */}
+      {!isActive && (
+        <span className="absolute -inset-x-2 -inset-y-1 rounded-md bg-[#3ea6ff]/5 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
+      )}
     </Link>
   );
 }
