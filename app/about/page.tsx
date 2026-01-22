@@ -20,14 +20,9 @@ export default function AboutPage() {
           <section className="relative">
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
             <div className="max-w-2xl space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/60 flex-shrink-0"></div>
-                <div className="flex-1">
-                  <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
-                    WTFiction is a speculative documentary series that explores how emerging technologies, social shifts, and systemic changes could reshape the world.
-                  </p>
-                </div>
-              </div>
+              <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
+                WTFiction is a speculative documentary series that explores how emerging technologies, social shifts, and systemic changes could reshape the world.
+              </p>
             </div>
           </section>
 
