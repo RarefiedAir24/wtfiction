@@ -55,6 +55,17 @@ export const scenarios: Scenario[] = [
     thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
     publishDate: '2026-01-08',
     featured: true,
+  },
+
+  {
+    id: 'qBl6FCVTA8E',
+    title: 'What If Survival Wasn’t the Reason We Work?',
+    premise: 'For most of human history, survival has been the reason we work',
+    runtime: '05:17',
+    youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
+    thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
+    publishDate: '2026-01-18',
+    featured: true,
   }
 ];
 
