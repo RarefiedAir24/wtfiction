@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 export const runtime = 'nodejs'; // Ensure this runs on Node.js runtime
 
@@ -23,13 +24,79 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for Resend API key (preferred method for shared mailboxes)
-    const resendApiKey = process.env.RESEND_API_KEY;
     const recipientEmail = process.env.SUBSCRIBE_EMAIL || 'subscribe@wtfiction.com';
     const fromEmail = process.env.FROM_EMAIL || 'noreply@wtfiction.com';
 
+    // Option 1: AWS SES (Recommended - works with any email, no SMTP AUTH issues)
+    const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    const awsRegion = process.env.AWS_REGION || 'us-east-1';
+
+    if (awsAccessKeyId && awsSecretAccessKey) {
+      try {
+        const sesClient = new SESClient({
+          region: awsRegion,
+          credentials: {
+            accessKeyId: awsAccessKeyId,
+            secretAccessKey: awsSecretAccessKey,
+          },
+        });
+
+        const emailContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #3ea6ff;">New Email Subscription</h2>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+            <hr style="border: none; border-top: 1px solid #272727; margin: 20px 0;">
+            <p style="color: #aaaaaa; font-size: 12px;">
+              This is an automated notification from the WTFiction website.
+            </p>
+          </div>
+        `;
+
+        const command = new SendEmailCommand({
+          Source: `WTFiction <${fromEmail}>`,
+          Destination: {
+            ToAddresses: [recipientEmail],
+          },
+          Message: {
+            Subject: {
+              Data: 'New Email Subscription - WTFiction',
+              Charset: 'UTF-8',
+            },
+            Body: {
+              Html: {
+                Data: emailContent,
+                Charset: 'UTF-8',
+              },
+              Text: {
+                Data: `New email subscription:\n\nEmail: ${email}\n\nTimestamp: ${new Date().toISOString()}`,
+                Charset: 'UTF-8',
+              },
+            },
+          },
+        });
+
+        const response = await sesClient.send(command);
+        console.log('Email sent successfully via AWS SES:', response.MessageId);
+
+        return NextResponse.json({ 
+          success: true,
+          message: 'Subscription received successfully' 
+        });
+      } catch (error: any) {
+        console.error('AWS SES error:', error);
+        return NextResponse.json(
+          { error: 'Failed to send email. Please try again later.' },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Option 2: Resend (works with shared mailboxes)
+    const resendApiKey = process.env.RESEND_API_KEY;
+
     if (resendApiKey) {
-      // Use Resend (works with shared mailboxes)
       const resend = new Resend(resendApiKey);
 
       const { data, error } = await resend.emails.send({
@@ -65,13 +132,13 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Fallback to SMTP (requires regular user account)
+    // Option 3: SMTP fallback (requires regular user account and SMTP AUTH enabled)
     const smtpHost = process.env.SMTP_HOST;
     const smtpUser = process.env.SMTP_USER;
     const smtpPassword = process.env.SMTP_PASSWORD;
 
     if (!smtpHost || !smtpUser || !smtpPassword) {
-      console.error('Email service not configured. Missing RESEND_API_KEY or SMTP credentials.');
+      console.error('Email service not configured. Missing AWS SES, Resend, or SMTP credentials.');
       return NextResponse.json(
         { error: 'Email service is not configured. Please contact support.' },
         { status: 503 }
@@ -101,7 +168,6 @@ export async function POST(request: NextRequest) {
       await transporter.verify();
     } catch (error: any) {
       console.error('SMTP verification failed:', error);
-      // Return more detailed error for debugging
       const errorMessage = error.message || 'Unknown SMTP error';
       return NextResponse.json(
         { 
