@@ -1,6 +1,42 @@
 import { references } from '@/data/references';
 import { scenarios } from '@/data/scenarios';
 
+/**
+ * Formats a citation in the standard format: "Author, Title (Type, Year)."
+ * The citation field should already contain the properly formatted citation.
+ * This function ensures it's displayed correctly.
+ */
+function formatCitation(citation: {
+  citation?: string;
+  title?: string;
+  text?: string;
+  type?: string;
+}): string {
+  // If citation field exists, use it (it should already be in the format "Author, Title (Type, Year).")
+  if (citation.citation) {
+    const citationText = citation.citation.trim();
+    // Ensure it ends with a period
+    return citationText.endsWith('.') ? citationText : citationText + '.';
+  }
+  
+  // Fallback: if no citation field, try to construct from available fields
+  // This is for backward compatibility with old data
+  const title = citation.title || citation.text || 'Untitled Reference';
+  const type = citation.type || 'Unknown';
+  
+  // Try to extract year from citation text if it exists
+  if (citation.text) {
+    const yearMatch = citation.text.match(/(\d{4})/);
+    const year = yearMatch ? yearMatch[1] : '';
+    if (year) {
+      return `${title} (${type}, ${year}).`;
+    }
+  }
+  
+  // Last resort: just title and type
+  return `${title} (${type}).`;
+}
+
 export default function ReferencesPage() {
   // Sort references by publish date (newest first), matching scenarios order
   const sortedReferences = [...references].sort((a, b) => {
@@ -68,7 +104,7 @@ export default function ReferencesPage() {
                       // Backward compatibility: convert old format to new
                       const title = citation.title || citation.text || 'Untitled Reference';
                       const description = citation.description;
-                      const citationText = citation.citation || citation.text || '';
+                      const formattedCitation = formatCitation(citation);
                       
                       return (
                         <li key={citationIndex} className="flex items-start gap-4">
@@ -103,10 +139,10 @@ export default function ReferencesPage() {
                                 </a>
                               </div>
                             )}
-                            {/* Citation Format */}
-                            {citationText && (
+                            {/* Citation Format - Always show in standard format */}
+                            {formattedCitation && (
                               <div className="text-xs text-muted/70 italic mt-2 pt-2 border-t border-[#272727]">
-                                {citationText}
+                                {formattedCitation}
                               </div>
                             )}
                           </div>
