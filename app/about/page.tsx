@@ -84,7 +84,7 @@ export default function AboutPage() {
             <div className="max-w-2xl">
               <div className="relative pl-6 border-l-2 border-[#3ea6ff]/20">
                 <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
-                  WTFiction is not a predictive model, a political advocacy platform, or a claim about what will happen.
+                  WTFiction is not a <em>predictive model</em>, a <em>political advocacy platform</em>, or a <em>claim about what will happen</em>.
                 </p>
               </div>
             </div>
@@ -96,12 +96,9 @@ export default function AboutPage() {
             <h2 className="text-2xl md:text-3xl font-light mb-10 text-foreground tracking-tight">
               How to Use the Site
             </h2>
-            <div className="max-w-2xl space-y-4">
+            <div className="max-w-2xl">
               <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
-                You can watch every scenario here on the site or on YouTube.
-              </p>
-              <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
-                After watching, explore the references to understand the evidence and assumptions behind each idea.
+                You can watch every scenario here on the site or on YouTube. After watching, explore the references to understand the evidence and assumptions behind each idea.
               </p>
             </div>
           </section>
