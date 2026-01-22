@@ -13,7 +13,49 @@ export interface Scenario {
 }
 
 export const scenarios: Scenario[] = [
+  {
+    id: 'i8vIIkaU4wI',
+    title: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
+    premise: 'America’s offshore oil infrastructure powers millions of homes, fuels global markets, and underpins national energy security',
+    runtime: '07:21',
+    youtubeUrl: 'https://youtu.be/i8vIIkaU4wI',
+    thumbnailUrl: 'https://i.ytimg.com/vi/i8vIIkaU4wI/maxresdefault.jpg',
+    publishDate: '2025-12-17',
+    featured: true,
+  },
 
+  {
+    id: '8ytNzzit528',
+    title: 'Heat Age vs Ice Age: Which Future Are We In?',
+    premise: 'The last Ice Age nearly wiped out humanity.',
+    runtime: '04:12',
+    youtubeUrl: 'https://youtu.be/8ytNzzit528',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    publishDate: '2025-12-18',
+    featured: true,
+  },
+
+  {
+    id: 'sPklz6qf1h0',
+    title: 'What If AI Was Elected to Run a Country? #viralvideo',
+    premise: 'What if replacing world leaders with AI wasn’t a choice — but the end result of efficiency',
+    runtime: '07:43',
+    youtubeUrl: 'https://youtu.be/sPklz6qf1h0',
+    thumbnailUrl: 'https://i.ytimg.com/vi/sPklz6qf1h0/maxresdefault.jpg',
+    publishDate: '2025-12-30',
+    featured: true,
+  },
+
+  {
+    id: 'EwIQB4sBx4I',
+    title: 'The Internet\'s Biggest Vulnerability Is Underwater',
+    premise: '🤔 What if the very systems we rely on are the ones we barely think about',
+    runtime: '07:28',
+    youtubeUrl: 'https://youtu.be/EwIQB4sBx4I',
+    thumbnailUrl: 'https://i.ytimg.com/vi/EwIQB4sBx4I/maxresdefault.jpg',
+    publishDate: '2026-01-08',
+    featured: true,
+  }
 ];
 
 export const featuredScenarios = scenarios.filter(s => s.featured);
