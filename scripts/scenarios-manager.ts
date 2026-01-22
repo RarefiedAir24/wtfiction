@@ -328,8 +328,8 @@ export function parseEpisodes(fileContent: string): Episode[] {
       
       // One more pass: if it still ends with an incomplete word, remove it
       const finalTrim = premise.trim();
-      const lastWord = finalTrim.split(/\s+/).pop() || '';
-      if (incompleteEndings.includes(lastWord) && finalTrim.length > 50) {
+      const lastWordCheck = finalTrim.split(/\s+/).pop() || '';
+      if (incompleteEndings.includes(lastWordCheck) && finalTrim.length > 50) {
         // Find last sentence ending
         const lastPeriod = finalTrim.lastIndexOf('.');
         const lastExclamation = finalTrim.lastIndexOf('!');
@@ -339,19 +339,19 @@ export function parseEpisodes(fileContent: string): Episode[] {
           premise = finalTrim.substring(0, lastEnding + 1);
         } else {
           // No sentence ending found, just remove the last word
-          premise = finalTrim.substring(0, finalTrim.lastIndexOf(lastWord)).trim();
+          premise = finalTrim.substring(0, finalTrim.lastIndexOf(lastWordCheck)).trim();
         }
       }
       
       // ABSOLUTE FINAL FIX: If premise still ends with "What", "But", "The" after all cleanup,
       // just remove it - this handles old corrupted data
       let finalPremise = premise.trim();
-      const finalWords = finalPremise.split(/\s+/);
-      if (finalWords.length > 0) {
-        const lastWord = finalWords[finalWords.length - 1];
-        if (incompleteEndings.includes(lastWord)) {
+      const finalWordsCheck = finalPremise.split(/\s+/);
+      if (finalWordsCheck.length > 0) {
+        const lastWordFinal = finalWordsCheck[finalWordsCheck.length - 1];
+        if (incompleteEndings.includes(lastWordFinal)) {
           // Remove the incomplete last word
-          finalPremise = finalWords.slice(0, -1).join(' ');
+          finalPremise = finalWordsCheck.slice(0, -1).join(' ');
         }
       }
       
