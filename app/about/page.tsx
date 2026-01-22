@@ -23,7 +23,7 @@ export default function AboutPage() {
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
             <div className="max-w-2xl space-y-6">
               <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
-                WTFiction exists to deepen our understanding of complex systems by exploring consequential scenarios before they unfold.
+                WTFiction exists to illuminate the hidden consequences of world-shaping trends before they unfold.
               </p>
             </div>
           </section>
@@ -35,7 +35,7 @@ export default function AboutPage() {
               What WTFiction Is
             </h2>
             <div className="max-w-2xl space-y-6">
-              <p className="text-base md:text-lg text-muted leading-relaxed">
+              <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
                 WTFiction is a speculative documentary series that explores how emerging technologies, social shifts, and systemic changes could reshape the world.
               </p>
             </div>
@@ -50,21 +50,27 @@ export default function AboutPage() {
             <div className="max-w-2xl space-y-6">
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
-                <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  <strong className="text-foreground/90">Systems-first</strong> — we focus on structural implications rather than isolated events.
-                </p>
+                <div className="flex-1">
+                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                    <strong className="text-foreground/90">Systems-first, not predictions.</strong> We focus on how structures behave when key variables change — not on forecasting outcomes.
+                  </p>
+                </div>
               </div>
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
-                <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  <strong className="text-foreground/90">Research-grounded</strong> — episodes are built from publicly available data, credible sources, and historical context.
-                </p>
+                <div className="flex-1">
+                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                    <strong className="text-foreground/90">Grounded in research.</strong> Episodes draw on credible sources, historical context, and real data.
+                  </p>
+                </div>
               </div>
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
-                <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  <strong className="text-foreground/90">Insight-oriented</strong> — we aim for clarity and understanding, not fear or sensationalism.
-                </p>
+                <div className="flex-1">
+                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                    <strong className="text-foreground/90">Designed to provoke understanding, not fear.</strong> The goal is clarity — not alarmism.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
@@ -77,8 +83,8 @@ export default function AboutPage() {
             </h2>
             <div className="max-w-2xl">
               <div className="relative pl-6 border-l-2 border-[#3ea6ff]/20">
-                <p className="text-base md:text-lg text-muted leading-relaxed">
-                  WTFiction is not a predictive model, a political platform, nor a claim about what will happen.
+                <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
+                  WTFiction is not a predictive model, a political advocacy platform, or a claim about what will happen.
                 </p>
               </div>
             </div>
@@ -91,11 +97,11 @@ export default function AboutPage() {
               How to Use the Site
             </h2>
             <div className="max-w-2xl space-y-4">
-              <p className="text-base md:text-lg text-muted leading-relaxed">
-                Watch each scenario here or on YouTube.
+              <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
+                You can watch every scenario here on the site or on YouTube.
               </p>
-              <p className="text-base md:text-lg text-muted leading-relaxed">
-                After watching, use the provided references to explore the underlying evidence and assumptions.
+              <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
+                After watching, explore the references to understand the evidence and assumptions behind each idea.
               </p>
             </div>
           </section>
@@ -108,8 +114,8 @@ export default function AboutPage() {
             </h2>
             <div className="max-w-2xl space-y-6">
               <div className="relative pl-6 border-l-2 border-[#3ea6ff]/20 bg-[#0a0a0a]/30 p-6 rounded-r-lg">
-                <p className="text-base md:text-lg text-muted leading-relaxed">
-                  Where possible, we prioritize peer-reviewed work, institutional reports, and primary data; ambiguous areas are acknowledged openly.
+                <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
+                  Where possible, we prioritize peer-reviewed work, institutional reports, and primary data; when evidence is uncertain, that uncertainty is acknowledged openly.
                 </p>
               </div>
               <div className="pt-2">
