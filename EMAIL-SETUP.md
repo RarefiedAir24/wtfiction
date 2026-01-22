@@ -16,16 +16,37 @@ This document outlines the email setup for wtfiction.com using Microsoft 365/Exc
    - **TTL**: `3600` (or default)
 5. Click **"Create Records"**
 
-### Step 2: Additional DNS Records (if needed)
+### Step 2: Additional DNS Records
+
+The following records have been added via AWS CLI:
+
+**MX Record:**
+- **Name**: `@` (wtfiction.com)
+- **Type**: `MX`
+- **Value**: `0 wtfiction-com.mail.protection.outlook.com`
+- **TTL**: `3600`
+
+**CNAME Record (Autodiscover):**
+- **Name**: `autodiscover`
+- **Type**: `CNAME`
+- **Value**: `autodiscover.outlook.com`
+- **TTL**: `3600`
+
+**SPF TXT Record:**
+- **Name**: `@` (wtfiction.com)
+- **Type**: `TXT`
+- **Value**: `v=spf1 include:spf.protection.outlook.com -all`
+- **TTL**: `3600`
+
+**Status**: ✅ All records added successfully
+
+### Additional Records (if needed)
 
 Microsoft 365 may require additional DNS records:
-- **MX records** - for email routing
-- **CNAME records** - for autodiscover
-- **SPF record** - for email authentication (TXT record)
 - **DKIM records** - for email authentication (TXT records)
 - **DMARC record** - for email authentication (TXT record)
 
-These will be provided by Microsoft 365 during setup.
+These will be provided by Microsoft 365 during setup if needed.
 
 ## Email Service Integration
 
@@ -54,6 +75,9 @@ After DNS records are added:
 
 ## Current Status
 
-- ✅ DNS TXT record documented
-- ⏳ Waiting for DNS configuration
+- ✅ Domain verification TXT record added (`MS=ms75334031`)
+- ✅ MX record added (`0 wtfiction-com.mail.protection.outlook.com`)
+- ✅ CNAME record added (`autodiscover` -> `autodiscover.outlook.com`)
+- ✅ SPF TXT record added (`v=spf1 include:spf.protection.outlook.com -all`)
+- ⏳ Waiting for DNS propagation (5-60 minutes)
 - ⏳ Email service integration pending
