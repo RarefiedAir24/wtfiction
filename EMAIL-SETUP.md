@@ -157,9 +157,10 @@ Once DNS is configured and email is set up, we'll need to:
    - Scroll down to look for **"App passwords"** or **"Manage app passwords"** section
    - If not visible, your organization may have app passwords disabled
 
-4. **If App Passwords Not Available:**
+4. **If App Passwords Not Available (Your Situation):**
    - Some Microsoft 365 organizations disable app passwords for security
-   - If you can't find or create app passwords, use **Resend API** instead (see Alternative section below)
+   - If the direct link doesn't work, app passwords are likely disabled
+   - **Solution:** Use **Resend API** instead (see section below)
    - Resend works with shared mailboxes and doesn't require app passwords
 
 4. **Create App Password**
@@ -174,17 +175,52 @@ Once DNS is configured and email is set up, we'll need to:
    - `SMTP_HOST` = `smtp.office365.com`
    - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
 
-### Alternative: Resend API (If SMTP doesn't work)
+### Using Resend API (Recommended - Works with Shared Mailboxes)
 
-If you can't create an app password, you can use Resend instead:
+Since app passwords aren't available in your organization, we'll use **Resend** - a modern email API that works perfectly with shared mailboxes.
 
-1. **Sign up for Resend** at [resend.com](https://resend.com)
-2. **Verify your domain** `wtfiction.com` in Resend
-3. **Get API Key** from Resend dashboard
-4. **Add to Vercel:**
-   - `RESEND_API_KEY` = `[your-resend-key]`
-   - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
-   - `FROM_EMAIL` = `noreply@wtfiction.com` (optional)
+**Advantages:**
+- ✅ No app passwords needed
+- ✅ Works with shared mailboxes
+- ✅ Free tier: 100 emails/day
+- ✅ Better deliverability
+- ✅ Easy setup
+
+**Setup Steps:**
+
+1. **Sign up for Resend**
+   - Go to [resend.com](https://resend.com)
+   - Click "Get Started" or "Sign Up"
+   - Create a free account (100 emails/day free)
+
+2. **Verify your domain**
+   - Once logged in, go to **Domains** in the left sidebar
+   - Click **"Add Domain"**
+   - Enter: `wtfiction.com`
+   - Resend will provide DNS records to add:
+     - **DKIM records** (TXT records)
+     - **SPF record** (TXT record - may already exist)
+     - **DMARC record** (TXT record - optional)
+   - Add these records to Route 53 (same way we added the MX records)
+   - Wait for verification (usually 5-10 minutes)
+
+3. **Get your API Key**
+   - Go to **API Keys** in the left sidebar
+   - Click **"Create API Key"**
+   - Name it: "WTFiction Production"
+   - Copy the key (starts with `re_`)
+   - **Important:** Save it securely - you won't see it again!
+
+4. **Add to Vercel**
+   - Go to Vercel → Settings → Environment Variables
+   - Add these variables:
+     - `RESEND_API_KEY` = `[your-resend-key]` (the one starting with `re_`)
+     - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
+     - `FROM_EMAIL` = `noreply@wtfiction.com` (or `subscribe@wtfiction.com`)
+   - Select all environments (Production, Preview, Development)
+
+5. **Redeploy**
+   - Go to Deployments → Redeploy the latest deployment
 
 ### Method 2: Via Vercel CLI
 
