@@ -28,17 +28,13 @@ async function fetchReferencesFromGitHub(): Promise<void> {
       return;
     }
 
-    let content = await response.text();
+    const content = await response.text();
     
     // Validate that we got valid TypeScript content
     if (!content.includes('export interface Citation') || !content.includes('export const references')) {
       console.warn('⚠️  Fetched content does not appear to be valid references.ts. Using local file.');
       return;
     }
-
-    // Remove all citations - citations should only be added via admin portal
-    // This regex matches citations arrays and replaces them with empty arrays
-    content = content.replace(/citations:\s*\[[\s\S]*?\],/g, 'citations: [],');
 
     // Write to local file
     const referencesPath = join(process.cwd(), 'data', 'references.ts');
