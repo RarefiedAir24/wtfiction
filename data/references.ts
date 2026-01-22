@@ -64,7 +64,7 @@ export const references: Reference[] = [
     ],
   },
   {
-    episodeId: 'what-if-venezuela-attacked-u-s-oil-platforms-video',
+    episodeId: 'i8vIIkaU4wI',
     episodeTitle: 'What If Venezuela Attacked U.S. Oil Platforms? #video',
     publishDate: '2025-12-17',
     citations: [
