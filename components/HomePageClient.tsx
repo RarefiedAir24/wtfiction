@@ -249,9 +249,6 @@ export default function HomePageClient() {
                                     <path d="M8 5v14l11-7z" />
                                   </svg>
                                 </div>
-                                
-                                {/* Shine effect on hover */}
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_ease-in-out_infinite] pointer-events-none" />
                               </div>
                               
                               {/* Runtime badge */}
