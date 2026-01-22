@@ -54,8 +54,9 @@ export async function POST(request: NextRequest) {
           </div>
         `;
 
+        // For domain-verified SES, use just the email address (display name format may cause issues)
         const command = new SendEmailCommand({
-          Source: `WTFiction <${fromEmail}>`,
+          Source: fromEmail, // Use email address directly for domain-verified identities
           Destination: {
             ToAddresses: [recipientEmail],
           },
