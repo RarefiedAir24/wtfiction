@@ -250,6 +250,54 @@ Sometimes app passwords work even if not explicitly enabled. Try:
 
 **Note:** If you don't see these options or don't have permissions, you may need Global Administrator permissions or need to contact your Microsoft 365 administrator.
 
+### Enabling SMTP AUTH for the Tenant (Required!)
+
+**IMPORTANT:** If you see the error: `SmtpClientAuthentication is disabled for the Tenant`, you need to enable SMTP AUTH at the organization level.
+
+**Error Message:**
+```
+535 5.7.139 Authentication unsuccessful, SmtpClientAuthentication is disabled for the Tenant
+```
+
+**Solution: Enable SMTP AUTH in Exchange Online**
+
+1. **Go to Microsoft 365 Admin Center**
+   - Visit [admin.microsoft.com](https://admin.microsoft.com)
+   - Sign in with Global Administrator account
+
+2. **Navigate to Exchange Admin Center**
+   - Go to **Admin centers** → **Exchange** (or visit [admin.exchange.microsoft.com](https://admin.exchange.microsoft.com))
+   - Sign in with Global Administrator account
+
+3. **Enable SMTP AUTH**
+   - Go to **Mail flow** → **Settings** (or **Settings** → **Mail flow**)
+   - Look for **"SMTP AUTH"** or **"Authenticated SMTP"** settings
+   - OR go to **Recipients** → **Mailboxes**
+   - Select the user account (`frank.s@montebay.io`)
+   - Click **"Manage email apps"** or **"Mailbox features"**
+   - Enable **"Authenticated SMTP"** or **"SMTP AUTH"**
+
+4. **Alternative: PowerShell (If UI not available)**
+   ```powershell
+   # Connect to Exchange Online PowerShell
+   Connect-ExchangeOnline
+   
+   # Enable SMTP AUTH for specific user
+   Set-CASMailbox -Identity "frank.s@montebay.io" -SmtpClientAuthenticationDisabled $false
+   
+   # Or enable for entire organization (less secure)
+   Set-TransportConfig -SmtpClientAuthenticationDisabled $false
+   ```
+
+5. **Wait 5-15 minutes** for changes to propagate
+
+6. **Test again** using the test script:
+   ```bash
+   API_URL=https://wtfiction.com/api/subscribe npm run test-email
+   ```
+
+**Reference:** [Microsoft Documentation](https://aka.ms/smtp_auth_disabled)
+
 ### If App Passwords Are Completely Disabled
 
 If app passwords are disabled and cannot be enabled (e.g., Security Defaults are ON and cannot be changed), you have these options:
