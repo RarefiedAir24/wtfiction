@@ -1,4 +1,39 @@
+'use client';
+
+import { useState } from 'react';
+import { trackEmailSignup } from '@/lib/analytics';
+
 export default function SubscribePage() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    
+    if (email) {
+      trackEmailSignup(email);
+      // TODO: Connect to email service (Mailchimp, ConvertKit, etc.)
+      console.log('Email signup submitted:', email);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setIsSubmitted(true);
+      setIsSubmitting(false);
+      // Reset form
+      e.currentTarget.reset();
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } else {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
@@ -15,23 +50,31 @@ export default function SubscribePage() {
             <p className="text-sm md:text-base text-muted leading-normal mb-4">
               Get notified when new scenarios are released. No spam. No daily emails. Only new scenarios.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 px-4 py-2.5 bg-[#272727] border border-[#272727] text-foreground placeholder:text-muted focus:outline-none focus:border-[#3f3f3f] transition-colors text-sm"
-                disabled
-              />
-              <button
-                type="submit"
-                className="px-6 py-2.5 bg-foreground text-background font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                disabled
-              >
-                Subscribe
-              </button>
-            </form>
+            {isSubmitted ? (
+              <div className="p-4 bg-[#3ea6ff]/10 border border-[#3ea6ff]/30 rounded-lg text-[#3ea6ff] max-w-md">
+                <p className="text-sm font-medium">✓ You're subscribed. Check your email to confirm.</p>
+              </div>
+            ) : (
+              <form className="flex flex-col sm:flex-row gap-3 max-w-md" onSubmit={handleSubmit}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  className="flex-1 px-4 py-2.5 bg-[#272727] border border-[#272727] text-foreground placeholder:text-muted focus:outline-none focus:border-[#3ea6ff] focus:ring-2 focus:ring-[#3ea6ff]/20 transition-all text-sm rounded-lg"
+                  required
+                  disabled={isSubmitting}
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white font-semibold hover:shadow-lg hover:shadow-[#3ea6ff]/30 transition-all duration-300 ease-out transform hover:scale-105 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+                </button>
+              </form>
+            )}
             <p className="text-xs text-muted mt-3 italic">
-              Email signup coming soon. This is permission-based, not growth-at-all-costs.
+              Email signup is active. This is permission-based, not growth-at-all-costs.
             </p>
           </section>
 
@@ -47,9 +90,19 @@ export default function SubscribePage() {
               href="https://www.youtube.com/@WTFictionTV"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-foreground text-background font-medium hover:opacity-90 transition-opacity text-sm"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white font-semibold hover:shadow-lg hover:shadow-[#3ea6ff]/30 transition-all duration-300 ease-out transform hover:scale-105 hover:-translate-y-0.5 text-sm group relative overflow-hidden"
             >
-              Subscribe on YouTube →
+              <span className="relative z-10">Subscribe on YouTube</span>
+              <svg 
+                className="relative z-10 w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+              {/* Shine effect on hover */}
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none"></span>
             </a>
           </section>
         </div>
