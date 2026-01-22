@@ -52,6 +52,26 @@ function formatCitation(citation: {
       );
     }
     
+    // If citation is severely corrupted (contains HTML fragments or description text),
+    // try to extract just the organization/title/type/year pattern
+    // Pattern: Look for "Organization, Title (Type, Year)" at the end
+    const endPattern = /,\s*([^,]+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/;
+    const endMatch = cleaned.match(endPattern);
+    if (endMatch) {
+      // Try to find organization name before the title
+      const beforeMatch = cleaned.substring(0, endMatch.index).trim();
+      const lastComma = beforeMatch.lastIndexOf(',');
+      if (lastComma > 0) {
+        const orgName = beforeMatch.substring(lastComma + 1).trim();
+        const [, title, type, year] = endMatch;
+        return (
+          <>
+            {orgName}, <em>{title}</em> ({type}, {year}).
+          </>
+        );
+      }
+    }
+    
     // If we can't parse it, return as-is (but this shouldn't happen with proper data)
     return citationText.endsWith('.') ? citationText : citationText + '.';
   }
