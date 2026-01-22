@@ -114,11 +114,11 @@ export default function HomePageClient() {
                   }}
                 />
                 {/* Enhanced gradient overlay system for better text contrast */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/80 to-black/70" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/85 to-black/75" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/38 to-black/65" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
                 {/* Vignette effect for better focus */}
-                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/30" />
+                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/33" />
               </div>
               
               <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full py-16">
