@@ -3,38 +3,94 @@ import { scenarios } from '@/data/scenarios';
 
 /**
  * Formats a citation in the standard format: "Author, Title (Type, Year)."
- * The citation field should already contain the properly formatted citation.
- * This function ensures it's displayed correctly.
+ * The title should be italicized in the output.
  */
 function formatCitation(citation: {
   citation?: string;
   title?: string;
   text?: string;
   type?: string;
-}): string {
-  // If citation field exists, use it (it should already be in the format "Author, Title (Type, Year).")
+  authors?: string[];
+  extractedYear?: string;
+  publishDate?: string;
+}): React.ReactNode {
+  // If citation field exists and looks properly formatted, parse it to italicize the title
   if (citation.citation) {
     const citationText = citation.citation.trim();
-    // Ensure it ends with a period
+    
+    // Check if citation is already in the format "Author, Title (Type, Year)."
+    // Pattern: Author(s), Title (Type, Year).
+    const citationPattern = /^(.+?),\s*(.+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/;
+    const match = citationText.match(citationPattern);
+    
+    if (match) {
+      const [, author, title, type, year] = match;
+      return (
+        <>
+          {author}, <em>{title}</em> ({type}, {year}).
+        </>
+      );
+    }
+    
+    // If citation doesn't match pattern but looks valid, try to clean it up
+    // Remove any HTML fragments or corrupted text
+    const cleaned = citationText
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/[""]/g, '"') // Normalize quotes
+      .replace(/\.\.\./g, '') // Remove ellipses
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .trim();
+    
+    // Try to extract parts from cleaned citation
+    const cleanedMatch = cleaned.match(/^(.+?),\s*(.+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/);
+    if (cleanedMatch) {
+      const [, author, title, type, year] = cleanedMatch;
+      return (
+        <>
+          {author}, <em>{title}</em> ({type}, {year}).
+        </>
+      );
+    }
+    
+    // If we can't parse it, return as-is (but this shouldn't happen with proper data)
     return citationText.endsWith('.') ? citationText : citationText + '.';
   }
   
-  // Fallback: if no citation field, try to construct from available fields
-  // This is for backward compatibility with old data
+  // Fallback: construct from available fields
+  const authors = citation.authors && citation.authors.length > 0 
+    ? citation.authors.join(' & ') 
+    : '';
   const title = citation.title || citation.text || 'Untitled Reference';
   const type = citation.type || 'Unknown';
+  const year = citation.extractedYear || (citation.publishDate 
+    ? new Date(citation.publishDate).getFullYear().toString()
+    : '');
   
-  // Try to extract year from citation text if it exists
-  if (citation.text) {
-    const yearMatch = citation.text.match(/(\d{4})/);
-    const year = yearMatch ? yearMatch[1] : '';
-    if (year) {
-      return `${title} (${type}, ${year}).`;
-    }
+  if (authors && title && type && year) {
+    return (
+      <>
+        {authors}, <em>{title}</em> ({type}, {year}).
+      </>
+    );
   }
   
-  // Last resort: just title and type
-  return `${title} (${type}).`;
+  if (title && type && year) {
+    return (
+      <>
+        <em>{title}</em> ({type}, {year}).
+      </>
+    );
+  }
+  
+  if (title && type) {
+    return (
+      <>
+        <em>{title}</em> ({type}).
+      </>
+    );
+  }
+  
+  return <em>{title}</em>;
 }
 
 export default function ReferencesPage() {
@@ -154,9 +210,9 @@ export default function ReferencesPage() {
                                 {description}
                               </div>
                             )}
-                            {/* Citation Format - Always show in standard format */}
+                            {/* Citation Format - Always show in standard format with italicized title */}
                             {formattedCitation && (
-                              <div className="text-xs text-muted/70 italic mt-2 pt-2 border-t border-[#272727]">
+                              <div className="text-xs text-muted/70 mt-2 pt-2 border-t border-[#272727]">
                                 {formattedCitation}
                               </div>
                             )}
