@@ -70,15 +70,40 @@ Once DNS is configured and email is set up, we'll need to:
    - API keys (if using email service API)
    - Email recipient: `subscribe@wtfiction.com`
 
+## Environment Variables (Vercel)
+
+Add these environment variables to your Vercel project settings:
+
+```bash
+SMTP_HOST=smtp.office365.com
+SMTP_USER=subscribe@wtfiction.com
+SMTP_PASSWORD=your-app-password-here
+SUBSCRIBE_EMAIL=subscribe@wtfiction.com
+```
+
+**Important Notes:**
+- `SMTP_USER` should be the full email address (`subscribe@wtfiction.com`)
+- `SMTP_PASSWORD` should be an **App Password** (not your regular password)
+  - To create an App Password in Microsoft 365:
+    1. Go to Microsoft 365 Security settings
+    2. Enable Multi-Factor Authentication (if not already enabled)
+    3. Go to Security info → App passwords
+    4. Create a new app password for "Mail"
+    5. Copy the generated password (you won't see it again)
+- `SUBSCRIBE_EMAIL` is optional (defaults to `subscribe@wtfiction.com`)
+
 ## Next Steps
 
 After DNS records are added:
-1. ✅ Wait for DNS propagation (5-60 minutes) - **In Progress**
-2. ⏳ Verify domain in Microsoft 365
-3. ⏳ Create mailbox: `subscribe@wtfiction.com` in Microsoft 365
-4. ⏳ Set up email service integration (SMTP or API)
-5. ⏳ Configure API route for email submissions
-6. ⏳ Update EmailSignup component to use the API
+1. ✅ Wait for DNS propagation (5-60 minutes) - **Complete**
+2. ✅ Verify domain in Microsoft 365 - **Complete**
+3. ✅ Create mailbox: `subscribe@wtfiction.com` in Microsoft 365 - **Complete**
+4. ✅ Set up email service integration (SMTP) - **Complete**
+5. ✅ Configure API route for email submissions - **Complete**
+6. ✅ Update EmailSignup component to use the API - **Complete**
+7. ⏳ Add environment variables to Vercel
+8. ⏳ Create App Password in Microsoft 365
+9. ⏳ Test email subscription flow
 
 ## Current Status
 
@@ -86,5 +111,10 @@ After DNS records are added:
 - ✅ MX record added (`0 wtfiction-com.mail.protection.outlook.com`)
 - ✅ CNAME record added (`autodiscover` -> `autodiscover.outlook.com`)
 - ✅ SPF TXT record added (`v=spf1 include:spf.protection.outlook.com -all`)
-- ⏳ Waiting for DNS propagation (5-60 minutes)
-- ⏳ Email service integration pending
+- ✅ DNS propagation complete
+- ✅ Mailbox created: `subscribe@wtfiction.com`
+- ✅ Email API route created (`/api/subscribe`)
+- ✅ EmailSignup component updated
+- ✅ Subscribe page updated
+- ⏳ Environment variables need to be added to Vercel
+- ⏳ App Password needs to be created in Microsoft 365

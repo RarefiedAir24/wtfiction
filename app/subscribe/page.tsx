@@ -6,29 +6,45 @@ import { trackEmailSignup } from '@/lib/analytics';
 export default function SubscribePage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     
     if (email) {
       trackEmailSignup(email);
-      // TODO: Connect to email service (Mailchimp, ConvertKit, etc.)
-      console.log('Email signup submitted:', email);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setIsSubmitted(true);
-      setIsSubmitting(false);
-      // Reset form
-      e.currentTarget.reset();
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
+      try {
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to subscribe');
+        }
+
+        setIsSubmitted(true);
+        e.currentTarget.reset();
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } catch (err: any) {
+        console.error('Subscription error:', err);
+        setError(err.message || 'Failed to subscribe. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
       setIsSubmitting(false);
     }
@@ -72,6 +88,11 @@ export default function SubscribePage() {
                   {isSubmitting ? 'Subscribing...' : 'Subscribe'}
                 </button>
               </form>
+            )}
+            {error && (
+              <div className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm text-center max-w-md">
+                {error}
+              </div>
             )}
             <p className="text-xs text-muted mt-3 italic">
               Email signup is active. This is permission-based, not growth-at-all-costs.
