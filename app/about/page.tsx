@@ -117,15 +117,7 @@ export default function AboutPage() {
                   href="/references" 
                   className="inline-flex items-center gap-2 text-base text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors group"
                 >
-                  <span>Explore the sources behind our scenarios</span>
-                  <svg 
-                    className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <span>Explore the sources behind our scenarios → References</span>
                 </Link>
               </div>
             </div>
