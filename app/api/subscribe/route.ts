@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     // Option 1: AWS SES (Recommended - works with any email, no SMTP AUTH issues)
     const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID;
     const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-    const awsRegion = process.env.AWS_REGION || 'us-east-1';
+    const awsRegion = (process.env.AWS_REGION || 'us-east-2').trim(); // Trim whitespace
 
     if (awsAccessKeyId && awsSecretAccessKey) {
       try {
