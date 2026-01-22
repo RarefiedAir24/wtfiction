@@ -180,28 +180,56 @@ Once DNS is configured and email is set up, we'll need to:
 
 ### Enabling App Passwords in Microsoft 365 Admin Center
 
-If app passwords aren't available, they may be disabled organization-wide. Here's how to enable them:
+If app passwords aren't available, they may be disabled organization-wide. Here's where to enable them:
+
+**Option 1: Azure AD (Entra ID) Portal (Most Common Location)**
+
+1. **Go to Azure AD Portal**
+   - Visit [portal.azure.com](https://portal.azure.com)
+   - Sign in with your admin account (`frank.s@montebay.io`)
+
+2. **Navigate to Azure Active Directory**
+   - Click on **Azure Active Directory** (or **Microsoft Entra ID**)
+   - Go to **Security** → **Authentication methods**
+
+3. **Enable App Passwords**
+   - Look for **"App passwords"** or **"Microsoft Authenticator"** settings
+   - Enable app passwords for your organization
+   - Save changes
+
+**Option 2: Microsoft 365 Admin Center - Security**
 
 1. **Go to Microsoft 365 Admin Center**
    - Visit [admin.microsoft.com](https://admin.microsoft.com)
    - Sign in with your admin account
 
-2. **Navigate to Security Settings**
-   - Go to **Settings** → **Org settings** → **Security & privacy**
-   - OR go to **Security** → **Authentication methods**
+2. **Navigate to Security**
+   - Click on **Security** in the left sidebar
+   - Look for **"Authentication methods"** or **"Multi-factor authentication"**
+   - OR go to **Azure Active Directory** → **Security** → **Authentication methods**
 
 3. **Enable App Passwords**
-   - Look for **"App passwords"** or **"Legacy authentication"** settings
-   - Enable app passwords for your organization
+   - Find **"App passwords"** or **"Legacy authentication"** settings
+   - Enable for your organization
    - Save changes
 
-4. **Wait a few minutes** for changes to propagate
+**Option 3: Check MFA Settings**
 
-5. **Try creating app password again**
-   - Go back to [My Sign-Ins](https://mysignins.microsoft.com) → Security info
-   - Or try the direct link: [App Passwords](https://account.microsoft.com/security/app-passwords)
+App passwords are often tied to Multi-Factor Authentication settings:
 
-**Note:** If you don't have permissions to change these settings, you may need to contact your Microsoft 365 administrator.
+1. Go to **Security** → **Multi-factor authentication** (or **MFA**)
+2. Look for app password settings
+3. Enable if available
+
+**After Enabling:**
+
+1. **Wait 5-10 minutes** for changes to propagate
+2. **Try creating app password again:**
+   - Go to [My Sign-Ins](https://mysignins.microsoft.com) → Security info
+   - Or try: [App Passwords](https://account.microsoft.com/security/app-passwords)
+   - You should now see the option to create app passwords
+
+**Note:** If you don't see these options or don't have permissions, you may need Global Administrator permissions or need to contact your Microsoft 365 administrator.
 
 ### Alternative: Using Resend API (If App Passwords Can't Be Enabled)
 
