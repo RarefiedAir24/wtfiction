@@ -113,12 +113,12 @@ export default function HomePageClient() {
                       : `url(${getYouTubeThumbnail(heroEpisode.youtubeUrl)})`
                   }}
                 />
-                {/* Enhanced gradient overlay system for better text contrast - reduced opacity for more visible background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/60" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                {/* Vignette effect for better focus - reduced opacity */}
-                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/25" />
+                {/* Enhanced gradient overlay system for better text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/80 to-black/70" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                {/* Vignette effect for better focus */}
+                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/30" />
               </div>
               
               <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full py-16">
