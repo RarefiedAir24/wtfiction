@@ -140,47 +140,17 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Section 6: Credits & Connect - Enhanced */}
+          {/* Section 6: Credits - Enhanced */}
           <section className="relative pt-12 border-t-2 border-[#272727]">
-            <div className="max-w-2xl space-y-8">
-              {/* Credits */}
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
-                  <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Credits</div>
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
-                </div>
-                <p className="text-sm text-muted/70 leading-relaxed">
-                  WTFiction is produced independently.
-                </p>
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+                <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Credits</div>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
               </div>
-
-              {/* Connect */}
-              <div className="pt-4 border-t border-[#272727]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
-                  <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Connect</div>
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
-                </div>
-                <div>
-                  <a 
-                    href="https://www.youtube.com/@WTFictionTV" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors group"
-                  >
-                    <span>YouTube Channel</span>
-                    <svg 
-                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
+              <p className="text-sm text-muted/70 leading-relaxed">
+                WTFiction is produced independently.
+              </p>
             </div>
           </section>
         </div>
