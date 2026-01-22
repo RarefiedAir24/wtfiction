@@ -106,7 +106,7 @@ export default function ReferencesPage() {
                             {/* Citation Format */}
                             {citationText && (
                               <div className="text-xs text-muted/70 italic mt-2 pt-2 border-t border-[#272727]">
-                                <span className="font-medium">How to cite:</span> {citationText}
+                                {citationText}
                               </div>
                             )}
                           </div>
