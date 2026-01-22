@@ -118,13 +118,7 @@ export default function AboutPage() {
                   Where possible, we prioritize peer-reviewed work, institutional reports, and primary data; when evidence is uncertain, that uncertainty is acknowledged openly.
                 </p>
               </div>
-              <div className="pt-2 space-y-3">
-                <Link 
-                  href="/references" 
-                  className="inline-flex items-center gap-2 text-base text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors group"
-                >
-                  <span>Explore the sources behind our scenarios → References</span>
-                </Link>
+              <div className="pt-2">
                 <p className="text-sm text-muted/70 leading-relaxed">
                   Explore scenario details and sources in the{' '}
                   <Link href="/scenarios" className="text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors underline underline-offset-2">
