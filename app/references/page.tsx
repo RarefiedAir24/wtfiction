@@ -90,22 +90,56 @@ function formatCitation(citation: {
     }
     
     // Last resort: if we can't parse it, try to construct from available fields
-    // This should rarely happen with proper data
+    // This handles severely corrupted citations by using title, type, and extracting year
     if (citation.title && citation.type) {
-      const year = citation.extractedYear || (citation.publishDate 
+      // Try to extract year from the citation text (look for 4-digit year)
+      const yearMatch = cleaned.match(/(\d{4})/);
+      const year = yearMatch ? yearMatch[1] : (citation.extractedYear || (citation.publishDate 
         ? new Date(citation.publishDate).getFullYear().toString()
-        : '');
+        : ''));
       
-      if (year) {
+      // Extract organization from title if it's in "News - Organization" format
+      let organization = '';
+      let titleToUse = citation.title;
+      
+      const titleMatch = citation.title.match(/News\s*-\s*(.+)/i);
+      if (titleMatch) {
+        organization = titleMatch[1].trim();
+        // For "News - Organization", use the organization as author and keep full title
+        titleToUse = citation.title;
+      } else if (citation.title.includes('Corporation') || citation.title.includes('Organization') || citation.title.includes('Institute')) {
+        // If title looks like an organization name, use it as the organization
+        organization = citation.title;
+        // Try to get actual article title from description if available
+        if (citation.description) {
+          // Look for title-like text at the start of description
+          const descLines = citation.description.split('\n');
+          if (descLines.length > 0 && descLines[0].length > 20 && descLines[0].length < 150) {
+            titleToUse = descLines[0].trim();
+          }
+        }
+        if (titleToUse === citation.title) {
+          // If we couldn't extract a better title, use a generic one
+          titleToUse = 'News Article';
+        }
+      }
+      
+      if (organization && year) {
         return (
           <>
-            <em>{citation.title}</em> ({citation.type}, {year}).
+            {organization}, <em>{titleToUse}</em> ({citation.type}, {year}).
+          </>
+        );
+      } else if (year) {
+        return (
+          <>
+            <em>{titleToUse}</em> ({citation.type}, {year}).
           </>
         );
       } else {
         return (
           <>
-            <em>{citation.title}</em> ({citation.type}).
+            <em>{titleToUse}</em> ({citation.type}).
           </>
         );
       }
