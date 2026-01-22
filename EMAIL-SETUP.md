@@ -135,38 +135,38 @@ Once DNS is configured and email is set up, we'll need to:
 
 ### Creating App Password for Admin Account
 
+**Your Account:** `frank.s@montebay.io` (SMTP authorization enabled ✅)
+
 **Steps to create an app password:**
 
-1. **Go to Microsoft 365 Admin Center**
-   - Visit [admin.microsoft.com](https://admin.microsoft.com)
-   - Sign in with your admin account
+1. **Go to Security Settings**
+   - Visit [My Sign-Ins](https://mysignins.microsoft.com)
+   - Sign in with `frank.s@montebay.io`
+   - Go to **Security info** page
 
-2. **Find Your Admin Account**
-   - Go to **Users** → **Active users**
-   - Find and click on your admin account (the one you use to manage Microsoft 365)
-
-3. **Access Mail Settings**
-   - Click on your admin account
-   - Go to the **Mail** tab
-   - Scroll down to look for **"App passwords"** section
-
-4. **If App Passwords Section Not Visible:**
-   - Try going to [My Sign-Ins](https://mysignins.microsoft.com)
-   - Sign in with your admin account
-   - Go to **Security info**
-   - Look for **"App passwords"** in the left sidebar or main content
+2. **Find App Passwords**
+   - Look for **"App passwords"** link in the left sidebar or main content
    - OR try direct link: [App Passwords](https://account.microsoft.com/security/app-passwords)
+   - Make sure you're signed in with `frank.s@montebay.io`
 
-5. **Create App Password**
+3. **Alternative: Via Admin Center**
+   - Go to [admin.microsoft.com](https://admin.microsoft.com)
+   - **Users** → **Active users**
+   - Find and click on `frank.s@montebay.io`
+   - Go to the **Mail** tab
+   - Look for **"App passwords"** section
+
+4. **Create App Password**
    - Click **"Create app password"** or **"Generate app password"**
    - Name it: "WTFiction Email Service" or "Vercel SMTP"
    - Copy the generated password (16 characters, spaces don't matter)
    - **Important:** You won't see this password again, so save it securely!
 
-6. **Use in Vercel**
-   - Use your admin account email as `SMTP_USER`
-   - Use the app password as `SMTP_PASSWORD`
-   - Emails will still be sent TO `subscribe@wtfiction.com` (the shared mailbox)
+5. **Add to Vercel**
+   - `SMTP_USER` = `frank.s@montebay.io`
+   - `SMTP_PASSWORD` = `[the-app-password-you-just-created]`
+   - `SMTP_HOST` = `smtp.office365.com`
+   - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
 
 ### Alternative: Resend API (If SMTP doesn't work)
 
