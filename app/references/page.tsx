@@ -116,27 +116,36 @@ export default function ReferencesPage() {
                           )}
                           {/* Citation Content - Right Side */}
                           <div className="flex-1 space-y-1.5">
-                            {/* Title */}
-                            <div className="text-foreground font-medium">
-                              {title}
-                            </div>
+                            {/* Title - Clickable if URL exists */}
+                            {citation.url ? (
+                              <a
+                                href={citation.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-foreground font-medium hover:text-[#3ea6ff] transition-all duration-200 inline-block group"
+                              >
+                                <span className="relative">
+                                  {title}
+                                  <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-[#3ea6ff] transition-all duration-200 group-hover:w-full"></span>
+                                </span>
+                                <svg 
+                                  className="inline-block w-3 h-3 ml-1.5 mb-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
+                                  fill="none" 
+                                  stroke="currentColor" 
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </a>
+                            ) : (
+                              <div className="text-foreground font-medium">
+                                {title}
+                              </div>
+                            )}
                             {/* Description */}
                             {description && (
                               <div className="text-muted text-sm leading-relaxed">
                                 {description}
-                              </div>
-                            )}
-                            {/* Link */}
-                            {citation.url && (
-                              <div>
-                                <a
-                                  href={citation.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-[#3ea6ff] hover:text-[#2d8fdd] transition-colors underline underline-offset-2 text-sm break-all"
-                                >
-                                  {citation.url}
-                                </a>
                               </div>
                             )}
                             {/* Citation Format - Always show in standard format */}
