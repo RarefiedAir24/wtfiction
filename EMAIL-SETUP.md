@@ -152,16 +152,36 @@ vercel env add SMTP_HOST development
 
 **Important:** `SMTP_PASSWORD` must be an **App Password** (not your regular password):
 
-1. Go to [Microsoft 365 Security](https://account.microsoft.com/security)
+**Option 1: Via Microsoft 365 Admin Center (Recommended)**
+1. Go to [Microsoft 365 Admin Center](https://admin.microsoft.com)
+2. Sign in with your Microsoft 365 admin account
+3. Go to **Users** → **Active users**
+4. Find and click on the user account (e.g., `subscribe@wtfiction.com` or your admin account)
+5. Click on the **Mail** tab
+6. Scroll down to **App passwords** section
+7. Click **"Create app password"**
+8. Name it: "WTFiction Email Service" or "Vercel SMTP"
+9. Copy the generated password (16 characters, spaces don't matter)
+10. Use this password as the `SMTP_PASSWORD` value
+
+**Option 2: Via Security Settings (Alternative)**
+1. Go to [Microsoft 365 Security](https://security.microsoft.com) or [My Sign-Ins](https://mysignins.microsoft.com)
 2. Sign in with your Microsoft 365 account
-3. Enable **Multi-Factor Authentication** (if not already enabled)
-4. Go to **Security info** → **App passwords**
-5. Click **"Create a new app password"**
-6. Name it: "WTFiction Email Service" or "Vercel SMTP"
-7. Copy the generated password (16 characters, spaces don't matter)
+3. Look for **"Additional security verification"** or **"App passwords"** in the left sidebar
+4. If you see **"App passwords"**, click it
+5. Click **"Create"** or **"Generate app password"**
+6. Name it: "WTFiction Email Service"
+7. Copy the generated password
 8. Use this password as the `SMTP_PASSWORD` value
 
-**Note:** You won't be able to see this password again, so save it securely.
+**Option 3: Direct Link (If Available)**
+- Try going directly to: [App Passwords](https://account.microsoft.com/security/app-passwords)
+- Or search for "app passwords" in the Microsoft 365 portal
+
+**Note:** 
+- You won't be able to see this password again, so save it securely
+- If you don't see "App passwords" option, you may need to enable it in your organization's security settings
+- App passwords are only available when MFA is enabled (which you have with Microsoft Authenticator)
 
 ## Next Steps
 

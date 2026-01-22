@@ -50,6 +50,10 @@ export async function POST(request: NextRequest) {
         ciphers: 'SSLv3',
         rejectUnauthorized: false, // For development, set to true in production with proper certs
       },
+      // Microsoft 365 may require these additional options
+      requireTLS: true,
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
     });
 
     // Verify transporter configuration
