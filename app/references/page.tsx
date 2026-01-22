@@ -13,6 +13,7 @@ function formatCitation(citation: {
   authors?: string[];
   extractedYear?: string;
   publishDate?: string;
+  description?: string;
 }): React.ReactNode {
   // If citation field exists, try to parse it
   if (citation.citation) {
