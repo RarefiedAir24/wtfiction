@@ -40,6 +40,9 @@ async function testEmailAPI() {
     } else {
       console.log('\n❌ ERROR: API returned an error');
       console.log(`   Error: ${data.error || 'Unknown error'}`);
+      if (data.details) {
+        console.log(`   Details: ${data.details}`);
+      }
       
       if (data.error?.includes('configuration') || data.error?.includes('not configured')) {
         console.log('\n💡 Tip: Check that all SMTP environment variables are set in Vercel:');
