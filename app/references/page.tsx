@@ -272,7 +272,7 @@ export default function ReferencesPage() {
                                 href={citation.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-foreground font-medium hover:text-[#3ea6ff] transition-all duration-300 ease-out inline-block group cursor-pointer"
+                                className="text-foreground font-medium hover:text-[#3ea6ff] transition-all duration-300 ease-out inline-flex items-center group cursor-pointer"
                               >
                                 <span className="relative inline-block">
                                   <span className="relative z-10">{title}</span>
@@ -280,6 +280,8 @@ export default function ReferencesPage() {
                                   <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] transition-all duration-300 ease-out group-hover:w-full rounded-full"></span>
                                   {/* Subtle glow effect on hover */}
                                   <span className="absolute -bottom-1 left-0 w-0 h-[4px] bg-[#3ea6ff]/20 blur-sm transition-all duration-300 ease-out group-hover:w-full rounded-full"></span>
+                                  {/* Subtle background highlight - constrained to text area */}
+                                  <span className="absolute -inset-x-1 -inset-y-0.5 rounded-md bg-[#3ea6ff]/5 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
                                 </span>
                                 {/* External link icon with smooth animation */}
                                 <svg 
@@ -290,8 +292,6 @@ export default function ReferencesPage() {
                                 >
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
-                                {/* Subtle scale effect on hover */}
-                                <span className="absolute inset-0 rounded-md bg-[#3ea6ff]/5 scale-0 group-hover:scale-105 transition-transform duration-300 ease-out -z-10"></span>
                               </a>
                             ) : (
                               <div className="text-foreground font-medium">
