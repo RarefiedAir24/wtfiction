@@ -1,92 +1,83 @@
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <h1 className="text-3xl md:text-4xl font-medium mb-12 text-foreground">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+        <h1 className="text-3xl md:text-4xl font-light mb-16 text-foreground">
           About
         </h1>
 
-        <div className="space-y-12">
-          {/* Brand Narrative */}
+        <div className="space-y-16">
+          {/* Section 1: What WTFiction Is (Primary) */}
           <section>
-            <h2 className="text-xl md:text-2xl font-medium mb-6 text-foreground">
-              What WTFiction Is
-            </h2>
-            <div className="space-y-4 text-base md:text-lg text-muted leading-relaxed max-w-3xl">
+            <div className="max-w-2xl space-y-4 text-lg md:text-xl text-muted leading-relaxed">
               <p>
-                WTFiction is a speculative storytelling project that explores what happens when the systems we rely on break, evolve, or disappear. Each episode examines a single scenario — grounded in real science, economics, and geopolitics — and follows the consequences forward.
-              </p>
-              <p>
-                This is not entertainment. It's analysis. We use scenario-based reasoning to trace domino effects, revealing how interconnected systems respond under stress.
+                WTFiction is a speculative documentary series that explores how emerging technologies, social shifts, and systemic changes could reshape the world.
               </p>
             </div>
           </section>
 
-          {/* What It Is Not */}
+          {/* Section 2: What Makes It Different */}
           <section>
-            <h2 className="text-xl md:text-2xl font-medium mb-6 text-foreground">
-              What It Is Not
+            <h2 className="text-xl md:text-2xl font-light mb-8 text-foreground">
+              What Makes It Different
             </h2>
-            <div className="space-y-3 text-base text-muted leading-relaxed max-w-3xl">
+            <div className="max-w-2xl space-y-4 text-base md:text-lg text-muted leading-relaxed">
               <p>
-                <strong className="text-foreground">Not news.</strong> These scenarios are hypotheticals, not current events.
+                Focused on systems, not predictions.
               </p>
               <p>
-                <strong className="text-foreground">Not predictions.</strong> We're not forecasting the future. We're stress-testing assumptions.
+                Grounded in real research and historical precedent.
               </p>
               <p>
-                <strong className="text-foreground">Not political advocacy.</strong> No agenda. No solutions. Only consequences.
-              </p>
-              <p>
-                <strong className="text-foreground">Not science fiction.</strong> Every scenario is anchored in real research, real data, real constraints.
+                Designed to provoke understanding, not fear.
               </p>
             </div>
           </section>
 
-          {/* Methodology */}
+          {/* Section 3: What WTFiction Is Not */}
           <section>
-            <h2 className="text-xl md:text-2xl font-medium mb-6 text-foreground">
-              Methodology
+            <h2 className="text-xl md:text-2xl font-light mb-8 text-foreground">
+              What WTFiction Is Not
             </h2>
-            <div className="space-y-4 text-base text-muted leading-relaxed max-w-3xl">
+            <div className="max-w-2xl space-y-4 text-base md:text-lg text-muted leading-relaxed">
               <p>
-                Each scenario begins with research: academic papers, government reports, industry analysis, historical precedents. We cross-reference sources across disciplines — economics, engineering, sociology, geopolitics.
-              </p>
-              <p>
-                Then we map consequences. Not just first-order effects, but second and third-order impacts. How does one change cascade? What breaks? What adapts? What emerges?
-              </p>
-              <p>
-                The goal isn't to scare — it's to understand. By examining extreme scenarios, we reveal the hidden dependencies and assumptions that underpin modern civilization.
+                WTFiction is not a prediction engine, a political platform, or a definitive forecast of the future.
               </p>
             </div>
           </section>
 
-          {/* Tone & Approach */}
+          {/* Section 4: How to Use the Site */}
           <section>
-            <h2 className="text-xl md:text-2xl font-medium mb-6 text-foreground">
-              Tone & Approach
+            <h2 className="text-xl md:text-2xl font-light mb-8 text-foreground">
+              How to Use the Site
             </h2>
-            <div className="space-y-3 text-base text-muted leading-relaxed max-w-3xl">
+            <div className="max-w-2xl space-y-4 text-base md:text-lg text-muted leading-relaxed">
               <p>
-                WTFiction is serious, not sensational. We avoid hype language, clickbait framing, and alarmist rhetoric. The scenarios speak for themselves.
+                Each scenario can be watched directly on the site or on YouTube.
               </p>
               <p>
-                We present facts, trace logic, and let viewers draw their own conclusions. No "smash that like button" energy. No emojis. No buzzwords.
-              </p>
-              <p>
-                Think: Netflix explainer meets The Atlantic meets early Vox. Calm. Intelligent. Speculative, not sensational.
+                References and sources are provided for those who want to explore the ideas further.
               </p>
             </div>
           </section>
 
-          {/* Trust Signals */}
+          {/* Section 5: Editorial Intent & Responsibility */}
+          <section>
+            <h2 className="text-xl md:text-2xl font-light mb-8 text-foreground">
+              Editorial Intent & Responsibility
+            </h2>
+            <div className="max-w-2xl space-y-4 text-base md:text-lg text-muted leading-relaxed">
+              <p>
+                Scenarios are constructed using publicly available research, reporting, and data. Sources are cited where possible, and uncertainty is acknowledged where it exists.
+              </p>
+            </div>
+          </section>
+
+          {/* Section 6: Minimal Creator Credit (Restrained) */}
           <section className="pt-8 border-t border-[#272727]">
-            <div className="space-y-3 text-sm text-muted leading-relaxed max-w-3xl">
+            <div className="max-w-2xl space-y-4 text-sm text-muted/70 leading-relaxed">
               <p>
-                Every episode includes a references page with citations. Sources are real, verifiable, and linked where possible.
-              </p>
-              <p>
-                This site exists to anchor the brand off YouTube — to provide context, credibility, and a permanent home for the project. It's brand infrastructure, not a growth hack.
+                WTFiction is produced independently.
               </p>
             </div>
           </section>
