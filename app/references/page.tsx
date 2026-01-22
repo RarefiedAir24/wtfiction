@@ -1,4 +1,5 @@
 import { references } from '@/data/references';
+import ReferenceSummary from '@/components/ReferenceSummary';
 import { scenarios } from '@/data/scenarios';
 
 /**
@@ -298,12 +299,14 @@ export default function ReferencesPage() {
                                 {title}
                               </div>
                             )}
-                            {/* Description */}
-                            {description && (
-                              <div className="text-muted text-sm leading-relaxed">
-                                {description}
-                              </div>
-                            )}
+                            {/* Description - with AI summarize option */}
+                            <ReferenceSummary
+                              url={citation.url}
+                              title={title}
+                              authors={(citation as any).authors || undefined}
+                              type={citation.type}
+                              existingDescription={description}
+                            />
                             {/* Citation Format - Always show in standard format with italicized title */}
                             {formattedCitation && (
                               <div className="text-xs text-muted/70 mt-2 pt-2 border-t border-[#272727]">
