@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -16,6 +16,13 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
+const montserrat = Montserrat({
+  variable: "--font-title",
+  subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "WTFiction — Speculative Scenarios Before They Happen",
   description: "WTFiction explores the consequences of science, technology, and power — before they happen. Each episode examines a single scenario grounded in real science, economics, and geopolitics.",
@@ -29,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${montserrat.variable} antialiased`}
       >
         <Navigation />
         {children}

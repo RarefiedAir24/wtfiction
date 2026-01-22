@@ -20,6 +20,7 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
+  --font-title: var(--font-title);
 }
 
 body {

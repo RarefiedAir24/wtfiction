@@ -118,7 +118,7 @@ export default function HomePageClient() {
                         Latest Episode
                       </span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] mb-6 text-foreground tracking-tight">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6 text-foreground tracking-tight" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
                       <span className="hero-title block">
                         {heroEpisode.title}
                       </span>
@@ -354,7 +354,7 @@ export default function HomePageClient() {
                   </div>
                 </div>
                 <div className="px-1 mt-5">
-                  <h3 className="text-lg font-medium mb-3 text-foreground leading-tight tracking-tight">
+                  <h3 className="text-lg font-bold mb-3 text-foreground leading-tight tracking-tight" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
                     {scenario.title}
                   </h3>
                   <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-2">
