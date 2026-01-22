@@ -22,7 +22,7 @@ export default function AboutPage() {
           <section className="relative">
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
             <div className="max-w-2xl space-y-6">
-              <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
+              <p className="text-2xl md:text-3xl lg:text-4xl text-foreground leading-[1.4] font-light tracking-tight" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
                 WTFiction exists to illuminate the hidden consequences of world-shaping trends before they unfold.
               </p>
             </div>
