@@ -16,14 +16,24 @@ export default function AboutPage() {
         </div>
 
         <div className="space-y-20">
-          {/* Section 1: What WTFiction Is (Primary) - Enhanced */}
+          {/* Opening Statement */}
           <section className="relative">
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
+            <div className="max-w-2xl space-y-6">
+              <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
+                WTFiction exists to help us think beyond the obvious — to explore how the world might change fundamentally before it happens.
+              </p>
+            </div>
+          </section>
+
+          {/* Section 1: What WTFiction Is */}
+          <section className="relative pt-8 border-t border-[#272727]">
+            <div className="absolute -left-4 top-8 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
             <h2 className="text-2xl md:text-3xl font-light mb-10 text-foreground tracking-tight">
               What WTFiction Is
             </h2>
             <div className="max-w-2xl space-y-6">
-              <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
+              <p className="text-base md:text-lg text-muted leading-relaxed">
                 WTFiction is a speculative documentary series that explores how emerging technologies, social shifts, and systemic changes could reshape the world.
               </p>
             </div>
