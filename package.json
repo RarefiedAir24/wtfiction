@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "fetch-videos": "tsx scripts/fetch-video-data.ts"
+    "fetch-videos": "tsx scripts/fetch-video-data.ts",
+    "test-email": "tsx scripts/test-email-api.ts"
   },
   "dependencies": {
     "@types/nodemailer": "^7.0.5",

@@ -99,10 +99,15 @@ export async function POST(request: NextRequest) {
 
     try {
       await transporter.verify();
-    } catch (error) {
+    } catch (error: any) {
       console.error('SMTP verification failed:', error);
+      // Return more detailed error for debugging
+      const errorMessage = error.message || 'Unknown SMTP error';
       return NextResponse.json(
-        { error: 'Email service configuration error. Please contact support.' },
+        { 
+          error: 'Email service configuration error. Please contact support.',
+          details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+        },
         { status: 503 }
       );
     }
