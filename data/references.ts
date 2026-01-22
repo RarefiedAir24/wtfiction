@@ -38,7 +38,9 @@ export const references: Reference[] = [
     episodeId: 'qBl6FCVTA8E',
     episodeTitle: 'What If Survival Wasn\'t the Reason We Work?',
     publishDate: '2026-01-18',
-    citations: [],
+    citations: [
+      { title: 'News - Alaska Permanent Fund Corporation', citation: 'Alaskans for Alaskans Fifty years ago, in 1976, Alaskan voters amended the state constitution to set aside a portion of the state’s revenues from oil, minerals to establish the Alaska Permanent Fund to benefit future generations of Alaskans. “The ..." />, News - Alaska Permanent Fund Corporation (Reporting, 2022).', description: 'FUND NEWS Alaska Celebrates the Fund’s First 50 Years, Prepares for the Next 50 Years January 14, 2026 Established by Alaskans for Alaskans Fifty years ago, in 1976, Alaskan voters amended the state constitution to set aside a portion of the state’s revenues from oil and minerals to establish the Alaska Permanent Fund to benefit future generations of Alaskans. “The ...', type: 'Reporting', url: 'https://apfc.org/news/' }
+],
   },
   {
     episodeId: 'i8vIIkaU4wI',
