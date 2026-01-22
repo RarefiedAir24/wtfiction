@@ -182,20 +182,27 @@ Once DNS is configured and email is set up, we'll need to:
 
 If app passwords aren't available, they may be disabled organization-wide. Here's where to enable them:
 
-**Option 1: Azure AD (Entra ID) Portal (Most Common Location)**
+**Option 1: Azure AD (Entra ID) Portal - Legacy Authentication**
+
+App passwords are controlled by legacy authentication settings, not the main authentication methods page:
 
 1. **Go to Azure AD Portal**
    - Visit [portal.azure.com](https://portal.azure.com)
    - Sign in with your admin account (`frank.s@montebay.io`)
 
-2. **Navigate to Azure Active Directory**
+2. **Navigate to Legacy Authentication Settings**
    - Click on **Azure Active Directory** (or **Microsoft Entra ID**)
-   - Go to **Security** → **Authentication methods**
+   - Go to **Security** → **Conditional Access** (or search for "Legacy authentication")
+   - OR go to **Properties** → Look for **"Manage security defaults"** or **"Legacy authentication"**
 
-3. **Enable App Passwords**
-   - Look for **"App passwords"** or **"Microsoft Authenticator"** settings
-   - Enable app passwords for your organization
-   - Save changes
+3. **Check Security Defaults**
+   - If Security Defaults are enabled, app passwords are typically disabled
+   - You may need to disable Security Defaults to enable app passwords
+   - **Warning:** Disabling Security Defaults requires setting up Conditional Access policies
+
+4. **Alternative: Check User Settings**
+   - Go to **Users** → Find `frank.s@montebay.io`
+   - Check if there are per-user app password settings
 
 **Option 2: Microsoft 365 Admin Center - Security**
 
@@ -213,13 +220,25 @@ If app passwords aren't available, they may be disabled organization-wide. Here'
    - Enable for your organization
    - Save changes
 
-**Option 3: Check MFA Settings**
+**Option 3: Check Security Defaults**
 
-App passwords are often tied to Multi-Factor Authentication settings:
+App passwords are often disabled when Security Defaults are enabled:
 
-1. Go to **Security** → **Multi-factor authentication** (or **MFA**)
-2. Look for app password settings
-3. Enable if available
+1. In Azure AD Portal, go to **Azure Active Directory** → **Properties**
+2. Scroll down to **"Manage security defaults"**
+3. If Security Defaults are **ON**, app passwords are disabled
+4. To enable app passwords:
+   - Turn OFF Security Defaults (requires Global Admin)
+   - Set up Conditional Access policies instead
+   - **Note:** This is a significant security change - only do this if you understand the implications
+
+**Option 4: Check if App Passwords Work Despite Settings**
+
+Sometimes app passwords work even if not explicitly enabled. Try:
+1. Go to [My Sign-Ins](https://mysignins.microsoft.com) → Security info
+2. Look for "App passwords" in the left sidebar (might be hidden)
+3. Or try: [App Passwords Direct](https://account.microsoft.com/security/app-passwords)
+4. If it works, you can create one even if the setting isn't visible
 
 **After Enabling:**
 
