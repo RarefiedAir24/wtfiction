@@ -127,7 +127,7 @@ export default function HomePageClient() {
                   <div>
                     <div className="mb-4">
                       <span className="text-xs md:text-sm text-[#3ea6ff] font-semibold tracking-[0.15em] uppercase mb-4 block opacity-90">
-                        Latest Episode
+                        Current Scenario
                       </span>
                     </div>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tracking-tight" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
@@ -166,6 +166,10 @@ export default function HomePageClient() {
                         Watch on YouTube
                       </TrackedExternalLink>
                     </div>
+                    {/* Site role clarification - subtle, one line */}
+                    <p className="text-sm text-muted/70 mt-6 font-light">
+                      WTFiction explores the consequences of world-changing ideas — beyond the video.
+                    </p>
                   </div>
 
                   {/* Right: YouTube Thumbnail/Player */}
@@ -395,6 +399,12 @@ export default function HomePageClient() {
 
         {/* Featured Scenarios - Documentary Series Style */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
+          {/* Soft transition cue */}
+          <div className="mb-12 text-center">
+            <p className="text-sm text-muted/60 font-light">
+              Previous scenarios and explorations
+            </p>
+          </div>
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-light mb-4 text-foreground">
               Episodes
@@ -459,18 +469,26 @@ export default function HomePageClient() {
           </div>
         </section>
 
-        {/* Why This Matters */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
-          <h2 className="text-3xl md:text-4xl font-light mb-8 text-foreground">
-            Why This Matters
-          </h2>
-          <div className="max-w-3xl space-y-4">
-            <p className="text-lg md:text-xl text-muted leading-relaxed font-light">
-              These scenarios aren't predictions.
-            </p>
-            <p className="text-lg md:text-xl text-foreground leading-relaxed font-normal">
-              They're stress tests for civilization.
-            </p>
+        {/* Why This Matters - Enhanced with structural weight */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-24 border-t border-[#272727]">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light mb-12 text-foreground">
+              Why This Matters
+            </h2>
+            <div className="space-y-6 leading-relaxed">
+              <p className="text-lg md:text-xl text-muted leading-relaxed font-light">
+                These scenarios aren't predictions.
+              </p>
+              <p className="text-lg md:text-xl text-foreground leading-relaxed font-normal">
+                They're stress tests for civilization.
+              </p>
+              <p className="text-lg md:text-xl text-muted leading-relaxed font-light mt-8">
+                By exploring extreme possibilities, we better understand the systems we rely on every day.
+              </p>
+              <p className="text-lg md:text-xl text-muted leading-relaxed font-light mt-8">
+                Each scenario examines what breaks, what adapts, and what endures.
+              </p>
+            </div>
           </div>
         </section>
       </main>
