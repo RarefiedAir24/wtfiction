@@ -145,16 +145,22 @@ Once DNS is configured and email is set up, we'll need to:
    - Go to **Security info** page
 
 2. **Find App Passwords**
-   - Look for **"App passwords"** link in the left sidebar or main content
-   - OR try direct link: [App Passwords](https://account.microsoft.com/security/app-passwords)
+   - **Try direct link first:** [App Passwords](https://account.microsoft.com/security/app-passwords)
    - Make sure you're signed in with `frank.s@montebay.io`
+   - If the link doesn't work or shows an error, try Option 3 below
 
 3. **Alternative: Via Admin Center**
    - Go to [admin.microsoft.com](https://admin.microsoft.com)
    - **Users** → **Active users**
    - Find and click on `frank.s@montebay.io`
    - Go to the **Mail** tab
-   - Look for **"App passwords"** section
+   - Scroll down to look for **"App passwords"** or **"Manage app passwords"** section
+   - If not visible, your organization may have app passwords disabled
+
+4. **If App Passwords Not Available:**
+   - Some Microsoft 365 organizations disable app passwords for security
+   - If you can't find or create app passwords, use **Resend API** instead (see Alternative section below)
+   - Resend works with shared mailboxes and doesn't require app passwords
 
 4. **Create App Password**
    - Click **"Create app password"** or **"Generate app password"**
