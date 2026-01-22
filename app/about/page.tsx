@@ -47,11 +47,11 @@ export default function AboutPage() {
             <h2 className="text-2xl md:text-3xl font-light mb-10 text-foreground tracking-tight">
               What Makes It Different
             </h2>
-            <div className="max-w-2xl space-y-6">
+            <div className="max-w-2xl space-y-5">
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <div className="flex-1">
-                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                  <p className="text-base md:text-lg text-muted leading-snug group-hover:text-foreground/90 transition-colors">
                     <strong className="text-foreground/90">Systems-first, not predictions.</strong> We focus on how structures behave when key variables change — not on forecasting outcomes.
                   </p>
                 </div>
@@ -59,7 +59,7 @@ export default function AboutPage() {
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <div className="flex-1">
-                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                  <p className="text-base md:text-lg text-muted leading-snug group-hover:text-foreground/90 transition-colors">
                     <strong className="text-foreground/90">Grounded in research.</strong> Episodes draw on credible sources, historical context, and real data.
                   </p>
                 </div>
@@ -67,7 +67,7 @@ export default function AboutPage() {
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <div className="flex-1">
-                  <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors" style={{ lineHeight: '1.75' }}>
+                  <p className="text-base md:text-lg text-muted leading-snug group-hover:text-foreground/90 transition-colors">
                     <strong className="text-foreground/90">Designed to provoke understanding, not fear.</strong> The goal is clarity — not alarmism.
                   </p>
                 </div>
