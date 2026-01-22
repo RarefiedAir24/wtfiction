@@ -91,11 +91,11 @@ export default function Navigation() {
             </NavLink>
             <Link 
               href="/subscribe" 
-              className="relative group px-4 py-2 rounded-lg bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white font-semibold hover:shadow-lg hover:shadow-[#3ea6ff]/30 transition-all duration-300 ease-out transform hover:scale-105 hover:-translate-y-0.5"
+              className="relative group px-4 py-2 rounded-lg bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white font-semibold hover:shadow-lg hover:shadow-[#3ea6ff]/30 transition-all duration-300 ease-out transform hover:scale-105 hover:-translate-y-0.5 overflow-hidden"
             >
               <span className="relative z-10">Subscribe</span>
-              {/* Shine effect on hover */}
-              <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></span>
+              {/* Shine effect on hover - contained within button */}
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none"></span>
             </Link>
           </div>
         </div>
