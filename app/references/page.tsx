@@ -14,12 +14,11 @@ function formatCitation(citation: {
   extractedYear?: string;
   publishDate?: string;
 }): React.ReactNode {
-  // If citation field exists and looks properly formatted, parse it to italicize the title
+  // If citation field exists, try to parse it
   if (citation.citation) {
     const citationText = citation.citation.trim();
     
-    // Check if citation is already in the format "Author, Title (Type, Year)."
-    // Pattern: Author(s), Title (Type, Year).
+    // First, check if citation is already in the format "Author, Title (Type, Year)."
     const citationPattern = /^(.+?),\s*(.+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/;
     const match = citationText.match(citationPattern);
     
@@ -32,17 +31,16 @@ function formatCitation(citation: {
       );
     }
     
-    // If citation doesn't match pattern but looks valid, try to clean it up
-    // Remove any HTML fragments or corrupted text
-    const cleaned = citationText
+    // Clean up corrupted citations: remove HTML fragments and normalize
+    let cleaned = citationText
       .replace(/<[^>]*>/g, '') // Remove HTML tags
       .replace(/[""]/g, '"') // Normalize quotes
       .replace(/\.\.\./g, '') // Remove ellipses
       .replace(/\s+/g, ' ') // Normalize whitespace
       .trim();
     
-    // Try to extract parts from cleaned citation
-    const cleanedMatch = cleaned.match(/^(.+?),\s*(.+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/);
+    // Try standard pattern on cleaned text
+    const cleanedMatch = cleaned.match(citationPattern);
     if (cleanedMatch) {
       const [, author, title, type, year] = cleanedMatch;
       return (
@@ -52,28 +50,69 @@ function formatCitation(citation: {
       );
     }
     
-    // If citation is severely corrupted (contains HTML fragments or description text),
-    // try to extract just the organization/title/type/year pattern
-    // Pattern: Look for "Organization, Title (Type, Year)" at the end
-    const endPattern = /,\s*([^,]+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/;
+    // For severely corrupted citations, look for the pattern at the END: ", Title (Type, Year)."
+    // This handles cases where description text is mixed in at the beginning
+    const endPattern = /,\s*([^,()]+?)\s*\(([^,]+),\s*(\d{4})\)\.?$/;
     const endMatch = cleaned.match(endPattern);
+    
     if (endMatch) {
-      // Try to find organization name before the title
-      const beforeMatch = cleaned.substring(0, endMatch.index).trim();
-      const lastComma = beforeMatch.lastIndexOf(',');
-      if (lastComma > 0) {
-        const orgName = beforeMatch.substring(lastComma + 1).trim();
-        const [, title, type, year] = endMatch;
+      const [, titleFromEnd, type, year] = endMatch;
+      const titleToUse = citation.title || titleFromEnd.trim();
+      
+      // Try to extract organization name from the title field or citation
+      // If title is "News - Organization Name", extract the organization
+      let organization = '';
+      if (citation.title) {
+        const titleMatch = citation.title.match(/News\s*-\s*(.+)/i);
+        if (titleMatch) {
+          organization = titleMatch[1].trim();
+        } else if (citation.title.includes('Corporation') || citation.title.includes('Organization')) {
+          // Use the title as organization if it looks like an org name
+          organization = citation.title;
+        }
+      }
+      
+      // If we found an organization, use it; otherwise use the title as-is
+      if (organization) {
         return (
           <>
-            {orgName}, <em>{title}</em> ({type}, {year}).
+            {organization}, <em>{titleToUse}</em> ({type}, {year}).
+          </>
+        );
+      } else {
+        // No clear organization, just use title
+        return (
+          <>
+            <em>{titleToUse}</em> ({type}, {year}).
           </>
         );
       }
     }
     
-    // If we can't parse it, return as-is (but this shouldn't happen with proper data)
-    return citationText.endsWith('.') ? citationText : citationText + '.';
+    // Last resort: if we can't parse it, try to construct from available fields
+    // This should rarely happen with proper data
+    if (citation.title && citation.type) {
+      const year = citation.extractedYear || (citation.publishDate 
+        ? new Date(citation.publishDate).getFullYear().toString()
+        : '');
+      
+      if (year) {
+        return (
+          <>
+            <em>{citation.title}</em> ({citation.type}, {year}).
+          </>
+        );
+      } else {
+        return (
+          <>
+            <em>{citation.title}</em> ({citation.type}).
+          </>
+        );
+      }
+    }
+    
+    // If all else fails, return cleaned citation as-is
+    return cleaned.endsWith('.') ? cleaned : cleaned + '.';
   }
   
   // Fallback: construct from available fields
