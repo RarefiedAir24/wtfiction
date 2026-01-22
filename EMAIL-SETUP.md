@@ -157,11 +157,14 @@ Once DNS is configured and email is set up, we'll need to:
    - Scroll down to look for **"App passwords"** or **"Manage app passwords"** section
    - If not visible, your organization may have app passwords disabled
 
-4. **If App Passwords Not Available (Your Situation):**
+4. **If App Passwords Not Available:**
    - Some Microsoft 365 organizations disable app passwords for security
-   - If the direct link doesn't work, app passwords are likely disabled
-   - **Solution:** Use **Resend API** instead (see section below)
-   - Resend works with shared mailboxes and doesn't require app passwords
+   - If the direct link doesn't work, app passwords may be disabled organization-wide
+   - **Options to enable app passwords:**
+     - Check Microsoft 365 Admin Center → Security → Authentication methods
+     - Look for "App passwords" or "Legacy authentication" settings
+     - You may need admin permissions to enable this
+   - **Alternative:** If app passwords can't be enabled, we can try using your regular password (only works if MFA is temporarily disabled, not recommended)
 
 4. **Create App Password**
    - Click **"Create app password"** or **"Generate app password"**
@@ -175,7 +178,32 @@ Once DNS is configured and email is set up, we'll need to:
    - `SMTP_HOST` = `smtp.office365.com`
    - `SUBSCRIBE_EMAIL` = `subscribe@wtfiction.com`
 
-### Using Resend API (Recommended - Works with Shared Mailboxes)
+### Enabling App Passwords in Microsoft 365 Admin Center
+
+If app passwords aren't available, they may be disabled organization-wide. Here's how to enable them:
+
+1. **Go to Microsoft 365 Admin Center**
+   - Visit [admin.microsoft.com](https://admin.microsoft.com)
+   - Sign in with your admin account
+
+2. **Navigate to Security Settings**
+   - Go to **Settings** → **Org settings** → **Security & privacy**
+   - OR go to **Security** → **Authentication methods**
+
+3. **Enable App Passwords**
+   - Look for **"App passwords"** or **"Legacy authentication"** settings
+   - Enable app passwords for your organization
+   - Save changes
+
+4. **Wait a few minutes** for changes to propagate
+
+5. **Try creating app password again**
+   - Go back to [My Sign-Ins](https://mysignins.microsoft.com) → Security info
+   - Or try the direct link: [App Passwords](https://account.microsoft.com/security/app-passwords)
+
+**Note:** If you don't have permissions to change these settings, you may need to contact your Microsoft 365 administrator.
+
+### Alternative: Using Resend API (If App Passwords Can't Be Enabled)
 
 Since app passwords aren't available in your organization, we'll use **Resend** - a modern email API that works perfectly with shared mailboxes.
 
