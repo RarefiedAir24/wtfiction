@@ -95,8 +95,18 @@ export async function POST(request: NextRequest) {
         });
       } catch (error: any) {
         console.error('AWS SES error:', error);
+        console.error('Error details:', {
+          message: error.message,
+          code: error.code,
+          name: error.name,
+          stack: error.stack?.substring(0, 500),
+        });
+        const errorMessage = error.message || 'Unknown error';
         return NextResponse.json(
-          { error: 'Failed to send email. Please try again later.' },
+          { 
+            error: 'Failed to send email. Please try again later.',
+            details: errorMessage, // Show error details for debugging
+          },
           { status: 500 }
         );
       }
