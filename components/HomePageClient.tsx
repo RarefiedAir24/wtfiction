@@ -17,6 +17,7 @@ export default function HomePageClient() {
   const [heroThumbnailError, setHeroThumbnailError] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [highlightedScenarioId, setHighlightedScenarioId] = useState<string | null>(null);
+  const [heroVideoLoading, setHeroVideoLoading] = useState(false);
   const heroEpisode = getHeroEpisode();
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
@@ -178,29 +179,35 @@ export default function HomePageClient() {
                     const thumbnailUrl = getThumbnailUrl('maxres');
                     
                     return (
-                      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer">
+                      <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer transform transition-all duration-500 hover:shadow-[0_20px_60px_rgba(62,166,255,0.3)] hover:scale-[1.01]">
                         {!heroVideoLoaded ? (
-                          // Thumbnail with play button overlay
+                          // Thumbnail with enhanced play button overlay
                           <>
                             {thumbnailUrl && !heroThumbnailError ? (
-                              <img
-                                src={thumbnailUrl}
-                                alt={heroEpisode.title}
-                                className="w-full h-full object-cover"
-                                loading="eager"
-                                onError={(e) => {
-                                  // Try fallback to high quality thumbnail
-                                  const currentSrc = (e.target as HTMLImageElement).src;
-                                  if (currentSrc.includes('maxresdefault')) {
-                                    // Try high quality fallback
-                                    const fallbackUrl = getThumbnailUrl('high');
-                                    (e.target as HTMLImageElement).src = fallbackUrl;
-                                  } else {
-                                    // Both failed, show error state
-                                    setHeroThumbnailError(true);
-                                  }
-                                }}
-                              />
+                              <div className="relative w-full h-full">
+                                <img
+                                  src={thumbnailUrl}
+                                  alt={heroEpisode.title}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  loading="eager"
+                                  onError={(e) => {
+                                    // Try fallback to high quality thumbnail
+                                    const currentSrc = (e.target as HTMLImageElement).src;
+                                    if (currentSrc.includes('maxresdefault')) {
+                                      // Try high quality fallback
+                                      const fallbackUrl = getThumbnailUrl('high');
+                                      (e.target as HTMLImageElement).src = fallbackUrl;
+                                    } else {
+                                      // Both failed, show error state
+                                      setHeroThumbnailError(true);
+                                    }
+                                  }}
+                                />
+                                {/* Gradient overlay for better contrast */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                {/* Subtle vignette effect */}
+                                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/20" />
+                              </div>
                             ) : (
                               // Fallback: gradient background when thumbnail fails
                               <div className="w-full h-full bg-gradient-to-br from-[#1a1a1a] via-[#0f0f0f] to-[#1a1a1a] flex items-center justify-center">
@@ -218,32 +225,82 @@ export default function HomePageClient() {
                                 </div>
                               </div>
                             )}
+                            
+                            {/* Enhanced play button overlay */}
                             <div 
-                              className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
-                              onClick={() => setHeroVideoLoaded(true)}
+                              className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all duration-500"
+                              onClick={() => {
+                                setHeroVideoLoading(true);
+                                setHeroVideoLoaded(true);
+                              }}
                             >
-                              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#3ea6ff]/90 hover:bg-[#3ea6ff] flex items-center justify-center transition-colors shadow-2xl">
-                                <svg 
-                                  className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" 
-                                  fill="currentColor" 
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M8 5v14l11-7z" />
+                              {/* Animated play button with glow */}
+                              <div className="relative">
+                                {/* Outer glow ring */}
+                                <div className="absolute inset-0 rounded-full bg-[#3ea6ff]/30 blur-xl scale-150 group-hover:scale-175 group-hover:bg-[#3ea6ff]/50 transition-all duration-500 animate-pulse" />
+                                
+                                {/* Play button */}
+                                <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#3ea6ff] to-[#2d8fdd] hover:from-[#4eb5ff] hover:to-[#3ea6ff] flex items-center justify-center transition-all duration-300 shadow-2xl transform group-hover:scale-110 group-active:scale-95">
+                                  <svg 
+                                    className="w-8 h-8 md:w-10 md:h-10 text-white ml-1 drop-shadow-lg" 
+                                    fill="currentColor" 
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M8 5v14l11-7z" />
+                                  </svg>
+                                </div>
+                                
+                                {/* Shine effect on hover */}
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_ease-in-out_infinite] pointer-events-none" />
+                              </div>
+                              
+                              {/* Runtime badge */}
+                              {heroEpisode.runtime && (
+                                <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg text-xs text-white font-medium shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                  {heroEpisode.runtime}
+                                </div>
+                              )}
+                              
+                              {/* "Watch Now" text hint */}
+                              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2">
+                                <span>Watch Now</span>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                 </svg>
                               </div>
                             </div>
                           </>
                         ) : (
-                          // YouTube iframe (loaded on click)
-                          <iframe
-                            width="100%"
-                            height="100%"
-                            src={buildYouTubeEmbedUrl(videoId, true)}
-                            title={heroEpisode.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            className="w-full h-full"
-                          />
+                          // YouTube iframe with loading state and smooth fade-in
+                          <div className="relative w-full h-full">
+                            {heroVideoLoading && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-10">
+                                <div className="text-center">
+                                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#3ea6ff]/20 flex items-center justify-center animate-pulse">
+                                    <svg 
+                                      className="w-8 h-8 text-[#3ea6ff] animate-spin" 
+                                      fill="none" 
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                  </div>
+                                  <p className="text-sm text-muted">Loading video...</p>
+                                </div>
+                              </div>
+                            )}
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              src={buildYouTubeEmbedUrl(videoId, true)}
+                              title={heroEpisode.title}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                              className="w-full h-full animate-fadeIn"
+                              onLoad={() => setHeroVideoLoading(false)}
+                            />
+                          </div>
                         )}
                       </div>
                     );
