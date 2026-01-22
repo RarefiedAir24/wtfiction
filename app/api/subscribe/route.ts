@@ -32,13 +32,21 @@ export async function POST(request: NextRequest) {
     const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
     const awsRegion = (process.env.AWS_REGION || 'us-east-2').trim(); // Trim whitespace
 
+    console.log('AWS SES Config:', {
+      hasAccessKey: !!awsAccessKeyId,
+      hasSecretKey: !!awsSecretAccessKey,
+      region: awsRegion,
+      fromEmail,
+      recipientEmail,
+    });
+
     if (awsAccessKeyId && awsSecretAccessKey) {
       try {
         const sesClient = new SESClient({
           region: awsRegion,
           credentials: {
-            accessKeyId: awsAccessKeyId,
-            secretAccessKey: awsSecretAccessKey,
+            accessKeyId: awsAccessKeyId.trim(),
+            secretAccessKey: awsSecretAccessKey.trim(),
           },
         });
 
