@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'nodejs'; // Ensure this runs on Node.js runtime
+
 export async function POST(request: NextRequest) {
   try {
     const { url, title, authors, type } = await request.json();
