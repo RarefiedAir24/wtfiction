@@ -69,8 +69,8 @@ export async function POST(request: NextRequest) {
 
     // Email content
     const mailOptions = {
-      from: smtpUser, // Sender address (must be authenticated user)
-      to: recipientEmail, // subscribe@wtfiction.com
+      from: `"WTFiction" <${smtpUser}>`, // Sender address (must be authenticated user account)
+      to: recipientEmail, // subscribe@wtfiction.com (can be shared mailbox)
       subject: 'New Email Subscription - WTFiction',
       text: `New email subscription:\n\nEmail: ${email}\n\nTimestamp: ${new Date().toISOString()}`,
       html: `

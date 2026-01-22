@@ -54,6 +54,8 @@ These will be provided by Microsoft 365 during setup if needed.
 
 This mailbox will receive email signup submissions from the website.
 
+**Important:** For SMTP authentication, you need a **regular user account** (not a shared mailbox). App passwords can only be created for user accounts that have a license assigned.
+
 ## Email Service Integration
 
 Once DNS is configured and email is set up, we'll need to:
@@ -150,24 +152,33 @@ vercel env add SMTP_HOST development
 
 ### Creating Microsoft 365 App Password
 
-**Important:** `SMTP_PASSWORD` must be an **App Password** (not your regular password):
+**Important:** 
+- `SMTP_PASSWORD` must be an **App Password** (not your regular password)
+- App passwords can only be created for **regular user accounts** (not shared mailboxes)
+- If `subscribe@wtfiction.com` is a shared mailbox, you'll need to either:
+  - Create a regular user account for sending emails, OR
+  - Use a different user account (like your admin account) for SMTP authentication
 
-**Option 1: Via Microsoft 365 Admin Center (Recommended)**
+**Option 1: Via Microsoft 365 Admin Center (For User Accounts)**
 1. Go to [Microsoft 365 Admin Center](https://admin.microsoft.com)
 2. Sign in with your Microsoft 365 admin account
 3. Go to **Users** → **Active users**
-4. Find and click on the user account (e.g., `subscribe@wtfiction.com` or your admin account)
+4. Find and click on a **regular user account** (not a shared mailbox)
+   - This could be your admin account (e.g., `frank.s@montebay.io` or similar)
+   - OR create a new user account specifically for sending emails
 5. Click on the **Mail** tab
-6. Scroll down to **App passwords** section
-7. Click **"Create app password"**
+6. Scroll down to look for **App passwords** section
+   - If you don't see it, try Option 2 below
+7. Click **"Create app password"** or **"Manage app passwords"**
 8. Name it: "WTFiction Email Service" or "Vercel SMTP"
 9. Copy the generated password (16 characters, spaces don't matter)
 10. Use this password as the `SMTP_PASSWORD` value
+11. Update `SMTP_USER` to match the user account you used (not the shared mailbox)
 
-**Option 2: Via Security Settings (Alternative)**
-1. Go to [Microsoft 365 Security](https://security.microsoft.com) or [My Sign-Ins](https://mysignins.microsoft.com)
-2. Sign in with your Microsoft 365 account
-3. Look for **"Additional security verification"** or **"App passwords"** in the left sidebar
+**Option 2: Via User's Security Settings (Alternative)**
+1. Sign in to [My Sign-Ins](https://mysignins.microsoft.com) with the **user account** (not shared mailbox)
+2. Go to **Security info** page
+3. Look for **"App passwords"** link in the left sidebar or main content
 4. If you see **"App passwords"**, click it
 5. Click **"Create"** or **"Generate app password"**
 6. Name it: "WTFiction Email Service"
@@ -176,12 +187,14 @@ vercel env add SMTP_HOST development
 
 **Option 3: Direct Link (If Available)**
 - Try going directly to: [App Passwords](https://account.microsoft.com/security/app-passwords)
+- Make sure you're signed in with a **user account** (not viewing a shared mailbox)
 - Or search for "app passwords" in the Microsoft 365 portal
 
-**Note:** 
+**Important Notes:** 
 - You won't be able to see this password again, so save it securely
 - If you don't see "App passwords" option, you may need to enable it in your organization's security settings
 - App passwords are only available when MFA is enabled (which you have with Microsoft Authenticator)
+- **The `SMTP_USER` should be the user account email** (the one you created the app password for), but emails will still be sent TO `subscribe@wtfiction.com` (the shared mailbox)
 
 ## Next Steps
 
