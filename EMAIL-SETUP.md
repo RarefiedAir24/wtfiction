@@ -250,6 +250,33 @@ Sometimes app passwords work even if not explicitly enabled. Try:
 
 **Note:** If you don't see these options or don't have permissions, you may need Global Administrator permissions or need to contact your Microsoft 365 administrator.
 
+### If App Passwords Are Completely Disabled
+
+If app passwords are disabled and cannot be enabled (e.g., Security Defaults are ON and cannot be changed), you have these options:
+
+**Option A: Disable Security Defaults (Requires Global Admin)**
+1. Go to Azure AD → Properties → Manage security defaults
+2. Turn OFF Security Defaults
+3. Set up Conditional Access policies to maintain security
+4. Wait 5-10 minutes, then try creating app password again
+
+**Option B: Use Regular Password (Only if MFA is bypassed for SMTP)**
+- Some organizations allow SMTP with regular password if MFA is bypassed for legacy apps
+- Try using your regular password as `SMTP_PASSWORD`
+- **Warning:** This only works if your organization allows it - most don't for security reasons
+- If it doesn't work, you'll get authentication errors
+
+**Option C: Use Microsoft Graph API with OAuth2 (Advanced)**
+- More secure and modern approach
+- Requires Azure app registration
+- More complex setup but works with modern authentication
+- Would require code changes to use Microsoft Graph API instead of SMTP
+
+**Option D: Contact Your IT Administrator**
+- If you don't have Global Admin permissions
+- Ask them to enable app passwords or provide an alternative solution
+- They may be able to create a service account specifically for SMTP
+
 ### Alternative: Using Resend API (If App Passwords Can't Be Enabled)
 
 Since app passwords aren't available in your organization, we'll use **Resend** - a modern email API that works perfectly with shared mailboxes.
