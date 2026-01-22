@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
@@ -16,12 +18,12 @@ export default function AboutPage() {
         </div>
 
         <div className="space-y-20">
-          {/* Opening Statement */}
+          {/* Mission / Purpose Statement */}
           <section className="relative">
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[#3ea6ff]/20 via-[#3ea6ff]/10 to-transparent"></div>
             <div className="max-w-2xl space-y-6">
               <p className="text-xl md:text-2xl text-foreground leading-relaxed font-light">
-                WTFiction exists to help us think beyond the obvious — to explore how the world might change fundamentally before it happens.
+                WTFiction exists to deepen our understanding of complex systems by exploring consequential scenarios before they unfold.
               </p>
             </div>
           </section>
@@ -49,19 +51,19 @@ export default function AboutPage() {
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  Systems-first, not predictions. We explore how structures behave when critical constraints shift.
+                  <strong className="text-foreground/90">Systems-first</strong> — we focus on structural implications rather than isolated events.
                 </p>
               </div>
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  Grounded in research. Episodes are built from publicly available data, historical precedent, and expert sources.
+                  <strong className="text-foreground/90">Research-grounded</strong> — episodes are built from publicly available data, credible sources, and historical context.
                 </p>
               </div>
               <div className="flex items-start gap-4 group">
                 <div className="mt-2 w-1.5 h-1.5 rounded-full bg-[#3ea6ff]/40 group-hover:bg-[#3ea6ff]/60 transition-colors flex-shrink-0"></div>
                 <p className="text-base md:text-lg text-muted leading-relaxed group-hover:text-foreground/90 transition-colors">
-                  Purposeful, not fearful. We aim to illuminate implications — not stir alarm or speculation.
+                  <strong className="text-foreground/90">Insight-oriented</strong> — we aim for clarity and understanding, not fear or sensationalism.
                 </p>
               </div>
             </div>
@@ -76,7 +78,7 @@ export default function AboutPage() {
             <div className="max-w-2xl">
               <div className="relative pl-6 border-l-2 border-[#3ea6ff]/20">
                 <p className="text-base md:text-lg text-muted leading-relaxed">
-                  WTFiction is not a forecasting tool, a political platform, or a claim about what will happen.
+                  WTFiction is not a predictive model, a political platform, nor a claim about what will happen.
                 </p>
               </div>
             </div>
@@ -88,9 +90,12 @@ export default function AboutPage() {
             <h2 className="text-2xl md:text-3xl font-light mb-10 text-foreground tracking-tight">
               How to Use the Site
             </h2>
-            <div className="max-w-2xl space-y-6">
+            <div className="max-w-2xl space-y-4">
               <p className="text-base md:text-lg text-muted leading-relaxed">
-                You can watch each scenario directly on this site or on YouTube. After watching, explore the references to understand the evidence and assumptions behind the idea.
+                Watch each scenario here or on YouTube.
+              </p>
+              <p className="text-base md:text-lg text-muted leading-relaxed">
+                After watching, use the provided references to explore the underlying evidence and assumptions.
               </p>
             </div>
           </section>
@@ -101,26 +106,72 @@ export default function AboutPage() {
             <h2 className="text-2xl md:text-3xl font-light mb-10 text-foreground tracking-tight">
               Editorial Intent & Responsibility
             </h2>
-            <div className="max-w-2xl">
+            <div className="max-w-2xl space-y-6">
               <div className="relative pl-6 border-l-2 border-[#3ea6ff]/20 bg-[#0a0a0a]/30 p-6 rounded-r-lg">
                 <p className="text-base md:text-lg text-muted leading-relaxed">
-                  We seek out peer-reviewed studies, institutionally produced datasets, and primary reporting when available. When uncertainty exists, we acknowledge it.
+                  Where possible, we prioritize peer-reviewed work, institutional reports, and primary data; ambiguous areas are acknowledged openly.
                 </p>
+              </div>
+              <div className="pt-2">
+                <Link 
+                  href="/references" 
+                  className="inline-flex items-center gap-2 text-base text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors group"
+                >
+                  <span>Explore the sources behind our scenarios</span>
+                  <svg 
+                    className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
           </section>
 
-          {/* Section 6: Minimal Creator Credit (Restrained) - Enhanced */}
-          <section className="relative pt-12 border-t border-[#272727]">
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
-                <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Credits</div>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+          {/* Section 6: Credits & Connect - Enhanced */}
+          <section className="relative pt-12 border-t-2 border-[#272727]">
+            <div className="max-w-2xl space-y-8">
+              {/* Credits */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+                  <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Credits</div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+                </div>
+                <p className="text-sm text-muted/70 leading-relaxed">
+                  WTFiction is produced independently.
+                </p>
               </div>
-              <p className="text-sm text-muted/70 leading-relaxed">
-                WTFiction is produced independently.
-              </p>
+
+              {/* Connect */}
+              <div className="pt-4 border-t border-[#272727]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+                  <div className="text-xs text-muted/50 font-medium tracking-wider uppercase">Connect</div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#272727] to-transparent"></div>
+                </div>
+                <div>
+                  <a 
+                    href="https://www.youtube.com/@WTFictionTV" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors group"
+                  >
+                    <span>YouTube Channel</span>
+                    <svg 
+                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </div>
           </section>
         </div>
