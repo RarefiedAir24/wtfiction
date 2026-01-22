@@ -8,6 +8,7 @@ import TrackedExternalLink from '@/components/TrackedExternalLink';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import YouTubeModal from '@/components/YouTubeModal';
 import PlayButton from '@/components/PlayButton';
+import PostWatchContinuation from '@/components/PostWatchContinuation';
 import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
@@ -18,6 +19,7 @@ export default function HomePageClient() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [highlightedScenarioId, setHighlightedScenarioId] = useState<string | null>(null);
   const [heroVideoLoading, setHeroVideoLoading] = useState(false);
+  const [showPostWatch, setShowPostWatch] = useState<string | null>(null);
   const heroEpisode = getHeroEpisode();
 
   const handlePlayClick = (scenario: typeof featuredScenarios[0]) => {
@@ -59,6 +61,11 @@ export default function HomePageClient() {
   const handleModalClose = () => {
     const currentVideoId = modalVideo?.id;
     setModalVideo(null);
+    
+    // Show post-watch continuation UI
+    if (currentVideoId) {
+      setShowPostWatch(currentVideoId);
+    }
     
     // Restore scroll position
     setTimeout(() => {
@@ -364,16 +371,27 @@ export default function HomePageClient() {
           </div>
         </section>
 
-        {/* Email Signup Section */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20 border-t border-[#272727]">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl md:text-3xl font-light mb-4 text-foreground">
-              Get Scenario Updates
-            </h2>
-            <p className="text-base md:text-lg text-muted mb-8 leading-relaxed font-light">
-              Get notified when new scenarios are released. No spam, no daily emails — only new episodes.
-            </p>
-            <EmailSignup />
+        {/* Email Signup Section - Enhanced */}
+        <section className="sticky bottom-0 z-30 border-t-2 border-[#3ea6ff]/30 bg-gradient-to-b from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] backdrop-blur-xl">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+            <div className="max-w-3xl mx-auto">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#3ea6ff]/20 to-[#2d8fdd]/20 mb-4">
+                  <svg className="w-8 h-8 text-[#3ea6ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground" style={{ fontFamily: 'var(--font-title), system-ui, sans-serif' }}>
+                  Get Scenario Updates
+                </h2>
+                <p className="text-base md:text-lg text-muted/90 leading-relaxed font-light max-w-xl mx-auto">
+                  Get notified when new scenarios are published. <span className="text-muted/70">No spam, no daily emails — only new episodes.</span>
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <EmailSignup />
+              </div>
+            </div>
           </div>
         </section>
 

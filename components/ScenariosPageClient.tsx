@@ -7,6 +7,7 @@ import YouTubeModal from '@/components/YouTubeModal';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import PlayButton from '@/components/PlayButton';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
+import PostWatchContinuation from '@/components/PostWatchContinuation';
 import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
@@ -14,6 +15,7 @@ export default function ScenariosPageClient() {
   const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string; id?: string } | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [highlightedScenarioId, setHighlightedScenarioId] = useState<string | null>(null);
+  const [showPostWatch, setShowPostWatch] = useState<string | null>(null);
   
   // Sort scenarios newest to oldest
   const sortedScenarios = [...scenarios].sort((a, b) => {
@@ -42,7 +44,13 @@ export default function ScenariosPageClient() {
   };
 
   const handleModalClose = () => {
+    const currentVideoId = modalVideo?.id;
     setModalVideo(null);
+
+    // Show post-watch continuation UI
+    if (currentVideoId) {
+      setShowPostWatch(currentVideoId);
+    }
 
     // Restore scroll position
     window.scrollTo({
@@ -51,8 +59,8 @@ export default function ScenariosPageClient() {
     });
 
     // Find and highlight next scenario
-    if (modalVideo?.id) {
-      const currentIndex = sortedScenarios.findIndex(s => s.id === modalVideo.id);
+    if (currentVideoId) {
+      const currentIndex = sortedScenarios.findIndex(s => s.id === currentVideoId);
       if (currentIndex >= 0 && currentIndex < sortedScenarios.length - 1) {
         const nextScenario = sortedScenarios[currentIndex + 1];
         setHighlightedScenarioId(nextScenario.id);
@@ -212,6 +220,12 @@ export default function ScenariosPageClient() {
           placement="scenario_card"
         />
       )}
+
+      {/* Post-Watch Continuation UI */}
+      <PostWatchContinuation 
+        scenarioId={showPostWatch || undefined}
+        onDismiss={() => setShowPostWatch(null)}
+      />
     </>
   );
 }
