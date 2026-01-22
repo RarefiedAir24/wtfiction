@@ -270,24 +270,45 @@ Sometimes app passwords work even if not explicitly enabled. Try:
    - Sign in with Global Administrator account
 
 3. **Enable SMTP AUTH**
-   - Go to **Mail flow** → **Settings** (or **Settings** → **Mail flow**)
-   - Look for **"SMTP AUTH"** or **"Authenticated SMTP"** settings
-   - OR go to **Recipients** → **Mailboxes**
+   
+   **Note:** SMTP AUTH is often NOT visible in the "Manage email apps" UI. You'll need to use PowerShell.
+   
+   **If you see it in the UI:**
+   - Go to **Recipients** → **Mailboxes**
    - Select the user account (`frank.s@montebay.io`)
    - Click **"Manage email apps"** or **"Mailbox features"**
-   - Enable **"Authenticated SMTP"** or **"SMTP AUTH"**
-
-4. **Alternative: PowerShell (If UI not available)**
-   ```powershell
-   # Connect to Exchange Online PowerShell
-   Connect-ExchangeOnline
+   - Look for **"Authenticated SMTP"** or **"SMTP AUTH"** (may not be visible)
+   - Enable it if you see it
    
-   # Enable SMTP AUTH for specific user
+   **If NOT visible (most common):**
+   - Use PowerShell method below (recommended)
+
+4. **PowerShell Method (Recommended - SMTP AUTH often not in UI)**
+   
+   SMTP AUTH is usually not visible in the Exchange Admin Center UI, so PowerShell is the most reliable method:
+   
+   ```powershell
+   # Step 1: Install Exchange Online PowerShell module (if not already installed)
+   Install-Module -Name ExchangeOnlineManagement -Scope CurrentUser
+   
+   # Step 2: Connect to Exchange Online
+   Connect-ExchangeOnline
+   # You'll be prompted to sign in - use your Global Admin account
+   
+   # Step 3: Enable SMTP AUTH for your specific user account
    Set-CASMailbox -Identity "frank.s@montebay.io" -SmtpClientAuthenticationDisabled $false
    
-   # Or enable for entire organization (less secure)
+   # Step 4: Verify it's enabled
+   Get-CASMailbox -Identity "frank.s@montebay.io" | Select-Object SmtpClientAuthenticationDisabled
+   # Should show: SmtpClientAuthenticationDisabled : False
+   ```
+   
+   **Alternative: Enable for entire organization (if you have permission)**
+   ```powershell
    Set-TransportConfig -SmtpClientAuthenticationDisabled $false
    ```
+   
+   **Note:** Enabling for the entire organization is less secure but easier. Enabling for a specific user is more secure.
 
 5. **Wait 5-15 minutes** for changes to propagate
 
