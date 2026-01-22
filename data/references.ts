@@ -59,7 +59,9 @@ export const references: Reference[] = [
       { text: 'McKinsey Global Institute, The Future of Work', type: 'Research' },
       { text: 'World Bank employment statistics and labor market data', type: 'Data' },
       { title: 'Scarcity in an Age of AI Abundance', citation: 'Agisilaos Papadogiannis, Scarcity in an Age of AI Abundance (Academic, 2025).', type: 'Academic' },
-      { title: 'The Stanford Basic Income Lab', citation: 'a Variety of Criteria, The Stanford Basic Income Lab (Academic).', description: 'We provide an academic home for research into the politics, philosophy, economics and implementation of basic income and related cash policies.', type: 'Academic', url: 'https://basicincome.stanford.edu' },
+      { title: 'The Stanford Basic Income Lab', citation: 'a Variety of Criteria, The Stanford Basic Income Lab (Academic).', description: 'We provide an academic home for research into the politics, philosophy, economics and implementation of basic income and related cash policies.', type: 'Academic', url: 'https://basicincome.stanford.edu' },,
+      { title: 'News - Alaska Permanent Fund Corporation', citation: 'Alaskans for Alaskans Fifty years ago, in 1976, Alaskan voters amended the state constitution to set aside a portion of the state’s revenues from oil, minerals to establish the Alaska Permanent Fund to benefit future generations of Alaskans. “The ..." />, News - Alaska Permanent Fund Corporation (Reporting, 2022).', description: 'FUND NEWS Alaska Celebrates the Fund’s First 50 Years, Prepares for the Next 50 Years January 14, 2026 Established by Alaskans for Alaskans Fifty years ago, in 1976, Alaskan voters amended the state constitution to set aside a portion of the state’s revenues from oil and minerals to establish the Alaska Permanent Fund to benefit future generations of Alaskans. “The ...', type: 'Reporting', url: 'https://apfc.org/news/' }
+
 
     ],
   },
