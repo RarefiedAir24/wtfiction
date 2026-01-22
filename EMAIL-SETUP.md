@@ -48,30 +48,37 @@ Microsoft 365 may require additional DNS records:
 
 These will be provided by Microsoft 365 during setup if needed.
 
+## Email Configuration
+
+**Mailbox**: `subscribe@wtfiction.com`
+
+This mailbox will receive email signup submissions from the website.
+
 ## Email Service Integration
 
 Once DNS is configured and email is set up, we'll need to:
 
-1. **Choose email service provider:**
-   - Microsoft 365 API
-   - SendGrid
-   - AWS SES
-   - Resend
-   - Or another service
+1. **Create API route** (`/api/subscribe`) to handle email submissions
+   - Option A: Send email directly to `subscribe@wtfiction.com` using SMTP
+   - Option B: Use Microsoft 365 API to send emails
+   - Option C: Use a service like SendGrid/AWS SES to forward to the mailbox
 
-2. **Create API route** (`/api/subscribe`) to handle email submissions
+2. **Update EmailSignup component** to call the API
 
-3. **Update EmailSignup component** to call the API
-
-4. **Add environment variables** for API keys/secrets
+3. **Add environment variables** for:
+   - SMTP credentials (if using SMTP)
+   - API keys (if using email service API)
+   - Email recipient: `subscribe@wtfiction.com`
 
 ## Next Steps
 
 After DNS records are added:
-1. Wait for DNS propagation (5-60 minutes)
-2. Verify domain in Microsoft 365
-3. Set up email service integration
-4. Configure API route for email submissions
+1. ✅ Wait for DNS propagation (5-60 minutes) - **In Progress**
+2. ⏳ Verify domain in Microsoft 365
+3. ⏳ Create mailbox: `subscribe@wtfiction.com` in Microsoft 365
+4. ⏳ Set up email service integration (SMTP or API)
+5. ⏳ Configure API route for email submissions
+6. ⏳ Update EmailSignup component to use the API
 
 ## Current Status
 
