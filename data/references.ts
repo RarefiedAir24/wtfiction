@@ -12,7 +12,15 @@ export interface Reference {
   episodeId: string;
   episodeTitle: string;
   publishDate?: string;
-  citations: Citation[];
+  citations: Citation[  {
+    episodeId: '5S8FsczZ06o',
+    episodeTitle: 'Black Holes Don’t Destroy What You Think They Do',
+    publishDate: '2026-01-25',
+    citations: [
+      { title: 'Nobel Prize in Physics 2020', citation: 'term., Nobel Prize in Physics 2020.', description: 'The Nobel Prize in Physics 2020 was divided, one half awarded to Roger Penrose &quot;for the discovery that black hole formation is a robust prediction of the general theory of relativity&quot;, the other half jointly to Reinhard Genzel and Andrea Ghez &quot;for the discovery of a supermassive compact object at the centre of our galaxy&quot;', url: 'https://www.nobelprize.org/prizes/physics/2020/penrose/lecture' },
+    ],
+  },
+];
 }
 
 export const references: Reference[] = [
