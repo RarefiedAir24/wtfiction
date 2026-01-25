@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\n\nBut what if the next global age isn’t ice?\n\nWhat if it’s heat?\n\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\n\nWhat',
+    premise: 'The last Ice Age nearly wiped out humanity.\\n\\nBut what if the next global age isn’t ice?\\n\\nWhat if it’s heat?\\n\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario:\\n\\nWhat',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
@@ -65,6 +65,17 @@ export const scenarios: Scenario[] = [
     youtubeUrl: 'https://youtu.be/qBl6FCVTA8E',
     thumbnailUrl: 'https://i.ytimg.com/vi/qBl6FCVTA8E/hqdefault.jpg',
     publishDate: '2026-01-18',
+    featured: true,
+  },
+
+  {
+    id: '5S8FsczZ06o',
+    title: 'Black Holes Don’t Destroy What You Think They Do',
+    premise: 'We think black holes destroy anything that crosses their edge',
+    runtime: '06:51',
+    youtubeUrl: 'https://youtu.be/5S8FsczZ06o',
+    thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/hqdefault.jpg',
+    publishDate: '2026-01-25',
     featured: true,
   }
 ];
