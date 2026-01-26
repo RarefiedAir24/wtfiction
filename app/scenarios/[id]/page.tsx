@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getScenarioById } from '@/data/scenarios';
-import { references } from '@/data/references';
+import { references, Citation } from '@/data/references';
 import ScenarioDetailClient from '@/components/ScenarioDetailClient';
 
 interface PageProps {
@@ -25,26 +25,14 @@ export default async function ScenarioDetailPage({ params }: PageProps) {
   
   const episodeReferences = references.find(r => r.episodeId === id);
   
-  // Convert Citation objects to strings for display
-  // Support both new format (citation field) and legacy format (text field)
-  const citationStrings = episodeReferences?.citations.map(c => {
-    if (c.citation) {
-      // New format: use citation field
-      return c.citation;
-    } else if (c.text) {
-      // Legacy format: use text field
-      return c.text;
-    } else if (c.title) {
-      // Fallback: use title if available
-      return c.title;
-    }
-    return '';
-  }).filter(c => c.length > 0) || [];
+  // Pass full Citation objects to preserve all metadata (title, url, description, type, etc.)
+  // Support up to 10 references per episode
+  const citations: Citation[] = episodeReferences?.citations.slice(0, 10) || [];
   
   return (
     <ScenarioDetailClient 
       scenario={scenario} 
-      references={citationStrings}
+      references={citations}
     />
   );
 }

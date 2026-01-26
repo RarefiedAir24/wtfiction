@@ -3,16 +3,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Scenario } from '@/data/scenarios';
+import { Citation } from '@/data/references';
 import YouTubeModal from '@/components/YouTubeModal';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
 import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import PlayButton from '@/components/PlayButton';
+import ReferenceSummary from '@/components/ReferenceSummary';
+import { formatCitation } from '@/lib/citation-formatter';
 
 interface ScenarioDetailClientProps {
   scenario: Scenario;
-  references: string[];
+  references: Citation[];
 }
 
 export default function ScenarioDetailClient({ scenario, references }: ScenarioDetailClientProps) {
@@ -147,12 +150,69 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
             <h2 className="text-2xl md:text-3xl font-light mb-8 text-foreground">
               References
             </h2>
-            <ul className="space-y-3">
-              {references.map((citation, index) => (
-                <li key={index} className="text-muted leading-relaxed pl-4 border-l-2 border-[#272727]">
-                  {citation}
-                </li>
-              ))}
+            <ul className="space-y-4 text-sm md:text-base text-muted leading-relaxed">
+              {references.map((citation, index) => {
+                const title = citation.title || citation.text || 'Untitled Reference';
+                const formattedCitation = formatCitation(citation);
+                
+                return (
+                  <li key={index} className="flex items-start gap-4">
+                    {/* Source Type Label - Left Side - Always reserve space for alignment */}
+                    <span className="text-xs text-muted/60 font-medium uppercase tracking-wide flex-shrink-0 pt-0.5 min-w-[80px]">
+                      {citation.type ? `[${citation.type}]` : ''}
+                    </span>
+                    {/* Citation Content - Right Side */}
+                    <div className="flex-1 space-y-1.5">
+                      {/* Title - Clickable if URL exists */}
+                      {citation.url ? (
+                        <a
+                          href={citation.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-foreground font-medium hover:text-[#3ea6ff] transition-all duration-300 ease-out inline-flex items-center group cursor-pointer"
+                        >
+                          <span className="relative inline-block">
+                            <span className="relative z-10">{title}</span>
+                            {/* Animated underline */}
+                            <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] transition-all duration-300 ease-out group-hover:w-full rounded-full"></span>
+                            {/* Subtle glow effect on hover */}
+                            <span className="absolute -bottom-1 left-0 w-0 h-[4px] bg-[#3ea6ff]/20 blur-sm transition-all duration-300 ease-out group-hover:w-full rounded-full"></span>
+                            {/* Subtle background highlight - constrained to text area */}
+                            <span className="absolute -inset-x-1 -inset-y-0.5 rounded-md bg-[#3ea6ff]/5 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
+                          </span>
+                          {/* External link icon with smooth animation */}
+                          <svg 
+                            className="inline-block w-3.5 h-3.5 ml-2 mb-0.5 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <div className="text-foreground font-medium">
+                          {title}
+                        </div>
+                      )}
+                      {/* Description - with AI summarize option */}
+                      <ReferenceSummary
+                        url={citation.url}
+                        title={title}
+                        authors={citation.authors}
+                        type={citation.type}
+                        existingDescription={citation.description}
+                      />
+                      {/* Citation Format - Always show in standard format with italicized title */}
+                      {formattedCitation && (
+                        <div className="text-xs text-muted/70 mt-2 pt-2 border-t border-[#272727]">
+                          {formattedCitation}
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
             <div className="mt-8">
               <Link
