@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\\n\\nBut what if the next global age isn’t ice?\\n\\nWhat if it’s heat?\\n\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
+    premise: 'The last Ice Age nearly wiped out humanity.\\\\n\\\\nBut what if the next global age isn’t ice?\\\\n\\\\nWhat if it’s heat?\\\\n\\\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
     thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
@@ -76,6 +76,17 @@ export const scenarios: Scenario[] = [
     youtubeUrl: 'https://youtu.be/5S8FsczZ06o',
     thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/hqdefault.jpg',
     publishDate: '2026-01-25',
+    featured: true,
+  },
+
+  {
+    id: 'viqYokNifr0',
+    title: 'The Day Gold Becomes Worthless',
+    premise: 'We assume scarcity is natural. It isn’t—and one asteroid could prove it . NASA is heading to 16 Psyche: a world with enough gold to make everyone on Earth a billionaire.',
+    runtime: '07:05',
+    youtubeUrl: 'https://youtu.be/viqYokNifr0',
+    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/maxresdefault.jpg',
+    publishDate: '2026-02-01',
     featured: true,
   }
 ];
