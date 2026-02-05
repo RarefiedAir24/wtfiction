@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { withThumbnailCacheBust } from '@/lib/youtube';
 
 interface EpisodeThumbnailProps {
   thumbnailUrl: string;
@@ -8,11 +9,13 @@ interface EpisodeThumbnailProps {
   runtime?: string;
 }
 
+const isYouTubeThumbnail = (url: string) =>
+  /youtube\.com|ytimg\.com/.test(url);
+
 export default function EpisodeThumbnail({ thumbnailUrl, title, runtime }: EpisodeThumbnailProps) {
   const [imageError, setImageError] = useState(false);
   const [fallbackError, setFallbackError] = useState(false);
 
-  // Phase 1: Visual Consistency - Better fallback handling
   const handleImageError = () => {
     if (!imageError) {
       setImageError(true);
@@ -21,20 +24,26 @@ export default function EpisodeThumbnail({ thumbnailUrl, title, runtime }: Episo
     }
   };
 
+  const fallbackUrl =
+    !fallbackError &&
+    isYouTubeThumbnail(thumbnailUrl) &&
+    (thumbnailUrl.includes('maxresdefault') || thumbnailUrl.includes('maxres'))
+      ? thumbnailUrl.replace(/maxresdefault|maxres/gi, 'hqdefault')
+      : null;
+
   return (
     <div className="episode-thumbnail relative w-full aspect-video mb-5 overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#272727] to-[#1a1a1a] rounded-lg border border-[#272727]">
       {!imageError ? (
         <img
-          src={thumbnailUrl}
+          src={withThumbnailCacheBust(thumbnailUrl)}
           alt={title}
           className="w-full h-full object-cover"
           onError={handleImageError}
           loading="lazy"
         />
-      ) : !fallbackError && thumbnailUrl.includes('youtube.com') ? (
-        // Try high quality fallback
+      ) : fallbackUrl ? (
         <img
-          src={thumbnailUrl.replace('maxresdefault', 'hqdefault')}
+          src={withThumbnailCacheBust(fallbackUrl)}
           alt={title}
           className="w-full h-full object-cover"
           onError={() => setFallbackError(true)}

@@ -9,7 +9,7 @@ import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import YouTubeModal from '@/components/YouTubeModal';
 import PlayButton from '@/components/PlayButton';
 import PostWatchContinuation from '@/components/PostWatchContinuation';
-import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl } from '@/lib/youtube';
+import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl, withThumbnailCacheBust } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
@@ -109,8 +109,8 @@ export default function HomePageClient() {
                   className="absolute inset-0 bg-cover bg-center"
                   style={{
                     backgroundImage: heroEpisode.thumbnailUrl 
-                      ? `url(${heroEpisode.thumbnailUrl})` 
-                      : `url(${getYouTubeThumbnail(heroEpisode.youtubeUrl)})`
+                      ? `url(${withThumbnailCacheBust(heroEpisode.thumbnailUrl)})` 
+                      : `url(${withThumbnailCacheBust(getYouTubeThumbnail(heroEpisode.youtubeUrl))})`
                   }}
                 />
                 {/* Enhanced gradient overlay system for better text contrast */}
@@ -201,19 +201,15 @@ export default function HomePageClient() {
                             {thumbnailUrl && !heroThumbnailError ? (
                               <div className="relative w-full h-full">
                                 <img
-                                  src={thumbnailUrl}
+                                  src={withThumbnailCacheBust(thumbnailUrl)}
                                   alt={heroEpisode.title}
                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                   loading="eager"
                                   onError={(e) => {
-                                    // Try fallback to high quality thumbnail
                                     const currentSrc = (e.target as HTMLImageElement).src;
-                                    if (currentSrc.includes('maxresdefault')) {
-                                      // Try high quality fallback
-                                      const fallbackUrl = getThumbnailUrl('high');
-                                      (e.target as HTMLImageElement).src = fallbackUrl;
+                                    if (currentSrc.includes('maxresdefault') || currentSrc.includes('maxres')) {
+                                      (e.target as HTMLImageElement).src = withThumbnailCacheBust(getThumbnailUrl('high'));
                                     } else {
-                                      // Both failed, show error state
                                       setHeroThumbnailError(true);
                                     }
                                   }}

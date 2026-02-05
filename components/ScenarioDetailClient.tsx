@@ -6,7 +6,7 @@ import { Scenario } from '@/data/scenarios';
 import { Citation } from '@/data/references';
 import YouTubeModal from '@/components/YouTubeModal';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
-import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
+import { getYouTubeThumbnail, getYouTubeVideoId, withThumbnailCacheBust } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import PlayButton from '@/components/PlayButton';
@@ -44,8 +44,8 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
               className="absolute inset-0 bg-cover bg-center"
               style={{
                 backgroundImage: scenario.thumbnailUrl
-                  ? `url(${scenario.thumbnailUrl})`
-                  : `url(${getYouTubeThumbnail(scenario.youtubeUrl)})`
+                  ? `url(${withThumbnailCacheBust(scenario.thumbnailUrl)})`
+                  : `url(${withThumbnailCacheBust(getYouTubeThumbnail(scenario.youtubeUrl))})`
               }}
             />
             {/* Enhanced gradient overlay system for better text contrast */}

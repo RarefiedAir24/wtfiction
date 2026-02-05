@@ -45,7 +45,14 @@ export function getYouTubeThumbnail(videoIdOrUrl: string, quality: 'default' | '
     maxres: 'maxresdefault',
   };
 
-  return `https://img.youtube.com/vi/${videoId}/${qualityMap[quality]}.jpg`;
+  return `https://i.ytimg.com/vi/${videoId}/${qualityMap[quality]}.jpg`;
+}
+
+/** Add cache-bust param so updated YouTube thumbnails aren't served from browser cache */
+export function withThumbnailCacheBust(url: string): string {
+  if (!url || !/youtube\.com|ytimg\.com/.test(url)) return url;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}t=${Math.floor(Date.now() / 86400000)}`;
 }
 
 /**
