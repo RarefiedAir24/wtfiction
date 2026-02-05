@@ -28,8 +28,15 @@ async function fetchReferencesFromGitHub(): Promise<void> {
       return;
     }
 
-    const content = await response.text();
-    
+    let content = await response.text();
+
+    // Repair double-comma syntax error (e.g. "},," or "},\n,") which breaks TypeScript
+    const repaired = content.replace(/\}\s*,\s*,/g, '},');
+    if (repaired !== content) {
+      console.log('   Repaired double-comma in references.ts');
+      content = repaired;
+    }
+
     // Validate that we got valid TypeScript content
     if (!content.includes('export interface Citation') || !content.includes('export const references')) {
       console.warn('⚠️  Fetched content does not appear to be valid references.ts. Using local file.');
