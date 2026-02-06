@@ -27,10 +27,10 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\\\\n\\\\nBut what if the next global age isn’t ice?\\\\n\\\\nWhat if it’s heat?\\\\n\\\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
+    premise: 'The last Ice Age nearly wiped out humanity.',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
-    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/hqdefault.jpg',
     publishDate: '2025-12-18',
     featured: true,
   },
