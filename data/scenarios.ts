@@ -70,11 +70,11 @@ export const scenarios: Scenario[] = [
 
   {
     id: '5S8FsczZ06o',
-    title: 'Black Holes Don’t Destroy What You Think They Do',
-    premise: 'We think black holes destroy anything that crosses their edge',
+    title: 'Everything is Data: The Black Hole Secret',
+    premise: 'What if black holes don\'t just destroy matter, but encode it',
     runtime: '06:51',
     youtubeUrl: 'https://youtu.be/5S8FsczZ06o',
-    thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/hqdefault.jpg',
+    thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/maxresdefault.jpg?t=1770418586011',
     publishDate: '2026-01-25',
     featured: true,
   },
@@ -85,7 +85,7 @@ export const scenarios: Scenario[] = [
     premise: 'We assume scarcity is natural. It isn’t—and one asteroid could prove it . NASA is heading to 16 Psyche: a world with enough gold to make everyone on Earth a billionaire.',
     runtime: '07:05',
     youtubeUrl: 'https://youtu.be/viqYokNifr0',
-    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/maxresdefault.jpg?t=1770418468524',
+    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/maxresdefault.jpg?t=1770418127421',
     publishDate: '2026-02-01',
     featured: true,
   }
