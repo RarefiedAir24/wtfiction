@@ -70,11 +70,11 @@ export const scenarios: Scenario[] = [
 
   {
     id: '5S8FsczZ06o',
-    title: 'Everything is Data: The Black Hole Secret',
-    premise: 'What if black holes don\'t just destroy matter, but encode it',
+    title: 'Black Holes Don’t Destroy What You Think They Do',
+    premise: 'We think black holes destroy anything that crosses their edge',
     runtime: '06:51',
     youtubeUrl: 'https://youtu.be/5S8FsczZ06o',
-    thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/maxresdefault.jpg?t=1770418586011',
+    thumbnailUrl: 'https://i.ytimg.com/vi/5S8FsczZ06o/hqdefault.jpg?t=1770418633533',
     publishDate: '2026-01-25',
     featured: true,
   },
