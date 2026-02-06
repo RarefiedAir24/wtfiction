@@ -85,7 +85,7 @@ export const scenarios: Scenario[] = [
     premise: 'We assume scarcity is natural. It isn’t—and one asteroid could prove it . NASA is heading to 16 Psyche: a world with enough gold to make everyone on Earth a billionaire.',
     runtime: '07:05',
     youtubeUrl: 'https://youtu.be/viqYokNifr0',
-    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/hqdefault.jpg?t=1770417912454',
+    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/maxresdefault.jpg?t=1770418127421',
     publishDate: '2026-02-01',
     featured: true,
   }
