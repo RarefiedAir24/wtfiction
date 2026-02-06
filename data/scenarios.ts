@@ -27,10 +27,10 @@ export const scenarios: Scenario[] = [
   {
     id: '8ytNzzit528',
     title: 'Heat Age vs Ice Age: Which Future Are We In?',
-    premise: 'The last Ice Age nearly wiped out humanity.\\\\\\\\n\\\\\\\\nBut what if the next global age isn’t ice?\\\\\\\\n\\\\\\\\nWhat if it’s heat?\\\\\\\\n\\\\\\\\nIn this episode of WTFiction, we explore a grounded, science-based what-if scenario.',
+    premise: 'The last Ice Age nearly wiped out humanity.',
     runtime: '04:12',
     youtubeUrl: 'https://youtu.be/8ytNzzit528',
-    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/maxresdefault.jpg',
+    thumbnailUrl: 'https://i.ytimg.com/vi/8ytNzzit528/hqdefault.jpg',
     publishDate: '2025-12-18',
     featured: true,
   },
@@ -85,7 +85,7 @@ export const scenarios: Scenario[] = [
     premise: 'We assume scarcity is natural. It isn’t—and one asteroid could prove it . NASA is heading to 16 Psyche: a world with enough gold to make everyone on Earth a billionaire.',
     runtime: '07:05',
     youtubeUrl: 'https://youtu.be/viqYokNifr0',
-    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/hqdefault.jpg',
+    thumbnailUrl: 'https://i.ytimg.com/vi/viqYokNifr0/maxresdefault.jpg',
     publishDate: '2026-02-01',
     featured: true,
   }
