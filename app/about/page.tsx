@@ -98,7 +98,7 @@ export default function AboutPage() {
             </h2>
             <div className="max-w-2xl">
               <p className="text-base md:text-lg text-muted leading-relaxed" style={{ lineHeight: '1.75' }}>
-                You can watch every scenario here on the site or on YouTube. After watching, explore the references to understand the evidence and assumptions behind each idea.
+                You can watch every scenario here on the site or on YouTube. After watching, explore the sources listed on each scenario to understand the evidence and assumptions behind each idea.
               </p>
             </div>
           </section>
@@ -121,11 +121,7 @@ export default function AboutPage() {
                   <Link href="/scenarios" className="text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors underline underline-offset-2">
                     Scenarios
                   </Link>
-                  {' '}and{' '}
-                  <Link href="/references" className="text-[#3ea6ff] hover:text-[#4eb5ff] transition-colors underline underline-offset-2">
-                    References
-                  </Link>
-                  {' '}sections.
+                  {' '}section — each episode lists its sources.
                 </p>
               </div>
             </div>

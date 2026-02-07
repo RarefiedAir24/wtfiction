@@ -47,7 +47,6 @@ export default function Navigation() {
   const isHomeActive = pathname === '/';
   const isScenariosActive = pathname?.startsWith('/scenarios');
   const isAboutActive = pathname === '/about';
-  const isReferencesActive = pathname === '/references';
   const isSubscribeActive = pathname === '/subscribe';
 
   return (
@@ -81,13 +80,6 @@ export default function Navigation() {
               isActive={isAboutActive}
             >
               About
-            </NavLink>
-            <NavLink 
-              href="/references" 
-              isActive={isReferencesActive}
-              className="hidden md:inline"
-            >
-              References
             </NavLink>
             <Link 
               href="/subscribe" 

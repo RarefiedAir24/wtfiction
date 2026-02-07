@@ -25,11 +25,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/references" className="text-muted hover:text-foreground transition-colors">
-                  References
-                </Link>
-              </li>
-              <li>
                 <Link href="/subscribe" className="text-muted hover:text-foreground transition-colors">
                   Subscribe
                 </Link>

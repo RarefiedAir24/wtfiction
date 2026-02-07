@@ -6,7 +6,7 @@ import { Scenario } from '@/data/scenarios';
 import { Citation } from '@/data/references';
 import YouTubeModal from '@/components/YouTubeModal';
 import TrackedExternalLink from '@/components/TrackedExternalLink';
-import { getYouTubeThumbnail, getYouTubeVideoId, withThumbnailCacheBust } from '@/lib/youtube';
+import { getYouTubeThumbnail, getYouTubeVideoId, withThumbnailCacheBust, getThumbnailProxyUrl } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import PlayButton from '@/components/PlayButton';
@@ -43,9 +43,13 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
-                backgroundImage: scenario.thumbnailUrl
-                  ? `url(${withThumbnailCacheBust(scenario.thumbnailUrl)})`
-                  : `url(${withThumbnailCacheBust(getYouTubeThumbnail(scenario.youtubeUrl))})`
+                backgroundImage: (() => {
+                  const videoId = getYouTubeVideoId(scenario.youtubeUrl);
+                  const proxy = getThumbnailProxyUrl(videoId);
+                  if (proxy) return `url(${proxy})`;
+                  const url = scenario.thumbnailUrl || getYouTubeThumbnail(scenario.youtubeUrl);
+                  return url ? `url(${withThumbnailCacheBust(url)})` : 'none';
+                })()
               }}
             />
             {/* Enhanced gradient overlay system for better text contrast */}
@@ -214,17 +218,6 @@ export default function ScenarioDetailClient({ scenario, references }: ScenarioD
                 );
               })}
             </ul>
-            <div className="mt-8">
-              <Link
-                href="/references"
-                className="text-sm text-[#3ea6ff] hover:text-[#2d8fdd] transition-colors inline-flex items-center gap-2"
-              >
-                View All References
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
           </section>
         )}
       </main>

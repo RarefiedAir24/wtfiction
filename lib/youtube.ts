@@ -51,10 +51,15 @@ export function getYouTubeThumbnail(videoIdOrUrl: string, quality: 'default' | '
 /** Add cache-bust param so updated YouTube thumbnails aren't served from browser cache */
 export function withThumbnailCacheBust(url: string): string {
   if (!url || !/youtube\.com|ytimg\.com/.test(url)) return url;
-  // Per-load bust so when creators update thumbnails on YouTube we show the new image
   const withoutT = url.replace(/[?&]t=[^&]*/g, '').replace(/\?&/, '?').replace(/\?$/, '');
   const sep = withoutT.includes('?') ? '&' : '?';
   return `${withoutT}${sep}t=${Date.now()}`;
+}
+
+/** Use proxy URL so main site gets fresh thumbnail (bypasses CDN cache). Pass videoId when available. */
+export function getThumbnailProxyUrl(videoId: string | null): string | null {
+  if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return null;
+  return `/api/thumbnail/${videoId}`;
 }
 
 /**

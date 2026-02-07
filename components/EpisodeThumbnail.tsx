@@ -12,6 +12,15 @@ interface EpisodeThumbnailProps {
 const isYouTubeThumbnail = (url: string) =>
   /youtube\.com|ytimg\.com/.test(url);
 
+/** Use proxy so main site gets fresh thumbnail (bypasses CDN cache) */
+function getThumbnailSrc(url: string): string {
+  const match = url.match(/ytimg\.com\/vi\/([a-zA-Z0-9_-]{11})\//);
+  if (match && match[1]) {
+    return `/api/thumbnail/${match[1]}`;
+  }
+  return withThumbnailCacheBust(url);
+}
+
 export default function EpisodeThumbnail({ thumbnailUrl, title, runtime }: EpisodeThumbnailProps) {
   const [imageError, setImageError] = useState(false);
   const [fallbackError, setFallbackError] = useState(false);
@@ -35,7 +44,7 @@ export default function EpisodeThumbnail({ thumbnailUrl, title, runtime }: Episo
     <div className="episode-thumbnail relative w-full aspect-video mb-5 overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#272727] to-[#1a1a1a] rounded-lg border border-[#272727]">
       {!imageError ? (
         <img
-          src={withThumbnailCacheBust(thumbnailUrl)}
+          src={getThumbnailSrc(thumbnailUrl)}
           alt={title}
           className="w-full h-full object-cover"
           onError={handleImageError}
@@ -43,7 +52,7 @@ export default function EpisodeThumbnail({ thumbnailUrl, title, runtime }: Episo
         />
       ) : fallbackUrl ? (
         <img
-          src={withThumbnailCacheBust(fallbackUrl)}
+          src={getThumbnailSrc(fallbackUrl)}
           alt={title}
           className="w-full h-full object-cover"
           onError={() => setFallbackError(true)}

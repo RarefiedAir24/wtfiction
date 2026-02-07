@@ -9,7 +9,7 @@ import EpisodeThumbnail from '@/components/EpisodeThumbnail';
 import YouTubeModal from '@/components/YouTubeModal';
 import PlayButton from '@/components/PlayButton';
 import PostWatchContinuation from '@/components/PostWatchContinuation';
-import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl, withThumbnailCacheBust } from '@/lib/youtube';
+import { getYouTubeThumbnail, getYouTubeVideoId, buildYouTubeEmbedUrl, withThumbnailCacheBust, getThumbnailProxyUrl } from '@/lib/youtube';
 import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
 
 export default function HomePageClient() {
@@ -184,33 +184,38 @@ export default function HomePageClient() {
                       );
                     }
                     
-                    // Try multiple thumbnail quality levels if one fails
+                    const heroVideoId = getYouTubeVideoId(heroEpisode.youtubeUrl);
+                    const heroThumbnailSrc = getThumbnailProxyUrl(heroVideoId)
+                      ?? (heroEpisode.thumbnailUrl
+                          ? withThumbnailCacheBust(heroEpisode.thumbnailUrl)
+                          : withThumbnailCacheBust(getYouTubeThumbnail(heroEpisode.youtubeUrl)));
                     const getThumbnailUrl = (quality: 'maxres' | 'high' = 'maxres') => {
                       if (heroEpisode.thumbnailUrl) return heroEpisode.thumbnailUrl;
                       return getYouTubeThumbnail(heroEpisode.youtubeUrl, quality);
                     };
-                    
-                    // Start with maxres, fallback to high if it fails
-                    const thumbnailUrl = getThumbnailUrl('maxres');
-                    
+
                     return (
                       <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-[#272727] group cursor-pointer transform transition-all duration-500 hover:shadow-[0_20px_60px_rgba(62,166,255,0.3)] hover:scale-[1.01]">
                         {!heroVideoLoaded ? (
                           // Thumbnail with enhanced play button overlay
                           <>
-                            {thumbnailUrl && !heroThumbnailError ? (
+                            {heroThumbnailSrc && !heroThumbnailError ? (
                               <div className="relative w-full h-full">
                                 <img
-                                  src={withThumbnailCacheBust(thumbnailUrl)}
+                                  src={heroThumbnailSrc}
                                   alt={heroEpisode.title}
                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                   loading="eager"
                                   onError={(e) => {
-                                    const currentSrc = (e.target as HTMLImageElement).src;
-                                    if (currentSrc.includes('maxresdefault') || currentSrc.includes('maxres')) {
+                                    if (heroThumbnailSrc.startsWith('/api/thumbnail/')) {
                                       (e.target as HTMLImageElement).src = withThumbnailCacheBust(getThumbnailUrl('high'));
                                     } else {
-                                      setHeroThumbnailError(true);
+                                      const currentSrc = (e.target as HTMLImageElement).src;
+                                      if (currentSrc.includes('maxresdefault') || currentSrc.includes('maxres')) {
+                                        (e.target as HTMLImageElement).src = withThumbnailCacheBust(getThumbnailUrl('high'));
+                                      } else {
+                                        setHeroThumbnailError(true);
+                                      }
                                     }
                                   }}
                                 />
