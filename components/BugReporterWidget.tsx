@@ -50,15 +50,27 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
   const [hasError, setHasError] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // On mount: check if the user has an active A3 session.
-  // The A3 session cookie is SameSite=None so it's sent cross-origin.
-  // Widget renders only for users logged into A3.
+  // On mount: check URL param (one-time token from A3 "Visit site" link) then localStorage.
+  // Flow: A3 → /api/widget/launch?to=https://... → redirect with ?a3token=TOKEN
+  //       Widget reads token, stores in localStorage, clears from URL.
   useEffect(() => {
-    fetch(`${apiUrl}/api/widget/ping`, { credentials: 'include' })
-      .then((r) => r.json())
-      .then((data) => { if (data.ok) setAuthorized(true); })
-      .catch(() => {});
-  }, [apiUrl]);
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get('a3token');
+    if (urlToken) {
+      localStorage.setItem('a3-widget-token', urlToken);
+      params.delete('a3token');
+      const newUrl = window.location.pathname +
+        (params.toString() ? '?' + params.toString() : '') +
+        window.location.hash;
+      window.history.replaceState({}, '', newUrl);
+      setAuthorized(true);
+      return;
+    }
+    if (localStorage.getItem('a3-widget-token')) {
+      setAuthorized(true);
+    }
+  }, []);
 
   // Form state
   const [selection, setSelection] = useState<SelectionType>('high');
