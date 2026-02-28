@@ -40,8 +40,6 @@ function formatBuffer(events: RecordedEvent[]): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const LS_KEY = 'a3-widget-token';
-
 export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProps = {}) {
   const pathname = usePathname();
   const bufferRef = useRef<RecordedEvent[]>([]);
@@ -52,12 +50,11 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
   const [hasError, setHasError] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // On mount: read token from localStorage and verify with A3 ping endpoint.
-  // If WIDGET_ACCESS_TOKEN is not set on the server, ping returns ok:true for all (dev mode).
+  // On mount: check if the user has an active A3 session.
+  // The A3 session cookie is SameSite=None so it's sent cross-origin.
+  // Widget renders only for users logged into A3.
   useEffect(() => {
-    const token = localStorage.getItem(LS_KEY) || '';
-    const url = `${apiUrl}/api/widget/ping${token ? `?token=${encodeURIComponent(token)}` : ''}`;
-    fetch(url)
+    fetch(`${apiUrl}/api/widget/ping`, { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => { if (data.ok) setAuthorized(true); })
       .catch(() => {});
