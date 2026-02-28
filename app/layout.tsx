@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { BugReporterWidget } from "@/components/BugReporterWidget";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -53,6 +54,10 @@ export default function RootLayout({
         <Navigation />
         {children}
         <Footer />
+        <BugReporterWidget
+          apiUrl="https://a3.montebay.io"
+          repoId="RarefiedAir24/wtfiction"
+        />
       </body>
     </html>
   );
