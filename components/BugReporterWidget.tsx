@@ -40,13 +40,28 @@ function formatBuffer(events: RecordedEvent[]): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+const LS_KEY = 'a3-widget-token';
+
 export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProps = {}) {
   const pathname = usePathname();
   const bufferRef = useRef<RecordedEvent[]>([]);
   const fetchPatched = useRef(false);
 
+  // Auth visibility — only show for A3 registered users
+  const [authorized, setAuthorized] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // On mount: read token from localStorage and verify with A3 ping endpoint.
+  // If WIDGET_ACCESS_TOKEN is not set on the server, ping returns ok:true for all (dev mode).
+  useEffect(() => {
+    const token = localStorage.getItem(LS_KEY) || '';
+    const url = `${apiUrl}/api/widget/ping${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => { if (data.ok) setAuthorized(true); })
+      .catch(() => {});
+  }, [apiUrl]);
 
   // Form state
   const [selection, setSelection] = useState<SelectionType>('high');
@@ -248,6 +263,9 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
   };
 
   // ── Render ──────────────────────────────────────────────────────────────────
+
+  // Not authorized — render nothing (widget invisible to non-A3 users)
+  if (!authorized) return null;
 
   return (
     <>
