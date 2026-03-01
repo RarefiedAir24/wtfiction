@@ -202,14 +202,22 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
     setFormError('');
 
     const isFeature = selection === 'feature';
-    const combinedDescription = [
-      description.trim(),
-      steps.trim() ? `\n\nRecorded steps:\n${steps.trim()}` : '',
-      additionalInfo.trim() ? `\n\nAdditional notes:\n${additionalInfo.trim()}` : '',
-    ].join('');
+
+    // For features: keep description clean for keyword extraction — steps go into
+    // acceptanceCriteria so the AI still has workflow context without polluting file search.
+    const featureAcceptanceCriteria = [
+      steps.trim() ? `Workflow context (recorded steps):\n${steps.trim()}` : '',
+      additionalInfo.trim() ? `Additional notes:\n${additionalInfo.trim()}` : '',
+    ].filter(Boolean).join('\n\n');
 
     const body = isFeature
-      ? { type: 'feature', title: title.trim(), description: combinedDescription, ...(repoId && { repoId }) }
+      ? {
+          type: 'feature',
+          title: title.trim(),
+          description: description.trim(),
+          ...(featureAcceptanceCriteria && { acceptanceCriteria: featureAcceptanceCriteria }),
+          ...(repoId && { repoId }),
+        }
       : {
           type: 'bug',
           title: title.trim(),
