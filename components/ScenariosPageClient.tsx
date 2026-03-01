@@ -1,231 +1,205 @@
+// A3: run-1772384872518 | 2026-03-01T17:09:09.893Z
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { scenarios } from '@/data/scenarios';
-import YouTubeModal from '@/components/YouTubeModal';
-import EpisodeThumbnail from '@/components/EpisodeThumbnail';
-import PlayButton from '@/components/PlayButton';
-import TrackedExternalLink from '@/components/TrackedExternalLink';
-import PostWatchContinuation from '@/components/PostWatchContinuation';
-import { getYouTubeThumbnail, getYouTubeVideoId } from '@/lib/youtube';
-import { trackScenarioClick, trackVideoModalOpen } from '@/lib/analytics';
+import { useState, useEffect } from 'react';
+import { Scenario } from '@/data/scenarios';
+import EpisodeThumbnail from './EpisodeThumbnail';
+import PlayButton from './PlayButton';
+import YouTubeModal from './YouTubeModal';
+import PostWatchContinuation from './PostWatchContinuation';
+import { logEvent } from '@/lib/analytics';
 
-export default function ScenariosPageClient() {
-  const [modalVideo, setModalVideo] = useState<{ url: string; title: string; logline?: string; id?: string } | null>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
+interface ScenariosPageClientProps {
+  scenarios: Scenario[];
+}
+
+export default function ScenariosPageClient({ scenarios }: ScenariosPageClientProps) {
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
+  const [showPostWatch, setShowPostWatch] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [highlightedScenarioId, setHighlightedScenarioId] = useState<string | null>(null);
-  const [showPostWatch, setShowPostWatch] = useState<string | null>(null);
-  
-  // Sort scenarios newest to oldest
+
   const sortedScenarios = [...scenarios].sort((a, b) => {
-    if (a.publishDate && b.publishDate) {
-      return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
-    }
-    return 0;
+    if (!a.publishDate || !b.publishDate) return 0;
+    const dateA = new Date(a.publishDate).getTime();
+    const dateB = new Date(b.publishDate).getTime();
+    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
   });
-  
-  // Get the latest scenario (first in sorted array)
-  const latestScenario = sortedScenarios[0];
 
-  const handlePlayClick = (scenario: typeof scenarios[0]) => {
-    setScrollPosition(window.scrollY); // Save scroll position for post-watch UX
-    trackScenarioClick(scenario.id, scenario.title);
-    const videoId = getYouTubeVideoId(scenario.youtubeUrl);
-    if (videoId) {
-      trackVideoModalOpen(videoId, 'scenarios', 'scenario_card');
-    }
-    setModalVideo({ 
-      url: scenario.youtubeUrl, 
-      title: scenario.title,
-      logline: scenario.premise,
-      id: scenario.id // Pass ID for post-watch UX
-    });
+  const handleVideoClick = (scenario: Scenario) => {
+    // Highlight the selected row
+    setHighlightedScenarioId(scenario.id);
+    
+    // Small delay to show the highlight before opening modal
+    setTimeout(() => {
+      setSelectedVideoId(scenario.id);
+      logEvent('scenario_click', {
+        scenario_id: scenario.id,
+        scenario_title: scenario.title,
+        page: 'scenarios'
+      });
+    }, 150);
   };
 
-  const handleModalClose = () => {
-    const currentVideoId = modalVideo?.id;
-    setModalVideo(null);
-
-    // Show post-watch continuation UI
-    if (currentVideoId) {
-      setShowPostWatch(currentVideoId);
-    }
-
-    // Restore scroll position
-    window.scrollTo({
-      top: scrollPosition,
-      behavior: 'instant' as ScrollBehavior
-    });
-
-    // Find and highlight next scenario
-    if (currentVideoId) {
-      const currentIndex = sortedScenarios.findIndex(s => s.id === currentVideoId);
-      if (currentIndex >= 0 && currentIndex < sortedScenarios.length - 1) {
-        const nextScenario = sortedScenarios[currentIndex + 1];
-        setHighlightedScenarioId(nextScenario.id);
-
-        // Scroll to next scenario smoothly
-        setTimeout(() => {
-          const element = document.getElementById(`scenario-${nextScenario.id}`);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, 100);
-
-        // Remove highlight after 5 seconds
-        setTimeout(() => setHighlightedScenarioId(null), 5000);
-      }
-    }
+  const handleCloseModal = () => {
+    setSelectedVideoId(null);
+    setShowPostWatch(false);
+    // Clear highlight when modal closes
+    setHighlightedScenarioId(null);
   };
 
-  // Get best thumbnail URL with fallbacks
-  const getThumbnailUrl = (scenario: typeof scenarios[0]) => {
-    // Priority: custom thumbnail > maxres > high > branded placeholder
-    if (scenario.thumbnailUrl) {
-      return scenario.thumbnailUrl;
-    }
-    const videoId = getYouTubeVideoId(scenario.youtubeUrl);
-    if (videoId) {
-      // Try maxres first, then high as fallback
-      return getYouTubeThumbnail(scenario.youtubeUrl, 'maxres');
-    }
-    return null;
+  const handleVideoEnd = () => {
+    setShowPostWatch(true);
   };
 
-  const isLatestScenario = (scenario: typeof scenarios[0]) => {
-    return scenario.id === latestScenario?.id;
+  const handleContinue = (nextScenarioId: string) => {
+    setShowPostWatch(false);
+    setSelectedVideoId(nextScenarioId);
+    setHighlightedScenarioId(nextScenarioId);
   };
+
+  const selectedScenario = scenarios.find(s => s.id === selectedVideoId);
+
+  // Clear highlight when clicking outside (on the backdrop)
+  useEffect(() => {
+    if (!selectedVideoId && highlightedScenarioId) {
+      const timer = setTimeout(() => {
+        setHighlightedScenarioId(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedVideoId, highlightedScenarioId]);
 
   return (
-    <>
-      <main className="min-h-screen">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-          <div className="mb-12">
-            <h1 className="text-3xl md:text-4xl font-light mb-2 text-foreground">
-              Scenarios
-            </h1>
-            <p className="text-sm text-muted">
-              Listed newest to oldest
-            </p>
+    <div className="relative">
+      {/* Backdrop overlay - dims the page when a video is highlighted */}
+      {highlightedScenarioId && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-30 transition-opacity duration-300"
+          onClick={() => {
+            if (!selectedVideoId) {
+              setHighlightedScenarioId(null);
+            }
+          }}
+        />
+      )}
+
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">All Scenarios</h1>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSortOrder('newest')}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                sortOrder === 'newest'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Newest First
+            </button>
+            <button
+              onClick={() => setSortOrder('oldest')}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                sortOrder === 'oldest'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Oldest First
+            </button>
           </div>
-          <div className="space-y-0">
-            {sortedScenarios.map((scenario, index) => {
-              const isLatest = isLatestScenario(scenario);
-              const thumbnailUrl = getThumbnailUrl(scenario);
-              const isEven = index % 2 === 0;
-              
-              return (
-                <article
-                  key={scenario.id}
-                  id={`scenario-${scenario.id}`}
-                  className={`border-b border-[#272727] py-10 transition-all duration-300 ${
-                    highlightedScenarioId === scenario.id 
-                      ? 'ring-4 ring-[#3ea6ff] ring-opacity-30 ring-offset-4 ring-offset-[#0f0f0f] -m-4 p-4 rounded-lg' 
-                      : ''
-                  } ${
-                    isEven ? 'bg-[#0a0a0a]/30' : 'bg-transparent'
-                  } ${
-                    isLatest ? 'border-l-4 border-l-[#3ea6ff] pl-8 -ml-8 bg-[#0a0a0a]/50' : ''
+        </div>
+
+        <div className="space-y-4">
+          {sortedScenarios.map((scenario) => {
+            const isHighlighted = highlightedScenarioId === scenario.id;
+            
+            return (
+              <div
+                key={scenario.id}
+                className={`relative transition-all duration-300 ${
+                  isHighlighted ? 'z-40' : 'z-10'
+                }`}
+              >
+                <div
+                  onClick={() => handleVideoClick(scenario)}
+                  className={`group cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden ${
+                    isHighlighted
+                      ? 'ring-4 ring-blue-500 shadow-2xl scale-[1.02] transform'
+                      : 'hover:scale-[1.01]'
                   }`}
                 >
-                  <div className="flex flex-col md:flex-row gap-6">
-                    {/* Thumbnail - Enhanced for latest episode */}
-                    <div className={`flex-shrink-0 w-full md:w-80 relative group transition-all duration-300 ${
-                      isLatest ? 'md:w-96 scale-105 md:scale-100' : ''
-                    }`}>
-                      <div className={`relative ${isLatest ? 'ring-2 ring-[#3ea6ff]/50 rounded-lg overflow-hidden' : ''}`}>
+                  <div className="flex flex-col md:flex-row gap-4 p-4">
+                    {/* Thumbnail Section */}
+                    <div className="relative w-full md:w-80 flex-shrink-0">
+                      <div className="relative aspect-video rounded-lg overflow-hidden">
                         <EpisodeThumbnail
-                          thumbnailUrl={thumbnailUrl || getYouTubeThumbnail(scenario.youtubeUrl, 'high')}
+                          videoId={scenario.id}
                           title={scenario.title}
-                          runtime={scenario.runtime}
+                          thumbnailUrl={scenario.thumbnailUrl}
                         />
-                        {/* Gradient overlay for better text contrast */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                          <PlayButton onClick={() => handlePlayClick(scenario)} size={isLatest ? "lg" : "md"} />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <PlayButton size="large" />
                         </div>
-                        {isLatest && (
-                          <div className="absolute top-3 left-3 px-3 py-1.5 bg-gradient-to-r from-[#3ea6ff] to-[#2d8fdd] text-white text-xs font-bold rounded-md backdrop-blur-sm shadow-lg uppercase tracking-wide">
-                            Latest
+                        {scenario.runtime && (
+                          <div className="absolute bottom-2 right-2 bg-black/80 text-white text-sm px-2 py-1 rounded">
+                            {scenario.runtime}
                           </div>
                         )}
                       </div>
                     </div>
-                    
-                    {/* Content */}
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-4 mb-2">
-                        <Link href={`/scenarios/${scenario.id}`}>
-                          <h2 className={`font-bold mb-4 text-foreground leading-snug hover:text-[#3ea6ff] transition-colors ${
-                            isLatest ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-xl md:text-2xl'
-                          }`} style={{ fontFamily: isLatest ? 'var(--font-title), system-ui, sans-serif' : 'inherit' }}>
-                            {scenario.title}
-                          </h2>
-                        </Link>
-                      </div>
-                      <p className="text-sm md:text-base text-muted leading-relaxed mb-4">
+
+                    {/* Content Section */}
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h2 className="text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                        {scenario.title}
+                      </h2>
+                      <p className="text-gray-600 mb-3 line-clamp-2">
                         {scenario.premise}
                       </p>
-                      {scenario.keyInsight && (
-                        <p className="text-xs text-muted/80 mb-4 leading-normal italic">
-                          {scenario.keyInsight}
+                      {scenario.publishDate && (
+                        <p className="text-sm text-gray-500">
+                          Published: {new Date(scenario.publishDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
                         </p>
                       )}
-                      <div className="flex items-center gap-4 text-xs text-muted/80 mb-6">
-                        {scenario.runtime && (
-                          <span>Runtime: {scenario.runtime}</span>
-                        )}
-                        {scenario.publishDate && (
-                          <span>{scenario.publishDate}</span>
-                        )}
-                      </div>
-                      
-                      {/* Phase 3: Action Clarity - Primary vs Secondary */}
-                      <div className="flex items-center gap-4">
-                        <button
-                          onClick={() => handlePlayClick(scenario)}
-                          className="btn-primary text-sm px-5 py-2.5 inline-flex items-center gap-2"
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                          Watch Episode
-                        </button>
-                        <TrackedExternalLink
-                          href={scenario.youtubeUrl}
-                          eventType="youtube"
-                          className="text-sm text-muted hover:text-foreground transition-colors"
-                        >
-                          Watch on YouTube
-                        </TrackedExternalLink>
-                      </div>
+                      {scenario.keyInsight && (
+                        <p className="text-sm text-blue-600 mt-2 italic">
+                          💡 {scenario.keyInsight}
+                        </p>
+                      )}
                     </div>
                   </div>
-                </article>
-              );
-            })}
-          </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </main>
+      </div>
 
-      {modalVideo && (
+      {/* YouTube Modal */}
+      {selectedVideoId && selectedScenario && (
         <YouTubeModal
-          videoUrl={modalVideo.url}
-          title={modalVideo.title}
-          logline={modalVideo.logline}
-          isOpen={!!modalVideo}
-          onClose={handleModalClose}
-          page="scenarios"
-          placement="scenario_card"
+          videoId={selectedVideoId}
+          title={selectedScenario.title}
+          onClose={handleCloseModal}
+          onVideoEnd={handleVideoEnd}
         />
       )}
 
-      {/* Post-Watch Continuation UI */}
-      <PostWatchContinuation 
-        scenarioId={showPostWatch || undefined}
-        onDismiss={() => setShowPostWatch(null)}
-      />
-    </>
+      {/* Post-Watch Continuation */}
+      {showPostWatch && selectedScenario && (
+        <PostWatchContinuation
+          currentScenario={selectedScenario}
+          allScenarios={scenarios}
+          onContinue={handleContinue}
+          onClose={handleCloseModal}
+        />
+      )}
+    </div>
   );
 }
