@@ -223,9 +223,13 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
         };
 
     try {
+      const token = localStorage.getItem('a3-widget-token') || '';
       const res = await fetch(`${apiUrl}/api/runs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
         body: JSON.stringify(body),
       });
       const data = await res.json();
