@@ -449,7 +449,7 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
                       Type
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                      {TYPES.map((t) => {
+                      {TYPES.filter((t) => !(hasError && t.value === 'feature')).map((t) => {
                         const active = selection === t.value;
                         return (
                           <button
@@ -474,7 +474,7 @@ export function BugReporterWidget({ apiUrl = '', repoId }: BugReporterWidgetProp
                                 {t.label}
                               </span>
                             </div>
-                            <div style={{ fontSize: '11px', color: '#94a3b8', marginLeft: '21px' }}>
+                            <div style={{ fontSize: '12px', fontWeight: 500, color: active ? t.color : '#64748b', marginLeft: '21px', opacity: active ? 0.85 : 1 }}>
                               {t.sub}
                             </div>
                           </button>
